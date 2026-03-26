@@ -29,3 +29,4 @@ dist-ssr
 
 /backend/generated/prisma
 /postgres_data
+/backend/prisma/dev.db
