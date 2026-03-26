@@ -9,7 +9,7 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 
-import { NetworkIcon, InfoIcon } from "lucide-react"
+import { MonitorIcon, InfoIcon } from "lucide-react"
 
 import {
   Empty,
@@ -21,20 +21,20 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
-import { AddProxyModal } from "@/modals/add-proxy"
-import type { Proxy } from "@/types"
+import { AddSiteModal } from "@/modals/add-site"
+import type { Site } from "@/types"
 
-type ProxyListProps = {
-  proxies?: Proxy[]
+type SiteListProps = {
+  sites?: Site[]
   loading?: boolean
   error?: string | null
 }
 
-export default function ProxyTable({
-  proxies,
+export default function SiteTable({
+  sites,
   loading,
   error,
-}: ProxyListProps) {
+}: SiteListProps) {
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -57,20 +57,20 @@ export default function ProxyTable({
     )
   }
 
-  if (!proxies || proxies.length === 0) {
+  if (!sites || sites.length === 0) {
     return (
       <Empty>
         <EmptyHeader>
           <EmptyMedia>
-            <NetworkIcon />
+            <MonitorIcon />
           </EmptyMedia>
-          <EmptyTitle>No proxies</EmptyTitle>
+          <EmptyTitle>No sites</EmptyTitle>
           <EmptyDescription>
-            You have not added any proxies yet
+            You have not added any sites yet
           </EmptyDescription>
         </EmptyHeader>
         <EmptyContent>
-          <AddProxyModal buttonText="Add proxies" />
+          <AddSiteModal buttonText="Add sites" />
         </EmptyContent>
       </Empty>
     )
@@ -79,18 +79,14 @@ export default function ProxyTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Host</TableHead>
-            <TableHead>Port</TableHead>
-            <TableHead>Username</TableHead>
+            <TableHead>Domain</TableHead>
             <TableHead>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {proxies.map((p) => (
+          {sites.map((p) => (
             <TableRow key={p.id}>
-              <TableCell>{p.host}</TableCell>
-              <TableCell>{p.port}</TableCell>
-              <TableCell>{p.username}</TableCell>
+              <TableCell>{p.domain}</TableCell>
               <TableCell>
                 {p.disabled ? (
                   <Badge variant="destructive">Disabled</Badge>
