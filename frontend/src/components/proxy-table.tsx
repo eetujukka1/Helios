@@ -93,9 +93,9 @@ export default function ProxyTable({
               <TableCell>{p.username}</TableCell>
               <TableCell>
                 {p.enabled ? (
-                  <Badge variant="success">Enabled</Badge>
-                ) : (
                   <Badge variant="destructive">Disabled</Badge>
+                ) : (
+                  <Badge variant="success">Enabled</Badge>
                 )}
               </TableCell>
             </TableRow>
