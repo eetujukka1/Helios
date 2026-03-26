@@ -6,7 +6,7 @@ import { ProxySchema } from "../schemas/proxy.js";
 const prisma = new PrismaClient();
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
-  const proxies = prisma.proxy.findMany();
+  const proxies = await prisma.proxy.findMany();
   res.json(proxies);
 };
 
