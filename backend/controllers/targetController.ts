@@ -1,0 +1,29 @@
+import * as z from "zod";
+import { PrismaClient } from "../generated/prisma/client.js";
+import { Request, Response } from "express";
+import { TargetSchema } from "../schemas/target.js";
+
+const prisma = new PrismaClient();
+
+export const getAll = async (req: Request, res: Response): Promise<void> => {
+  const targets = await prisma.target.findMany();
+  res.json(targets);
+};
+
+export const getOne = async (req: Request, res: Response): Promise<void> => {
+  const target = await prisma.target.findFirst({
+    where: { id: res.locals.id },
+  });
+  res.json(target);
+};
+
+export const add = async (req: Request, res: Response): Promise<void> => {
+  const targets = z.array(TargetSchema).parse(req.body.targets);
+  await prisma.target.createMany({ data: targets });
+  res.status(201).json({ ok: true });
+};
+
+export const remove = async (req: Request, res: Response): Promise<void> => {
+  const deleted = await prisma.target.delete({ where: { id: res.locals.id } });
+  res.json(deleted);
+};
