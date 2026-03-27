@@ -1,27 +1,27 @@
-import { useState, useEffect } from "react"
-import type { Site } from "@/types"
-import { fetchSites } from "@/services/site-service"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import type { SiteInput } from "@/types"
+import { fetchSites, addSites as add } from "@/services/site-service"
 
 export function useSites() {
-  const [sites, setSites] = useState<Site[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
-  const getSites = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      setSites(await fetchSites())
-    } catch (error) {
-      setError((error as Error).message)
-    } finally {
-      setLoading(false)
-    }
+  const { data: sites = [], isLoading: loading, error } = useQuery({
+    queryKey: ["sites"],
+    queryFn: fetchSites,
+  })
+
+  const { mutateAsync: addSites } = useMutation({
+    mutationFn: (newSites: SiteInput[]) => add(newSites),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["sites"] }),
+  })
+
+  const getSites = () => queryClient.invalidateQueries({ queryKey: ["sites"] })
+
+  return {
+    sites,
+    loading,
+    error: error ? (error as Error).message : null,
+    getSites,
+    addSites,
   }
-
-  useEffect(() => {
-    getSites()
-  }, [])
-
-  return { sites, loading, error, getSites }
 }

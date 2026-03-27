@@ -13,7 +13,6 @@ import { MonitorIcon, InfoIcon } from "lucide-react"
 
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -21,20 +20,10 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
-import { AddSiteModal } from "@/modals/add-site"
-import type { Site } from "@/types"
+import { useSites } from "@/hooks/use-sites"
 
-type SiteListProps = {
-  sites?: Site[]
-  loading?: boolean
-  error?: string | null
-}
-
-export default function SiteTable({
-  sites,
-  loading,
-  error,
-}: SiteListProps) {
+export default function SiteTable() {
+  const { sites, loading, error } = useSites()
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -69,9 +58,6 @@ export default function SiteTable({
             You have not added any sites yet
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
-          <AddSiteModal buttonText="Add sites" />
-        </EmptyContent>
       </Empty>
     )
   } else {

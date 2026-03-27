@@ -17,8 +17,8 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 
 export const add = async (req: Request, res: Response): Promise<void> => {
   const proxies = z.array(ProxySchema).parse(req.body.proxies);
-  await prisma.proxy.createMany({ data: proxies });
-  res.status(201).json({ ok: true });
+  const addedProxies = await prisma.proxy.createManyAndReturn({ data: proxies });
+  res.status(201).json(addedProxies);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {

@@ -13,7 +13,6 @@ import { NetworkIcon, InfoIcon } from "lucide-react"
 
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -21,20 +20,10 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
-import { AddProxyModal } from "@/modals/add-proxy"
-import type { Proxy } from "@/types"
+import { useProxies } from "@/hooks/use-proxies"
 
-type ProxyListProps = {
-  proxies?: Proxy[]
-  loading?: boolean
-  error?: string | null
-}
-
-export default function ProxyTable({
-  proxies,
-  loading,
-  error,
-}: ProxyListProps) {
+export default function ProxyTable() {
+  const { proxies, loading, error } = useProxies()
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -69,9 +58,6 @@ export default function ProxyTable({
             You have not added any proxies yet
           </EmptyDescription>
         </EmptyHeader>
-        <EmptyContent>
-          <AddProxyModal buttonText="Add proxies" />
-        </EmptyContent>
       </Empty>
     )
   } else {

@@ -7,8 +7,12 @@ export type Proxy = {
   disabled: boolean
 }
 
+export type ProxyInput = Omit<Proxy, "id" | "disabled">;
+
 export type Site = {
   id: number,
   domain: string,
   disabled: boolean
 }
+
+export type SiteInput = Omit<Site, "id" | "disabled">;

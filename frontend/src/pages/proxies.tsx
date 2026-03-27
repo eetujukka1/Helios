@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { useProxies } from "@/hooks/use-proxies"
 
 export default function Proxies() {
-  const { proxies, loading, error, getProxies } = useProxies()
+  const { getProxies } = useProxies()
 
   return (
     <Protected>
@@ -19,7 +19,7 @@ export default function Proxies() {
         <AddProxyModal />
         <AddProxyFileModal />
       </AppHeader>
-      <ProxyTable proxies={proxies} loading={loading} error={error} />
+      <ProxyTable />
     </Protected>
   )
 }
