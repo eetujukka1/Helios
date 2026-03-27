@@ -6,7 +6,7 @@ export const ProxySchema = z.object({
   port: z.number(),
   username: z.string(),
   password: z.optional(z.string()),
-  enabled: z.boolean(),
+  enabled: z.optional(z.boolean()),
 });
 
 export type Proxy = z.infer<typeof ProxySchema>;
