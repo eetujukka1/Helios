@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { getAll, getOne, add, remove } from "../controllers/proxyController.js";
+import {
+  getAll,
+  getOne,
+  add,
+  remove,
+} from "../controllers/targetController.js";
 import { validateId } from "../middlewares/validateId.js";
 
 const router = Router();
