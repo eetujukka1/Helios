@@ -4,5 +4,11 @@ export type Proxy = {
   port: number
   username: string
   password?: string
-  enabled: boolean
+  disabled: boolean
+}
+
+export type Site = {
+  id: number,
+  domain: string,
+  disabled: boolean
 }
