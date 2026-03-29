@@ -22,6 +22,9 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import { useProxies } from "@/hooks/use-proxies"
 
+import { RemoveProxyModal } from "@/modals/remove-proxy"
+import { AddProxyModal } from "@/modals/add-proxy"
+
 export default function ProxyTable() {
   const { proxies, loading, error } = useProxies()
   if (loading) {
@@ -57,6 +60,7 @@ export default function ProxyTable() {
           <EmptyDescription>
             You have not added any proxies yet
           </EmptyDescription>
+          <AddProxyModal />
         </EmptyHeader>
       </Empty>
     )
@@ -69,6 +73,7 @@ export default function ProxyTable() {
             <TableHead>Port</TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -83,6 +88,9 @@ export default function ProxyTable() {
                 ) : (
                   <Badge variant="success">Enabled</Badge>
                 )}
+              </TableCell>
+              <TableCell className="text-right">
+                <RemoveProxyModal proxy={p}/>
               </TableCell>
             </TableRow>
           ))}

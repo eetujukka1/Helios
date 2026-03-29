@@ -2,9 +2,9 @@ import * as z from "zod";
 
 export const ProxySchema = z.object({
   id: z.union([z.number(), z.undefined()]),
-  host: z.string(),
+  host: z.string().min(1),
   port: z.number(),
-  username: z.string(),
+  username: z.optional(z.string()),
   password: z.optional(z.string()),
   disabled: z.optional(z.boolean()),
 });

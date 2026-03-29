@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -14,7 +13,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { addSites as add } from "@/services/site-service"
+import { useSites } from "@/hooks/use-sites"
 
 type Props = {
   buttonText?: string
@@ -22,20 +21,17 @@ type Props = {
 
 export function AddSiteModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
-  const queryClient = useQueryClient()
-
-  const { mutateAsync } = useMutation({
-    mutationFn: add,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["sites"] }),
-  })
+  const { addSites } = useSites()
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
-    await mutateAsync([{
-      domain: data.get("domain") as string,
-    }])
+    await addSites([
+      {
+        domain: data.get("domain") as string,
+      },
+    ])
     form.reset()
     setOpen(false)
   }
@@ -56,7 +52,7 @@ export function AddSiteModal({ buttonText }: Props) {
           <FieldGroup>
             <Field>
               <Label htmlFor="domain">Domain</Label>
-              <Input id="domain" name="domain" placeholder="example.com" />
+              <Input id="domain" name="domain" placeholder="example.com" required />
             </Field>
           </FieldGroup>
           <DialogFooter>

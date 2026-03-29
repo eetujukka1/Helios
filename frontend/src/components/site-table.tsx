@@ -21,6 +21,8 @@ import {
 
 import { Spinner } from "@/components/ui/spinner"
 import { useSites } from "@/hooks/use-sites"
+import { AddSiteModal } from "@/modals/add-site"
+import { RemoveSiteModal } from "@/modals/remove-site"
 
 export default function SiteTable() {
   const { sites, loading, error } = useSites()
@@ -54,9 +56,8 @@ export default function SiteTable() {
             <MonitorIcon />
           </EmptyMedia>
           <EmptyTitle>No sites</EmptyTitle>
-          <EmptyDescription>
-            You have not added any sites yet
-          </EmptyDescription>
+          <EmptyDescription>You have not added any sites yet</EmptyDescription>
+          <AddSiteModal />
         </EmptyHeader>
       </Empty>
     )
@@ -67,18 +68,22 @@ export default function SiteTable() {
           <TableRow>
             <TableHead>Domain</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sites.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>{p.domain}</TableCell>
+          {sites.map((s) => (
+            <TableRow key={s.id}>
+              <TableCell>{s.domain}</TableCell>
               <TableCell>
-                {p.disabled ? (
+                {s.disabled ? (
                   <Badge variant="destructive">Disabled</Badge>
                 ) : (
                   <Badge variant="success">Enabled</Badge>
                 )}
+              </TableCell>
+              <TableCell className="text-right">
+                <RemoveSiteModal site={s}/>
               </TableCell>
             </TableRow>
           ))}

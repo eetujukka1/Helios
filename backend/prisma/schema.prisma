@@ -24,7 +24,7 @@ model Proxy {
   id          Int       @id @default(autoincrement())
   host        String
   port        Int
-  username    String
+  username    String?
   password    String?
   disabled    Boolean   @default(false)
 }

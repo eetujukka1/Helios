@@ -8,11 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import {
-  Field,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/auth-provider"
 
@@ -24,8 +20,10 @@ export function Login({ className, ...props }: React.ComponentProps<"div">) {
     e.preventDefault()
     setError(null)
     const form = e.currentTarget
-    const username = (form.elements.namedItem("username") as HTMLInputElement).value
-    const password = (form.elements.namedItem("password") as HTMLInputElement).value
+    const username = (form.elements.namedItem("username") as HTMLInputElement)
+      .value
+    const password = (form.elements.namedItem("password") as HTMLInputElement)
+      .value
     try {
       await login(username, password)
     } catch (err) {

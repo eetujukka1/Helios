@@ -1,5 +1,4 @@
 import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -14,7 +13,7 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { addProxies as add } from "@/services/proxy-service"
+import { useProxies } from "@/hooks/use-proxies"
 
 type Props = {
   buttonText?: string
@@ -22,23 +21,20 @@ type Props = {
 
 export function AddProxyModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
-  const queryClient = useQueryClient()
-
-  const { mutateAsync } = useMutation({
-    mutationFn: add,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["proxies"] }),
-  })
+  const { addProxies } = useProxies()
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
-    await mutateAsync([{
-      host: data.get("host") as string,
-      port: Number(data.get("port")),
-      username: data.get("username") as string,
-      password: data.get("password") as string,
-    }])
+    await addProxies([
+      {
+        host: data.get("host") as string,
+        port: Number(data.get("port")),
+        username: data.get("username") as string,
+        password: data.get("password") as string,
+      },
+    ])
     form.reset()
     setOpen(false)
   }
@@ -59,11 +55,11 @@ export function AddProxyModal({ buttonText }: Props) {
           <FieldGroup>
             <Field>
               <Label htmlFor="host">Host</Label>
-              <Input id="host" name="host" placeholder="1.1.1.1" />
+              <Input id="host" name="host" placeholder="1.1.1.1" required />
             </Field>
             <Field>
               <Label htmlFor="port">Port</Label>
-              <Input id="port" name="port" placeholder="522" />
+              <Input id="port" name="port" placeholder="522" required />
             </Field>
             <Field>
               <Label htmlFor="username">Username</Label>

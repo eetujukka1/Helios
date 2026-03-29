@@ -1,6 +1,5 @@
 import Protected from "@/layouts/protected"
 import { AddProxyModal } from "@/modals/add-proxy"
-import { AddProxyFileModal } from "@/modals/add-proxy-file"
 import ProxyTable from "@/components/proxy-table"
 import AppHeader from "@/components/app-header"
 
@@ -17,7 +16,6 @@ export default function Proxies() {
           Refresh
         </Button>
         <AddProxyModal />
-        <AddProxyFileModal />
       </AppHeader>
       <ProxyTable />
     </Protected>
