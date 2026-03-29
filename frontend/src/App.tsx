@@ -1,3 +1,4 @@
+import { Toaster } from "./components/ui/sonner"
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom"
 import { PAGES } from "@/config"
 import { Login } from "@/pages/login"
@@ -17,6 +18,7 @@ export function App() {
           // Catches all other paths
           <Route path="*" element={<Navigate to="/dashboard" replace />} />
         </Routes>
+        <Toaster />
       </AuthProvider>
     </BrowserRouter>
   )
