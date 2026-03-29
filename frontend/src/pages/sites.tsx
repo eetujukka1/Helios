@@ -7,7 +7,7 @@ import { useSites } from "@/hooks/use-sites"
 import { AddSiteModal } from "@/modals/add-site"
 
 export default function Sites() {
-  const { sites, loading, error, getSites } = useSites()
+  const { getSites } = useSites()
   return (
     <Protected>
       <AppHeader title="Sites">
@@ -16,7 +16,7 @@ export default function Sites() {
         </Button>
         <AddSiteModal />
       </AppHeader>
-      <SiteTable sites={sites} loading={loading} error={error}/>
+      <SiteTable />
     </Protected>
   )
 }

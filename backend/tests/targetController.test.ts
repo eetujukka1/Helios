@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 const mockTarget = {
   findMany: jest.fn<() => Promise<object[]>>(),
   findFirst: jest.fn<() => Promise<object | null>>(),
-  createMany: jest.fn<() => Promise<object>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
   delete: jest.fn<() => Promise<object>>(),
 };
 
@@ -24,7 +24,7 @@ beforeEach(() => {
   setupEnv();
   mockTarget.findMany.mockReset();
   mockTarget.findFirst.mockReset();
-  mockTarget.createMany.mockReset();
+  mockTarget.createManyAndReturn.mockReset();
   mockTarget.delete.mockReset();
 });
 
@@ -134,16 +134,24 @@ describe("POST /api/targets", () => {
     expect(res.status).toBe(400);
   });
 
-  it("responds with 201 on valid targets", async () => {
-    mockTarget.createMany.mockResolvedValue({ count: 1 });
+  it("responds with 400 when domain is empty string", async () => {
+    const res = await request(app)
+      .post("/api/targets")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ targets: [{ domain: "" }] });
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 201 and the created targets", async () => {
+    mockTarget.createManyAndReturn.mockResolvedValue([target]);
 
     const res = await request(app)
       .post("/api/targets")
       .set("Authorization", `Bearer ${authToken()}`)
-      .send({ targets: [{ domain: "example.com", disabled: false }] });
+      .send({ targets: [{ domain: "example.com" }] });
 
     expect(res.status).toBe(201);
-    expect(res.body).toEqual({ ok: true });
+    expect(res.body).toEqual([target]);
   });
 });
 

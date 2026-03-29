@@ -13,7 +13,7 @@ export default function Protected({ children }: { children: React.ReactNode }) {
       <AppSidebar />
       <main className="min-w-0 flex-1">
         <SidebarTrigger />
-        <div className="p-8 flex w-full flex-col gap-4">{children}</div>
+        <div className="flex w-full flex-col gap-4 p-8">{children}</div>
       </main>
     </SidebarProvider>
   )

@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,15 +13,36 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useSites } from "@/hooks/use-sites"
 
-export function AddSiteModal({ buttonText }: { buttonText?: string }) {
+type Props = {
+  buttonText?: string
+}
+
+export function AddSiteModal({ buttonText }: Props) {
+  const [open, setOpen] = useState(false)
+  const { addSites } = useSites()
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const data = new FormData(form)
+    await addSites([
+      {
+        domain: data.get("domain") as string,
+      },
+    ])
+    form.reset()
+    setOpen(false)
+  }
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">{buttonText || "Add"}</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-sm">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">{buttonText || "Add"}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={handleSubmit} className="grid gap-4">
           <DialogHeader>
             <DialogTitle>Add sites</DialogTitle>
             <DialogDescription>
@@ -29,8 +51,8 @@ export function AddSiteModal({ buttonText }: { buttonText?: string }) {
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="host">Domain</Label>
-              <Input id="host" name="host" placeholder="example.com" />
+              <Label htmlFor="domain">Domain</Label>
+              <Input id="domain" name="domain" placeholder="example.com" required />
             </Field>
           </FieldGroup>
           <DialogFooter>
@@ -39,8 +61,8 @@ export function AddSiteModal({ buttonText }: { buttonText?: string }) {
             </DialogClose>
             <Button type="submit">Add</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

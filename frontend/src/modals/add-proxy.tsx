@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -12,15 +13,39 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { useProxies } from "@/hooks/use-proxies"
 
-export function AddProxyModal({ buttonText }: { buttonText?: string }) {
+type Props = {
+  buttonText?: string
+}
+
+export function AddProxyModal({ buttonText }: Props) {
+  const [open, setOpen] = useState(false)
+  const { addProxies } = useProxies()
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const form = e.currentTarget
+    const data = new FormData(form)
+    await addProxies([
+      {
+        host: data.get("host") as string,
+        port: Number(data.get("port")),
+        username: data.get("username") as string,
+        password: data.get("password") as string,
+      },
+    ])
+    form.reset()
+    setOpen(false)
+  }
+
   return (
-    <Dialog>
-      <form>
-        <DialogTrigger asChild>
-          <Button variant="outline">{buttonText || "Add"}</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-sm">
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">{buttonText || "Add"}</Button>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-sm">
+        <form onSubmit={handleSubmit} className="grid gap-4">
           <DialogHeader>
             <DialogTitle>Add proxies</DialogTitle>
             <DialogDescription>
@@ -30,11 +55,11 @@ export function AddProxyModal({ buttonText }: { buttonText?: string }) {
           <FieldGroup>
             <Field>
               <Label htmlFor="host">Host</Label>
-              <Input id="host" name="host" placeholder="1.1.1.1" />
+              <Input id="host" name="host" placeholder="1.1.1.1" required />
             </Field>
             <Field>
               <Label htmlFor="port">Port</Label>
-              <Input id="port" name="port" placeholder="522" />
+              <Input id="port" name="port" placeholder="522" required />
             </Field>
             <Field>
               <Label htmlFor="username">Username</Label>
@@ -51,8 +76,8 @@ export function AddProxyModal({ buttonText }: { buttonText?: string }) {
             </DialogClose>
             <Button type="submit">Add</Button>
           </DialogFooter>
-        </DialogContent>
-      </form>
+        </form>
+      </DialogContent>
     </Dialog>
   )
 }

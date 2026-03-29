@@ -13,7 +13,6 @@ import { MonitorIcon, InfoIcon } from "lucide-react"
 
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -21,20 +20,12 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
+import { useSites } from "@/hooks/use-sites"
 import { AddSiteModal } from "@/modals/add-site"
-import type { Site } from "@/types"
+import { RemoveSiteModal } from "@/modals/remove-site"
 
-type SiteListProps = {
-  sites?: Site[]
-  loading?: boolean
-  error?: string | null
-}
-
-export default function SiteTable({
-  sites,
-  loading,
-  error,
-}: SiteListProps) {
+export default function SiteTable() {
+  const { sites, loading, error } = useSites()
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -65,13 +56,9 @@ export default function SiteTable({
             <MonitorIcon />
           </EmptyMedia>
           <EmptyTitle>No sites</EmptyTitle>
-          <EmptyDescription>
-            You have not added any sites yet
-          </EmptyDescription>
+          <EmptyDescription>You have not added any sites yet</EmptyDescription>
+          <AddSiteModal />
         </EmptyHeader>
-        <EmptyContent>
-          <AddSiteModal buttonText="Add sites" />
-        </EmptyContent>
       </Empty>
     )
   } else {
@@ -81,18 +68,22 @@ export default function SiteTable({
           <TableRow>
             <TableHead>Domain</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sites.map((p) => (
-            <TableRow key={p.id}>
-              <TableCell>{p.domain}</TableCell>
+          {sites.map((s) => (
+            <TableRow key={s.id}>
+              <TableCell>{s.domain}</TableCell>
               <TableCell>
-                {p.disabled ? (
+                {s.disabled ? (
                   <Badge variant="destructive">Disabled</Badge>
                 ) : (
                   <Badge variant="success">Enabled</Badge>
                 )}
+              </TableCell>
+              <TableCell className="text-right">
+                <RemoveSiteModal site={s}/>
               </TableCell>
             </TableRow>
           ))}

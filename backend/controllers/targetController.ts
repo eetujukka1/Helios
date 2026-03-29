@@ -19,8 +19,8 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 
 export const add = async (req: Request, res: Response): Promise<void> => {
   const targets = z.array(TargetSchema).parse(req.body.targets);
-  await prisma.target.createMany({ data: targets });
-  res.status(201).json({ ok: true });
+  const addedSites = await prisma.target.createManyAndReturn({ data: targets });
+  res.status(201).json(addedSites);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {

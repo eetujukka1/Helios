@@ -3,7 +3,7 @@ import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 const mockProxy = {
   findMany: jest.fn<() => Promise<object[]>>(),
   findFirst: jest.fn<() => Promise<object | null>>(),
-  createMany: jest.fn<() => Promise<object>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
   delete: jest.fn<() => Promise<object | null>>(),
 };
 
@@ -24,7 +24,7 @@ beforeEach(() => {
   setupEnv();
   mockProxy.findMany.mockReset();
   mockProxy.findFirst.mockReset();
-  mockProxy.createMany.mockReset();
+  mockProxy.createManyAndReturn.mockReset();
   mockProxy.delete.mockReset();
 });
 
@@ -137,8 +137,35 @@ describe("POST /api/proxies", () => {
     expect(res.status).toBe(400);
   });
 
-  it("responds with 201 on valid proxies", async () => {
-    mockProxy.createMany.mockResolvedValue({ count: 1 });
+  it("responds with 400 when host is empty string", async () => {
+    const res = await request(app)
+      .post("/api/proxies")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ proxies: [{ host: "", port: 8080, username: "user" }] });
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 400 when username is empty string", async () => {
+    const res = await request(app)
+      .post("/api/proxies")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ proxies: [{ host: "proxy.example.com", port: 8080, username: "" }] });
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 201 when username is omitted", async () => {
+    mockProxy.createManyAndReturn.mockResolvedValue([{ ...proxy, username: null }]);
+
+    const res = await request(app)
+      .post("/api/proxies")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ proxies: [{ host: "proxy.example.com", port: 8080 }] });
+
+    expect(res.status).toBe(201);
+  });
+
+  it("responds with 201 and the created proxies", async () => {
+    mockProxy.createManyAndReturn.mockResolvedValue([proxy]);
 
     const res = await request(app)
       .post("/api/proxies")
@@ -150,13 +177,12 @@ describe("POST /api/proxies", () => {
             port: 8080,
             username: "user",
             password: "pass",
-            enabled: true,
           },
         ],
       });
 
     expect(res.status).toBe(201);
-    expect(res.body).toEqual({ ok: true });
+    expect(res.body).toEqual([proxy]);
   });
 });
 

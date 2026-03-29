@@ -1,27 +1,37 @@
-import { useState, useEffect } from "react"
-import type { Proxy } from "@/types"
-import { fetchProxies } from "@/services/proxy-service"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import type { ProxyInput } from "@/types"
+import { get, add, remove } from "@/services/proxy-service"
 
 export function useProxies() {
-  const [proxies, setProxies] = useState<Proxy[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const queryClient = useQueryClient()
 
-  const getProxies = async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      setProxies(await fetchProxies())
-    } catch (error) {
-      setError((error as Error).message)
-    } finally {
-      setLoading(false)
-    }
+  const {
+    data: proxies = [],
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: ["proxies"],
+    queryFn: get,
+  })
+
+  const getProxies = () => queryClient.invalidateQueries({ queryKey: ["proxies"] })
+
+  const { mutateAsync: addProxies } = useMutation({
+    mutationFn: (newProxies: ProxyInput[]) => add(newProxies),
+    onSuccess: () => getProxies()
+  })
+
+  const { mutateAsync: removeProxy } = useMutation({
+    mutationFn: (id: number | string) => remove(id),
+    onSuccess: () => getProxies()
+  })
+
+  return {
+    proxies,
+    loading,
+    error: error ? (error as Error).message : null,
+    getProxies,
+    addProxies,
+    removeProxy
   }
-
-  useEffect(() => {
-    getProxies()
-  }, [])
-
-  return { proxies, loading, error, getProxies }
 }

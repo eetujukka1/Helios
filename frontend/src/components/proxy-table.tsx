@@ -13,7 +13,6 @@ import { NetworkIcon, InfoIcon } from "lucide-react"
 
 import {
   Empty,
-  EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
@@ -21,20 +20,13 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
+import { useProxies } from "@/hooks/use-proxies"
+
+import { RemoveProxyModal } from "@/modals/remove-proxy"
 import { AddProxyModal } from "@/modals/add-proxy"
-import type { Proxy } from "@/types"
 
-type ProxyListProps = {
-  proxies?: Proxy[]
-  loading?: boolean
-  error?: string | null
-}
-
-export default function ProxyTable({
-  proxies,
-  loading,
-  error,
-}: ProxyListProps) {
+export default function ProxyTable() {
+  const { proxies, loading, error } = useProxies()
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -68,10 +60,8 @@ export default function ProxyTable({
           <EmptyDescription>
             You have not added any proxies yet
           </EmptyDescription>
+          <AddProxyModal />
         </EmptyHeader>
-        <EmptyContent>
-          <AddProxyModal buttonText="Add proxies" />
-        </EmptyContent>
       </Empty>
     )
   } else {
@@ -83,6 +73,7 @@ export default function ProxyTable({
             <TableHead>Port</TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead className="text-right">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -97,6 +88,9 @@ export default function ProxyTable({
                 ) : (
                   <Badge variant="success">Enabled</Badge>
                 )}
+              </TableCell>
+              <TableCell className="text-right">
+                <RemoveProxyModal proxy={p}/>
               </TableCell>
             </TableRow>
           ))}
