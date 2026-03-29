@@ -1,0 +1,10 @@
+services:
+  postgres:
+    image: postgres
+    container_name: helios-postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./postgres_data:/var/lib/postgresql
