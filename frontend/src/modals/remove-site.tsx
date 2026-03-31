@@ -24,11 +24,11 @@ type Props = {
 
 export function RemoveSiteModal({ site }: Props) {
   const [open, setOpen] = useState(false)
-  const { removeSite } = useSites();
+  const { removeSite } = useSites()
 
   const handleOnClick = async () => {
-    await removeSite(site.id);
-    setOpen(false);
+    await removeSite(site.id)
+    setOpen(false)
   }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -46,7 +46,9 @@ export function RemoveSiteModal({ site }: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleOnClick}>Remove</AlertDialogAction>
+          <AlertDialogAction variant="destructive" onClick={handleOnClick}>
+            Remove
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

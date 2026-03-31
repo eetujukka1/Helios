@@ -1,25 +1,19 @@
-import { Card, CardContent, CardFooter, CardHeader } from "./card";
-import { Button } from "./button";
+import { Card, CardContent, CardFooter, CardHeader } from "./card"
 
 type Props = {
-  value: number,
+  value: number
   title: string
+  children?: React.ReactNode
 }
 
-export function DataCard({value, title}: Props) {
+export function DataCard({ value, title, children }: Props) {
   return (
     <Card>
-      <CardHeader className="flex flex-column">
-        {title}
-      </CardHeader>
+      <CardHeader className="flex-column flex">{title}</CardHeader>
       <CardContent>
-        <h1 className="text-4xl text-center">
-          {value}
-        </h1>
+        <h1 className="text-center text-4xl">{value}</h1>
       </CardContent>
-      <CardFooter>
-        <Button variant="outline" className="w-full">View</Button>
-      </CardFooter>
+      {children ? <CardFooter>{children}</CardFooter> : null}
     </Card>
   )
 }

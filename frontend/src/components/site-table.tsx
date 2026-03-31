@@ -83,7 +83,7 @@ export default function SiteTable() {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveSiteModal site={s}/>
+                <RemoveSiteModal site={s} />
               </TableCell>
             </TableRow>
           ))}
