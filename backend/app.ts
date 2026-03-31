@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
+import healthRoute from "./routes/healthRoute.js"
 import authRoutes from "./routes/authRoutes.js";
 import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
@@ -12,6 +13,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+app.use("/api/health", healthRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/proxies", authenticateToken, proxyRoutes);
 app.use("/api/targets", authenticateToken, targetRoutes);
