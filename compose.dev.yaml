@@ -4,3 +4,32 @@ services:
     container_name: helios-redis-dev
     ports:
       - "6379:6379"
+
+  frontend:
+    image: helios-frontend-dev
+    container_name: helios-frontend-dev
+    build:
+      context: ./frontend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend:/usr/src/app
+
+  backend:
+    image: helios-backend-dev
+    container_name: helios-backend-dev
+    build:
+      context: ./backend
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./backend:/usr/src/app
+      
+  nginx:
+    image: nginx:latest
+    container_name: helios-nginx-dev
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    depends_on:
+      - frontend
+    
