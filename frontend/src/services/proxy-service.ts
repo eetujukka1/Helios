@@ -14,6 +14,6 @@ export async function add(proxies: ProxyInput[]): Promise<Proxy[]> {
 }
 
 export async function remove(id: number | string): Promise<Proxy[]> {
-  const response = await apiClient.delete(`/proxies/${id}`);
-  return response.data;
+  const response = await apiClient.delete(`/proxies/${id}`)
+  return response.data
 }

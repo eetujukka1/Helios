@@ -24,11 +24,11 @@ type Props = {
 
 export function RemoveProxyModal({ proxy }: Props) {
   const [open, setOpen] = useState(false)
-  const { removeProxy } = useProxies();
+  const { removeProxy } = useProxies()
 
   const handleOnClick = async () => {
-    await removeProxy(proxy.id);
-    setOpen(false);
+    await removeProxy(proxy.id)
+    setOpen(false)
   }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -46,7 +46,9 @@ export function RemoveProxyModal({ proxy }: Props) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction variant="destructive" onClick={handleOnClick}>Remove</AlertDialogAction>
+          <AlertDialogAction variant="destructive" onClick={handleOnClick}>
+            Remove
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

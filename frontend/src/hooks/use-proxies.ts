@@ -15,24 +15,27 @@ export function useProxies() {
     queryFn: get,
   })
 
-  const getProxies = () => queryClient.invalidateQueries({ queryKey: ["proxies"] })
+  const getProxies = () =>
+    queryClient.invalidateQueries({ queryKey: ["proxies"] })
 
   const { mutateAsync: addProxies } = useMutation({
     mutationFn: (newProxies: ProxyInput[]) => add(newProxies),
     onSuccess: () => getProxies(),
-    onError: (error: Error) => toast.error("Failed to add proxies", {
-      description: error.message,
-      position: "top-center"
-    })
+    onError: (error: Error) =>
+      toast.error("Failed to add proxies", {
+        description: error.message,
+        position: "top-center",
+      }),
   })
 
   const { mutateAsync: removeProxy } = useMutation({
     mutationFn: (id: number | string) => remove(id),
     onSuccess: () => getProxies(),
-    onError: (error: Error) => toast.error("Failed to remove proxy", {
-      description: error.message,
-      position: "top-center"
-    })  
+    onError: (error: Error) =>
+      toast.error("Failed to remove proxy", {
+        description: error.message,
+        position: "top-center",
+      }),
   })
 
   return {
@@ -41,6 +44,6 @@ export function useProxies() {
     error: error ? (error as Error).message : null,
     getProxies,
     addProxies,
-    removeProxy
+    removeProxy,
   }
 }

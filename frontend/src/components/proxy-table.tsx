@@ -90,7 +90,7 @@ export default function ProxyTable() {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveProxyModal proxy={p}/>
+                <RemoveProxyModal proxy={p} />
               </TableCell>
             </TableRow>
           ))}

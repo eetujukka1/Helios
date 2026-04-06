@@ -14,6 +14,6 @@ export async function add(sites: SiteInput[]): Promise<Site[]> {
 }
 
 export async function remove(id: number | string): Promise<Site> {
-  const response = await apiClient.delete(`/targets/${id}`);
-  return response.data;
+  const response = await apiClient.delete(`/targets/${id}`)
+  return response.data
 }

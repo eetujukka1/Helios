@@ -52,7 +52,12 @@ export function AddSiteModal({ buttonText }: Props) {
           <FieldGroup>
             <Field>
               <Label htmlFor="domain">Domain</Label>
-              <Input id="domain" name="domain" placeholder="example.com" required />
+              <Input
+                id="domain"
+                name="domain"
+                placeholder="example.com"
+                required
+              />
             </Field>
           </FieldGroup>
           <DialogFooter>
