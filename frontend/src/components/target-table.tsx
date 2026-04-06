@@ -20,12 +20,12 @@ import {
 } from "@/components/ui/empty"
 
 import { Spinner } from "@/components/ui/spinner"
-import { useSites } from "@/hooks/use-sites"
-import { AddSiteModal } from "@/modals/add-site"
-import { RemoveSiteModal } from "@/modals/remove-site"
+import { useTargets } from "@/hooks/use-targets"
+import { AddTargetModal } from "@/modals/add-target"
+import { RemoveTargetModal } from "@/modals/remove-target"
 
-export default function SiteTable() {
-  const { sites, loading, error } = useSites()
+export default function TargetTable() {
+  const { targets, loading, error } = useTargets()
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -48,16 +48,18 @@ export default function SiteTable() {
     )
   }
 
-  if (!sites || sites.length === 0) {
+  if (!targets || targets.length === 0) {
     return (
       <Empty>
         <EmptyHeader>
           <EmptyMedia>
             <MonitorIcon />
           </EmptyMedia>
-          <EmptyTitle>No sites</EmptyTitle>
-          <EmptyDescription>You have not added any sites yet</EmptyDescription>
-          <AddSiteModal />
+          <EmptyTitle>No targets</EmptyTitle>
+          <EmptyDescription>
+            You have not added any targets yet
+          </EmptyDescription>
+          <AddTargetModal />
         </EmptyHeader>
       </Empty>
     )
@@ -72,18 +74,18 @@ export default function SiteTable() {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {sites.map((s) => (
-            <TableRow key={s.id}>
-              <TableCell>{s.domain}</TableCell>
+          {targets.map((t) => (
+            <TableRow key={t.id}>
+              <TableCell>{t.domain}</TableCell>
               <TableCell>
-                {s.disabled ? (
+                {t.disabled ? (
                   <Badge variant="destructive">Disabled</Badge>
                 ) : (
                   <Badge variant="success">Enabled</Badge>
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveSiteModal site={s} />
+                <RemoveTargetModal target={t} />
               </TableCell>
             </TableRow>
           ))}

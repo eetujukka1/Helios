@@ -149,12 +149,16 @@ describe("POST /api/proxies", () => {
     const res = await request(app)
       .post("/api/proxies")
       .set("Authorization", `Bearer ${authToken()}`)
-      .send({ proxies: [{ host: "proxy.example.com", port: 8080, username: "" }] });
+      .send({
+        proxies: [{ host: "proxy.example.com", port: 8080, username: "" }],
+      });
     expect(res.status).toBe(400);
   });
 
   it("responds with 201 when username is omitted", async () => {
-    mockProxy.createManyAndReturn.mockResolvedValue([{ ...proxy, username: null }]);
+    mockProxy.createManyAndReturn.mockResolvedValue([
+      { ...proxy, username: null },
+    ]);
 
     const res = await request(app)
       .post("/api/proxies")

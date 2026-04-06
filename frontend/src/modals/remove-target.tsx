@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useSites } from "@/hooks/use-sites"
+import { useTargets } from "@/hooks/use-targets"
 
 import {
   AlertDialog,
@@ -15,19 +15,19 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import type { Site } from "@/types"
+import type { Target } from "@helios/shared"
 import { Trash2Icon } from "lucide-react"
 
 type Props = {
-  site: Site
+  target: Target
 }
 
-export function RemoveSiteModal({ site }: Props) {
+export function RemoveTargetModal({ target }: Props) {
   const [open, setOpen] = useState(false)
-  const { removeSite } = useSites()
+  const { removeTarget } = useTargets()
 
   const handleOnClick = async () => {
-    await removeSite(site.id)
+    await removeTarget(target.id)
     setOpen(false)
   }
   return (
@@ -41,7 +41,7 @@ export function RemoveSiteModal({ site }: Props) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            {`You are about to remove ${site.domain} from Helios. This action cannot be undone.`}
+            {`You are about to remove ${target.domain} from Helios. This action cannot be undone.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

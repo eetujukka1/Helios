@@ -67,7 +67,7 @@ export function AddProxyModal({ buttonText }: Props) {
             </Field>
             <Field>
               <Label htmlFor="password">Password</Label>
-              <Input id="password" name="password" placeholder="password" />
+              <Input id="password" name="password" placeholder="password" type="password"/>
             </Field>
           </FieldGroup>
           <DialogFooter>

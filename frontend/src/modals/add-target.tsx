@@ -13,21 +13,21 @@ import {
 import { Field, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useSites } from "@/hooks/use-sites"
+import { useTargets } from "@/hooks/use-targets"
 
 type Props = {
   buttonText?: string
 }
 
-export function AddSiteModal({ buttonText }: Props) {
+export function AddTargetModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
-  const { addSites } = useSites()
+  const { addTargets } = useTargets()
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
     const form = e.currentTarget
     const data = new FormData(form)
-    await addSites([
+    await addTargets([
       {
         domain: data.get("domain") as string,
       },
@@ -44,9 +44,9 @@ export function AddSiteModal({ buttonText }: Props) {
       <DialogContent className="sm:max-w-sm">
         <form onSubmit={handleSubmit} className="grid gap-4">
           <DialogHeader>
-            <DialogTitle>Add sites</DialogTitle>
+            <DialogTitle>Add targets</DialogTitle>
             <DialogDescription>
-              Add site information here. Click Add to add.
+              Add target information here. Click Add to add.
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>

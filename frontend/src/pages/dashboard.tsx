@@ -2,30 +2,32 @@ import { Spinner } from "@/components/ui/spinner"
 
 import Protected from "@/layouts/protected"
 import AppHeader from "@/components/app-header"
-import { DataCard } from "@/components/ui/data-card"
+import { DataCard } from "@/components/data-card"
 
 import { useProxies } from "@/hooks/use-proxies"
-import { useSites } from "@/hooks/use-sites"
+import { useTargets } from "@/hooks/use-targets"
 
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
 export default function Dashboard() {
-  const { sites, loading: sitesLoading, getSites } = useSites()
+  const { targets, loading: targetsLoading, getTargets } = useTargets()
   const { proxies, loading: proxiesLoading, getProxies } = useProxies()
   const navigate = useNavigate()
 
   const refresh = () => {
-    getSites();
-    getProxies();
+    getTargets()
+    getProxies()
   }
 
   return (
     <Protected>
-      <AppHeader title="Dashboard" >
-        <Button variant="outline" onClick={() => refresh()}>Refresh</Button>
+      <AppHeader title="Dashboard">
+        <Button variant="outline" onClick={() => refresh()}>
+          Refresh
+        </Button>
       </AppHeader>
-      {sitesLoading || proxiesLoading ? (
+      {targetsLoading || proxiesLoading ? (
         <div className="flex justify-center py-8">
           <Spinner />
         </div>
@@ -40,11 +42,11 @@ export default function Dashboard() {
               View
             </Button>
           </DataCard>
-          <DataCard value={sites.length} title="Sites">
+          <DataCard value={targets.length} title="Targets">
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => navigate("/sites")}
+              onClick={() => navigate("/targets")}
             >
               View
             </Button>

@@ -9,19 +9,23 @@ services:
     image: helios-frontend-dev
     container_name: helios-frontend-dev
     build:
-      context: ./frontend
-      dockerfile: dev.Dockerfile
+      context: .
+      dockerfile: frontend/dev.Dockerfile
     volumes:
-      - ./frontend:/usr/src/app
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/frontend/node_modules
 
   backend:
     image: helios-backend-dev
     container_name: helios-backend-dev
     build:
-      context: ./backend
-      dockerfile: dev.Dockerfile
+      context: .
+      dockerfile: backend/dev.Dockerfile
     volumes:
-      - ./backend:/usr/src/app
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/backend/node_modules
       
   nginx:
     image: nginx:latest
