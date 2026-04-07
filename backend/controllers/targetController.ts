@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
-import { TargetSchema } from "../schemas/target.js";
+import { TargetCreateSchema } from "@helios/shared";
 
 const prisma = new PrismaClient();
 
@@ -18,7 +18,7 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const add = async (req: Request, res: Response): Promise<void> => {
-  const targets = z.array(TargetSchema).parse(req.body.targets);
+  const targets = z.array(TargetCreateSchema).parse(req.body.targets);
   const addedSites = await prisma.target.createManyAndReturn({ data: targets });
   res.status(201).json(addedSites);
 };

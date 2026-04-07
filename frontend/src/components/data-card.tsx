@@ -1,4 +1,4 @@
-import { Card, CardContent, CardFooter, CardHeader } from "./card"
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card"
 
 type Props = {
   value: number

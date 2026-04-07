@@ -15,7 +15,7 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import type { Proxy } from "@/types"
+import type { Proxy } from "@helios/shared"
 import { Trash2Icon } from "lucide-react"
 
 type Props = {

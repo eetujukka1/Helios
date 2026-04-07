@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import type { ProxyInput } from "@/types"
+import type { ProxyCreate } from "@helios/shared"
 import { get, add, remove } from "@/services/proxy-service"
 import { toast } from "sonner"
 
@@ -19,7 +19,7 @@ export function useProxies() {
     queryClient.invalidateQueries({ queryKey: ["proxies"] })
 
   const { mutateAsync: addProxies } = useMutation({
-    mutationFn: (newProxies: ProxyInput[]) => add(newProxies),
+    mutationFn: (newProxies: ProxyCreate[]) => add(newProxies),
     onSuccess: () => getProxies(),
     onError: (error: Error) =>
       toast.error("Failed to add proxies", {
