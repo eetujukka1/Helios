@@ -11,7 +11,9 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [token, setToken] = useState<string | null>(() => localStorage.getItem("helios-token"))
+  const [token, setToken] = useState<string | null>(() =>
+    localStorage.getItem("helios-token")
+  )
   const navigate = useNavigate()
 
   const login = async (username: string, password: string) => {
@@ -27,7 +29,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     navigate("/login")
   }
 
-  return <AuthContext.Provider value={{ token, login, logout }}>{children}</AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ token, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  )
 }
 /* eslint-disable react-refresh/only-export-components */
 export function useAuth() {

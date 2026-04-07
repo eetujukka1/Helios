@@ -1,12 +1,12 @@
 import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
-import { ProxySchema } from "../schemas/proxy.js";
+import { ProxyCreateSchema } from "@helios/shared";
 
 const prisma = new PrismaClient();
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
-  const proxies = prisma.proxy.findMany();
+  const proxies = await prisma.proxy.findMany();
   res.json(proxies);
 };
 
@@ -16,9 +16,11 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const add = async (req: Request, res: Response): Promise<void> => {
-  const proxies = z.array(ProxySchema).parse(req.body.proxies);
-  await prisma.proxy.createMany({ data: proxies });
-  res.status(201).json({ ok: true });
+  const proxies = z.array(ProxyCreateSchema).parse(req.body.proxies);
+  const addedProxies = await prisma.proxy.createManyAndReturn({
+    data: proxies,
+  });
+  res.status(201).json(addedProxies);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {

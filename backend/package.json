@@ -1,17 +1,21 @@
 {
-  "name": "helios-backend",
+  "name": "@helios/backend",
+  "private": true,
   "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "NODE_ENV=dev tsx watch index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
+    "generatePrisma": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
     "format": "npx prettier --write .",
+    "checkformat": "prettier --check .",
     "lint": "eslint"
   },
   "dependencies": {
+    "@helios/shared": "*",
     "@prisma/client": "^6.19.2",
     "body-parser": "^2.2.2",
     "cors": "^2.8.6",

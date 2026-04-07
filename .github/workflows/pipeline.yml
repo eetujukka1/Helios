@@ -1,0 +1,28 @@
+name: Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+      - name: Install dependencies
+        run: npm install
+      - name: Generate Prisma client
+        run: npm run generatePrisma -w backend
+      - name: Check format
+        run: npm run checkformat
+      - name: Linter
+        run: npm run lint
+      - name: Run tests
+        run: npm run test

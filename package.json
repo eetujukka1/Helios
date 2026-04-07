@@ -1,0 +1,19 @@
+{
+  "name": "helios",
+  "private": true,
+  "version": "0.0.1",
+  "workspaces": [
+    "frontend",
+    "backend",
+    "shared"
+  ],
+  "scripts": {
+    "dev:frontend": "npm run dev -w frontend",
+    "dev:backend": "npm run dev -w backend",
+    "build": "npm run build -w frontend && npm run build -w backend",
+    "lint": "npm run lint --workspaces",
+    "format": "npm run format --workspaces",
+    "checkformat": "npm run checkformat --workspaces",
+    "test": "npm run test -w backend"
+  }
+}

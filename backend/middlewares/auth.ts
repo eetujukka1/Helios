@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
 export const authenticateToken = (
@@ -18,7 +18,7 @@ export const authenticateToken = (
       res.sendStatus(403);
       return;
     }
-    (req as any).user = user;
+    (req as Request & { user?: JwtPayload | string }).user = user;
     next();
   });
 };

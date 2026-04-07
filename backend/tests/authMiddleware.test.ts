@@ -1,15 +1,18 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import request from "supertest";
-import express from "express";
-import jwt from "jsonwebtoken";
+import express, { Request } from "express";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import { authenticateToken } from "../middlewares/auth.js";
 import { SECRET, setupEnv } from "./helpers.js";
 
 beforeEach(setupEnv);
 
 const app = express();
-app.get("/protected", authenticateToken, (req: any, res) =>
-  res.json({ user: req.user }),
+app.get(
+  "/protected",
+  authenticateToken,
+  (req: Request & { user?: JwtPayload | string }, res) =>
+    res.json({ user: req.user }),
 );
 
 describe("GET /protected", () => {
