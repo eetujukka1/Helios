@@ -7,13 +7,11 @@ import { DataCard } from "@/components/data-card"
 import { useProxies } from "@/hooks/use-proxies"
 import { useTargets } from "@/hooks/use-targets"
 
-import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
 export default function Dashboard() {
   const { targets, loading: targetsLoading, getTargets } = useTargets()
   const { proxies, loading: proxiesLoading, getProxies } = useProxies()
-  const navigate = useNavigate()
 
   const refresh = () => {
     getTargets()
@@ -33,24 +31,8 @@ export default function Dashboard() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <DataCard value={proxies.length} title="Proxies">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => navigate("/proxies")}
-            >
-              View
-            </Button>
-          </DataCard>
-          <DataCard value={targets.length} title="Targets">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => navigate("/targets")}
-            >
-              View
-            </Button>
-          </DataCard>
+          <DataCard value={proxies.length} title="Proxies" to="/proxies" />
+          <DataCard value={targets.length} title="Targets" to="/targets" />
         </div>
       )}
     </Protected>
