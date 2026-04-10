@@ -3,8 +3,16 @@ import { z } from "zod";
 export const ProxyCreateSchema = z.object({
   host: z.string().min(1),
   port: z.number(),
-  username: z.string().min(1).optional(),
-  password: z.string().min(1).optional(),
+  username: z
+    .string()
+    .min(1)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
+  password: z
+    .string()
+    .min(1)
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   disabled: z.boolean().optional(),
 });
 
