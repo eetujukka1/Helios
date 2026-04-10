@@ -17,5 +17,5 @@ A web crawling management tool for running scrapes through rotating proxies acro
 |---|---|
 | Frontend | React, Vite, TypeScript, Radix UI |
 | Backend | Node.js, Express, TypeScript |
-| Database | PostgreSQL (Prisma ORM) |
+| Database | SQLite (Prisma ORM) |
 | Infrastructure | Docker Compose, Nginx |
