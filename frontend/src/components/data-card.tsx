@@ -9,8 +9,11 @@ type Props = {
 }
 
 export function DataCard({ value, title, to }: Props) {
+  const cardClassName = to
+    ? "aspect-square h-full cursor-pointer transition-colors hover:bg-muted/30"
+    : "aspect-square h-full"
   const card = (
-    <Card className={to ? "h-full cursor-pointer transition-colors hover:bg-muted/30" : "h-full"}>
+    <Card className={cardClassName}>
       <CardHeader className="flex-column flex">{title}</CardHeader>
       <CardContent>
         <h1 className="text-center text-4xl">{value}</h1>
