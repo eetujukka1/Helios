@@ -15,7 +15,7 @@ export function DataCard({ value, title, to }: Props) {
   const card = (
     <Card className={cardClassName}>
       <CardHeader className="flex-column flex">{title}</CardHeader>
-      <CardContent>
+      <CardContent className="flex flex-1 items-center justify-center">
         <h1 className="text-center text-4xl">{value}</h1>
       </CardContent>
     </Card>
