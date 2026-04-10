@@ -14,6 +14,6 @@
     "lint": "npm run lint --workspaces",
     "format": "npm run format --workspaces",
     "checkformat": "npm run checkformat --workspaces",
-    "test": "npm run test -w backend"
+    "test": "npm run test -w backend -w frontend"
   }
 }

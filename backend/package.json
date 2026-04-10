@@ -10,7 +10,7 @@
     "generatePrisma": "npx prisma generate",
     "migrate": "npx prisma migrate dev",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest",
-    "format": "npx prettier --write .",
+    "format": "prettier --write .",
     "checkformat": "prettier --check .",
     "lint": "eslint"
   },
