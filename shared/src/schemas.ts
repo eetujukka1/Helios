@@ -15,6 +15,8 @@ export const ProxySchema = ProxyCreateSchema.extend({
 
 export type Proxy = z.infer<typeof ProxySchema>;
 export type ProxyCreate = z.infer<typeof ProxyCreateSchema>;
+export const ProxyUpdateSchema = ProxyCreateSchema.partial();
+export type ProxyUpdate = z.infer<typeof ProxyUpdateSchema>;
 
 export const TargetCreateSchema = z.object({
   domain: z.string().min(1),

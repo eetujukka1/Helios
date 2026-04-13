@@ -33,7 +33,11 @@ export function RemoveProxyModal({ proxy }: Props) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button size="xs" variant="destructive">
+        <Button
+          size="xs"
+          variant="destructive"
+          aria-label={`Remove ${proxy.host}`}
+        >
           <Trash2Icon />
         </Button>
       </AlertDialogTrigger>

@@ -9,10 +9,12 @@ vi.mock("@/services/proxy-service", () => ({
   get: vi.fn(),
   add: vi.fn(),
   remove: vi.fn(),
+  update: vi.fn(),
 }))
 
 const mockGet = vi.mocked(proxyService.get)
 const mockRemove = vi.mocked(proxyService.remove)
+const mockUpdate = vi.mocked(proxyService.update)
 
 function wrapper({ children }: { children: React.ReactNode }) {
   return (
@@ -78,7 +80,7 @@ describe("ProxyTable", () => {
     render(<ProxyTable />, { wrapper })
     await screen.findByText("1.1.1.1")
 
-    await user.click(screen.getByRole("button"))
+    await user.click(screen.getByRole("button", { name: "Remove 1.1.1.1" }))
 
     expect(screen.getByText("Are you absolutely sure?")).toBeInTheDocument()
     expect(
@@ -93,9 +95,31 @@ describe("ProxyTable", () => {
     render(<ProxyTable />, { wrapper })
     await screen.findByText("1.1.1.1")
 
-    await user.click(screen.getByRole("button"))
+    await user.click(screen.getByRole("button", { name: "Remove 1.1.1.1" }))
     await user.click(screen.getByRole("button", { name: "Remove" }))
 
     expect(mockRemove).toHaveBeenCalledWith(1)
+  })
+
+  it("opens update modal and calls update service", async () => {
+    mockGet.mockResolvedValue([testProxy])
+    mockUpdate.mockResolvedValue(testProxy)
+    const user = userEvent.setup()
+    render(<ProxyTable />, { wrapper })
+    await screen.findByText("1.1.1.1")
+
+    await user.click(screen.getByRole("button", { name: "Edit 1.1.1.1" }))
+    expect(screen.getByText("Update proxy")).toBeInTheDocument()
+
+    await user.clear(screen.getByLabelText("Host"))
+    await user.type(screen.getByLabelText("Host"), "2.2.2.2")
+    await user.click(screen.getByRole("button", { name: "Update" }))
+
+    expect(mockUpdate).toHaveBeenCalledWith(1, {
+      host: "2.2.2.2",
+      port: 8080,
+      username: "user",
+      password: undefined,
+    })
   })
 })
