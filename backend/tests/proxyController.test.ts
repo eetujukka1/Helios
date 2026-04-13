@@ -4,6 +4,10 @@ const mockProxy = {
   findMany: jest.fn<() => Promise<object[]>>(),
   findFirst: jest.fn<() => Promise<object | null>>(),
   createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  update:
+    jest.fn<
+      (args: { where: { id: number }; data: object }) => Promise<object | null>
+    >(),
   delete: jest.fn<() => Promise<object | null>>(),
 };
 
@@ -25,6 +29,7 @@ beforeEach(() => {
   mockProxy.findMany.mockReset();
   mockProxy.findFirst.mockReset();
   mockProxy.createManyAndReturn.mockReset();
+  mockProxy.update.mockReset();
   mockProxy.delete.mockReset();
 });
 
@@ -219,5 +224,67 @@ describe("DELETE /api/proxies/:id", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(proxy);
+  });
+});
+
+describe("PATCH /api/proxies/:id", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).patch("/api/proxies/1");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 on invalid token", async () => {
+    const res = await request(app)
+      .patch("/api/proxies/1")
+      .set("Authorization", "Bearer invalidtoken");
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 400 on non-numeric id", async () => {
+    const res = await request(app)
+      .patch("/api/proxies/abc")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ host: "proxy.example.com" });
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 400 on invalid body", async () => {
+    const res = await request(app)
+      .patch("/api/proxies/1")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ host: "" });
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 400 when body is empty", async () => {
+    const res = await request(app)
+      .patch("/api/proxies/1")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({});
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 200 and the updated proxy", async () => {
+    mockProxy.update.mockResolvedValue({
+      ...proxy,
+      host: "updated.example.com",
+      disabled: true,
+    });
+
+    const res = await request(app)
+      .patch("/api/proxies/1")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({ host: "updated.example.com", disabled: true });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      ...proxy,
+      host: "updated.example.com",
+      disabled: true,
+    });
+    expect(mockProxy.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { host: "updated.example.com", disabled: true },
+    });
   });
 });
