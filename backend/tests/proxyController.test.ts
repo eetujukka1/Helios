@@ -145,14 +145,18 @@ describe("POST /api/proxies", () => {
     expect(res.status).toBe(400);
   });
 
-  it("responds with 400 when username is empty string", async () => {
+  it("responds with 201 when username is empty string", async () => {
+    mockProxy.createManyAndReturn.mockResolvedValue([
+      { ...proxy, username: null },
+    ]);
+
     const res = await request(app)
       .post("/api/proxies")
       .set("Authorization", `Bearer ${authToken()}`)
       .send({
         proxies: [{ host: "proxy.example.com", port: 8080, username: "" }],
       });
-    expect(res.status).toBe(400);
+    expect(res.status).toBe(201);
   });
 
   it("responds with 201 when username is omitted", async () => {
