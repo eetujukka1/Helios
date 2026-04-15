@@ -24,6 +24,13 @@ export const ProxySchema = ProxyCreateSchema.extend({
 export type Proxy = z.infer<typeof ProxySchema>;
 export type ProxyCreate = z.infer<typeof ProxyCreateSchema>;
 
+export const ProxyUpdateSchema = ProxyCreateSchema.partial().refine(
+  (value) => Object.keys(value).length > 0,
+  { message: "At least one field must be provided for update." },
+);
+
+export type ProxyUpdate = z.infer<typeof ProxyUpdateSchema>;
+
 export const TargetCreateSchema = z.object({
   domain: z.url(),
   disabled: z.boolean().optional(),
