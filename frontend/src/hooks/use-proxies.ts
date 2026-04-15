@@ -21,21 +21,11 @@ export function useProxies() {
   const { mutateAsync: addProxies } = useMutation({
     mutationFn: (newProxies: ProxyCreate[]) => add(newProxies),
     onSuccess: () => getProxies(),
-    onError: (error: Error) =>
-      toast.error("Failed to add proxies", {
-        description: error.message,
-        position: "top-center",
-      }),
   })
 
   const { mutateAsync: removeProxy } = useMutation({
     mutationFn: (id: number | string) => remove(id),
     onSuccess: () => getProxies(),
-    onError: (error: Error) =>
-      toast.error("Failed to remove proxy", {
-        description: error.message,
-        position: "top-center",
-      }),
   })
 
   const { mutateAsync: updateProxy } = useMutation({

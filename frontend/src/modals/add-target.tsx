@@ -51,11 +51,11 @@ export function AddTargetModal({ buttonText }: Props) {
           </DialogHeader>
           <FieldGroup>
             <Field>
-              <Label htmlFor="domain">Domain</Label>
+              <Label htmlFor="domain">URL</Label>
               <Input
                 id="domain"
                 name="domain"
-                placeholder="example.com"
+                placeholder="https://example.com"
                 required
               />
             </Field>

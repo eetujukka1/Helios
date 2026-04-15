@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
-import { ProxyCreateSchema } from "@helios/shared";
+import { ProxyCreateSchema, ProxyUpdateSchema } from "@helios/shared";
 
 const prisma = new PrismaClient();
 
@@ -26,4 +26,13 @@ export const add = async (req: Request, res: Response): Promise<void> => {
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const deleted = await prisma.proxy.delete({ where: { id: res.locals.id } });
   res.json(deleted);
+};
+
+export const update = async (req: Request, res: Response): Promise<void> => {
+  const proxy = ProxyUpdateSchema.parse(req.body);
+  const updated = await prisma.proxy.update({
+    where: { id: res.locals.id },
+    data: proxy,
+  });
+  res.json(updated);
 };
