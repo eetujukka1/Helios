@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
-import type { ProxyCreate } from "@helios/shared"
-import { get, add, remove } from "@/services/proxy-service"
+import type { ProxyCreate, ProxyUpdate } from "@helios/shared"
+import { get, add, remove, update } from "@/services/proxy-service"
 import { toast } from "sonner"
 
 export function useProxies() {
@@ -21,18 +21,19 @@ export function useProxies() {
   const { mutateAsync: addProxies } = useMutation({
     mutationFn: (newProxies: ProxyCreate[]) => add(newProxies),
     onSuccess: () => getProxies(),
-    onError: (error: Error) =>
-      toast.error("Failed to add proxies", {
-        description: error.message,
-        position: "top-center",
-      }),
   })
 
   const { mutateAsync: removeProxy } = useMutation({
     mutationFn: (id: number | string) => remove(id),
     onSuccess: () => getProxies(),
+  })
+
+  const { mutateAsync: updateProxy } = useMutation({
+    mutationFn: ({ id, proxy }: { id: number | string; proxy: ProxyUpdate }) =>
+      update(id, proxy),
+    onSuccess: () => getProxies(),
     onError: (error: Error) =>
-      toast.error("Failed to remove proxy", {
+      toast.error("Failed to update proxy", {
         description: error.message,
         position: "top-center",
       }),
@@ -45,5 +46,6 @@ export function useProxies() {
     getProxies,
     addProxies,
     removeProxy,
+    updateProxy,
   }
 }

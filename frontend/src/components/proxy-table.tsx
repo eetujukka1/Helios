@@ -24,6 +24,7 @@ import { useProxies } from "@/hooks/use-proxies"
 
 import { RemoveProxyModal } from "@/modals/remove-proxy"
 import { AddProxyModal } from "@/modals/add-proxy"
+import { UpdateProxyModal } from "@/modals/update-proxy"
 
 export default function ProxyTable() {
   const { proxies, loading, error } = useProxies()
@@ -90,7 +91,10 @@ export default function ProxyTable() {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveProxyModal proxy={p} />
+                <div className="flex justify-end gap-2">
+                  <UpdateProxyModal proxy={p} />
+                  <RemoveProxyModal proxy={p} />
+                </div>
               </TableCell>
             </TableRow>
           ))}
