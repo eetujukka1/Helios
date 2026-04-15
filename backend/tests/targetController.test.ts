@@ -30,7 +30,7 @@ beforeEach(() => {
 
 const target = {
   id: 1,
-  domain: "example.com",
+  domain: "https://example.com",
   disabled: false,
 };
 
@@ -134,11 +134,11 @@ describe("POST /api/targets", () => {
     expect(res.status).toBe(400);
   });
 
-  it("responds with 400 when domain is empty string", async () => {
+  it("responds with 400 when domain is not a valid URL", async () => {
     const res = await request(app)
       .post("/api/targets")
       .set("Authorization", `Bearer ${authToken()}`)
-      .send({ targets: [{ domain: "" }] });
+      .send({ targets: [{ domain: "example.com" }] });
     expect(res.status).toBe(400);
   });
 
@@ -148,7 +148,7 @@ describe("POST /api/targets", () => {
     const res = await request(app)
       .post("/api/targets")
       .set("Authorization", `Bearer ${authToken()}`)
-      .send({ targets: [{ domain: "example.com" }] });
+      .send({ targets: [{ domain: "https://example.com" }] });
 
     expect(res.status).toBe(201);
     expect(res.body).toEqual([target]);
