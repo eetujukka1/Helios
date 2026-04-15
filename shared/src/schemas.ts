@@ -23,6 +23,8 @@ export const ProxySchema = ProxyCreateSchema.extend({
 
 export type Proxy = z.infer<typeof ProxySchema>;
 export type ProxyCreate = z.infer<typeof ProxyCreateSchema>;
+export const ProxyUpdateSchema = ProxyCreateSchema.partial();
+export type ProxyUpdate = z.infer<typeof ProxyUpdateSchema>;
 
 export const ProxyUpdateSchema = ProxyCreateSchema.partial().refine(
   (value) => Object.keys(value).length > 0,
