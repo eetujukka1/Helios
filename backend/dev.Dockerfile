@@ -10,4 +10,4 @@ COPY shared/package.json ./shared/
 RUN npm install
 
 WORKDIR /usr/src/app/backend
-CMD ["npm", "run", "dev"]
+CMD ["sh", "-c", "npm run migrate && npm run dev"]
