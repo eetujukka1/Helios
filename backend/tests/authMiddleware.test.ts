@@ -2,10 +2,8 @@ import { describe, it, expect, beforeEach } from "@jest/globals";
 import request from "supertest";
 import express from "express";
 import jwt from "jsonwebtoken";
-import {
-  authenticateToken,
-  type AuthenticatedRequest,
-} from "../middlewares/auth.js";
+import { authenticateToken } from "../middlewares/auth.js";
+import type { AuthenticatedRequest } from "../schemas/auth.js";
 import { SECRET, setupEnv } from "./helpers.js";
 import type { AuthClaims } from "../schemas/auth.js";
 import { ActorTypeEnum } from "../schemas/auth.js";

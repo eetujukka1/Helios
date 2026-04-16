@@ -8,16 +8,20 @@ import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
 import { authenticateToken } from "./middlewares/auth.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+import { createRequireRole } from "./middlewares/requireRole.js";
+import { ActorTypeEnum } from "./schemas/auth.js";
 
 const app = express();
+
+const requireUser = createRequireRole(ActorTypeEnum.User);
 
 app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/api/health", healthRoute);
 app.use("/api/auth", authRoutes);
-app.use("/api/proxies", authenticateToken, proxyRoutes);
-app.use("/api/targets", authenticateToken, targetRoutes);
+app.use("/api/proxies", authenticateToken, requireUser, proxyRoutes);
+app.use("/api/targets", authenticateToken, requireUser, targetRoutes);
 app.use("/api/workers/auth", workerAuthRoutes);
 
 app.use(errorHandler);

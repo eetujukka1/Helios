@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Request } from "express";
 
 export enum ActorTypeEnum {
   User = "user",
@@ -27,3 +28,7 @@ export const AuthClaimsSchema = z.discriminatedUnion("actorType", [
 ]);
 
 export type AuthClaims = z.infer<typeof AuthClaimsSchema>;
+
+export type AuthenticatedRequest = Request & {
+  auth?: AuthClaims;
+};
