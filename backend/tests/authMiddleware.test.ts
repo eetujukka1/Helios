@@ -7,7 +7,7 @@ import {
   type AuthenticatedRequest,
 } from "../middlewares/auth.js";
 import { SECRET, setupEnv } from "./helpers.js";
-import type { AuthClaims } from "../types.js";
+import type { AuthClaims } from "../schemas/auth.js";
 
 beforeEach(setupEnv);
 

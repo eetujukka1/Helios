@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { AuthClaimsSchema } from "../schemas/auth.js";
-import type { AuthClaims } from "../types.js";
+import type { AuthClaims } from "../schemas/auth.js";
 
 export type AuthenticatedRequest = Request & {
   auth?: AuthClaims;

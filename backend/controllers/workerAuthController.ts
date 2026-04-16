@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
-import { AuthClaims } from "../types.js";
+import type { AuthClaims } from "../schemas/auth.js";
 
 export const authenticateWorker = (req: Request, res: Response): void => {
   const { workerId, secret } = req.body;
