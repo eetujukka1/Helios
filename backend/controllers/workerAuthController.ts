@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import type { AuthClaims } from "../schemas/auth.js";
+import { ActorTypeEnum } from "../schemas/auth.js";
 
 export const authenticateWorker = (req: Request, res: Response): void => {
   const { workerId, secret } = req.body;
@@ -9,7 +10,7 @@ export const authenticateWorker = (req: Request, res: Response): void => {
     secret === process.env.DEMO_WORKER_SECRET
   ) {
     const claims: AuthClaims = {
-      actorType: "worker",
+      actorType: ActorTypeEnum.Worker,
       workerId,
     };
 

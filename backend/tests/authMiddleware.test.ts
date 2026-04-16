@@ -8,20 +8,19 @@ import {
 } from "../middlewares/auth.js";
 import { SECRET, setupEnv } from "./helpers.js";
 import type { AuthClaims } from "../schemas/auth.js";
+import { ActorTypeEnum } from "../schemas/auth.js";
 
 beforeEach(setupEnv);
 
 const app = express();
-app.get(
-  "/protected",
-  authenticateToken,
-  (req: AuthenticatedRequest, res) => res.json({ auth: req.auth }),
+app.get("/protected", authenticateToken, (req: AuthenticatedRequest, res) =>
+  res.json({ auth: req.auth }),
 );
 
 describe("GET /protected", () => {
   it("responds with 200 and attaches auth claims on a valid token", async () => {
     const claims: AuthClaims = {
-      actorType: "user",
+      actorType: ActorTypeEnum.User,
       username: "admin",
     };
     const token = jwt.sign(claims, SECRET);
@@ -40,7 +39,7 @@ describe("GET /protected", () => {
 
   it("responds with 403 for a token signed with the wrong secret", async () => {
     const token = jwt.sign(
-      { actorType: "user", username: "admin" } satisfies AuthClaims,
+      { actorType: ActorTypeEnum.User, username: "admin" } satisfies AuthClaims,
       "wrongsecret",
     );
     const res = await request(app)

@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
-import { AuthClaims } from "../schemas/auth.js";
+import { AuthClaims, ActorTypeEnum } from "../schemas/auth.js";
 
 export const login = (req: Request, res: Response): void => {
   const { username, password } = req.body;
@@ -9,7 +9,7 @@ export const login = (req: Request, res: Response): void => {
     password === process.env.DEMO_USER_PASSWORD
   ) {
     const claims: AuthClaims = {
-      actorType: "user",
+      actorType: ActorTypeEnum.User,
       username,
     };
     const token = jwt.sign(claims, process.env.JWT_SECRET as string);

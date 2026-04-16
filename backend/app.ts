@@ -3,7 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import healthRoute from "./routes/healthRoute.js";
 import authRoutes from "./routes/authRoutes.js";
-import workerAuthRoutes from "./routes/workerAuthRoutes.js"
+import workerAuthRoutes from "./routes/workerAuthRoutes.js";
 import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
 import { authenticateToken } from "./middlewares/auth.js";
