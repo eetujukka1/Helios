@@ -17,7 +17,7 @@ const { default: request } = await import("supertest");
 const { default: jwt } = await import("jsonwebtoken");
 
 function authToken(): string {
-  return jwt.sign({ username: "admin" }, SECRET);
+  return jwt.sign({ actorType: "user", username: "admin" }, SECRET);
 }
 
 beforeEach(() => {

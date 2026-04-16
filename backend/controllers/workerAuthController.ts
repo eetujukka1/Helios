@@ -2,16 +2,17 @@ import jwt from "jsonwebtoken";
 import { Request, Response } from "express";
 import { AuthClaims } from "../types.js";
 
-export const login = (req: Request, res: Response): void => {
-  const { username, password } = req.body;
+export const authenticateWorker = (req: Request, res: Response): void => {
+  const { workerId, secret } = req.body;
   if (
-    username === process.env.DEMO_USER_USERNAME &&
-    password === process.env.DEMO_USER_PASSWORD
+    workerId === process.env.DEMO_WORKER_ID &&
+    secret === process.env.DEMO_WORKER_SECRET
   ) {
     const claims: AuthClaims = {
-      actorType: "user",
-      username,
+      actorType: "worker",
+      workerId,
     };
+
     const token = jwt.sign(claims, process.env.JWT_SECRET as string);
     res.json({ token });
     return;

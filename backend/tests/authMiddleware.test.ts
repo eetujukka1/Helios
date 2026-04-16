@@ -1,9 +1,13 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 import request from "supertest";
-import express, { Request } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
-import { authenticateToken } from "../middlewares/auth.js";
+import express from "express";
+import jwt from "jsonwebtoken";
+import {
+  authenticateToken,
+  type AuthenticatedRequest,
+} from "../middlewares/auth.js";
 import { SECRET, setupEnv } from "./helpers.js";
+import type { AuthClaims } from "../types.js";
 
 beforeEach(setupEnv);
 
@@ -11,19 +15,22 @@ const app = express();
 app.get(
   "/protected",
   authenticateToken,
-  (req: Request & { user?: JwtPayload | string }, res) =>
-    res.json({ user: req.user }),
+  (req: AuthenticatedRequest, res) => res.json({ auth: req.auth }),
 );
 
 describe("GET /protected", () => {
-  it("responds with 200 and attaches user on a valid token", async () => {
-    const token = jwt.sign({ username: "admin" }, SECRET);
+  it("responds with 200 and attaches auth claims on a valid token", async () => {
+    const claims: AuthClaims = {
+      actorType: "user",
+      username: "admin",
+    };
+    const token = jwt.sign(claims, SECRET);
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.user).toMatchObject({ username: "admin" });
+    expect(res.body.auth).toEqual(claims);
   });
 
   it("responds with 401 when no Authorization header is present", async () => {
@@ -32,7 +39,10 @@ describe("GET /protected", () => {
   });
 
   it("responds with 403 for a token signed with the wrong secret", async () => {
-    const token = jwt.sign({ username: "admin" }, "wrongsecret");
+    const token = jwt.sign(
+      { actorType: "user", username: "admin" } satisfies AuthClaims,
+      "wrongsecret",
+    );
     const res = await request(app)
       .get("/protected")
       .set("Authorization", `Bearer ${token}`);
@@ -44,6 +54,15 @@ describe("GET /protected", () => {
     const res = await request(app)
       .get("/protected")
       .set("Authorization", "Bearer notavalidtoken");
+
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 403 for a token with an invalid claim shape", async () => {
+    const token = jwt.sign({ username: "admin" }, SECRET);
+    const res = await request(app)
+      .get("/protected")
+      .set("Authorization", `Bearer ${token}`);
 
     expect(res.status).toBe(403);
   });

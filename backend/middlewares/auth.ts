@@ -1,5 +1,11 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
+import { AuthClaimsSchema } from "../schemas/auth.js";
+import type { AuthClaims } from "../types.js";
+
+export type AuthenticatedRequest = Request & {
+  auth?: AuthClaims;
+};
 
 export const authenticateToken = (
   req: Request,
@@ -13,12 +19,18 @@ export const authenticateToken = (
     return;
   }
 
-  jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
-    if (err) {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    const claims = AuthClaimsSchema.safeParse(decoded);
+
+    if (!claims.success) {
       res.sendStatus(403);
       return;
     }
-    (req as Request & { user?: JwtPayload | string }).user = user;
+
+    (req as AuthenticatedRequest).auth = claims.data;
     next();
-  });
+  } catch {
+    res.sendStatus(403);
+  }
 };
