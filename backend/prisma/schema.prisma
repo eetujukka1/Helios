@@ -17,8 +17,8 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
-  target_id   Int
-  proxy_id    Int
+  targetId    Int
+  proxyId     Int
 }
 
 model Proxy {
@@ -28,30 +28,38 @@ model Proxy {
   username    String?
   password    String?
   disabled    Boolean   @default(false)
+  response    Response[]
 }
 
 model Target {
   id          Int       @id @default(autoincrement())
   domain      String
   disabled    Boolean   @default(false)
+  pages       Page[]
 }
 
 model Page {
   id          Int       @id @default(autoincrement())
   url         String
-  domain      String
+  target      Target    @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  targetId    Int
+  response    Response[]
 }
 
 model Response {
   id          Int       @id @default(autoincrement())
-  page_id     Int
-  file_id     Int
-  proxy_id    Int
-  status_code Int
+  page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
+  pageId      Int
+  file        File      @relation(fields: [fileId], references: [id])
+  fileId      Int       @unique
+  proxy       Proxy     @relation(fields: [proxyId], references: [id], onDelete: SetNull)
+  proxyId     Int
+  statusCode  Int
   date        DateTime  @default(now()) 
 }
 
 model File {
-  id          Int       @id @default(autoincrement())
-  name        String
+  id       Int      @id @default(autoincrement())
+  name     String
+  response Response?
 }
