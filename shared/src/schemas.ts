@@ -88,3 +88,6 @@ export const ResponseSchema = ResponseCreateSchema.extend({
   id: z.number(),
   date: z.iso.datetime(),
 });
+
+export type Response = z.infer<typeof ResponseSchema>;
+export type ResponseCreate = z.infer<typeof ResponseCreateSchema>;
