@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import workerAuthRoutes from "./routes/workerAuthRoutes.js";
 import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
+import fileRoutes from "./routes/fileRoutes.js";
 import { authenticateToken } from "./middlewares/auth.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { createRequireRole } from "./middlewares/requireRole.js";
@@ -14,6 +15,7 @@ import { ActorTypeEnum } from "./schemas/auth.js";
 const app = express();
 
 const requireUser = createRequireRole(ActorTypeEnum.User);
+const requireWorker = createRequireRole(ActorTypeEnum.Worker);
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -22,6 +24,7 @@ app.use("/api/health", healthRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/proxies", authenticateToken, requireUser, proxyRoutes);
 app.use("/api/targets", authenticateToken, requireUser, targetRoutes);
+app.use("/api/files", authenticateToken, requireWorker, fileRoutes);
 app.use("/api/workers/auth", workerAuthRoutes);
 
 app.use(errorHandler);
