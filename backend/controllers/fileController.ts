@@ -1,7 +1,7 @@
 import * as z from "zod";
-import { PrismaClient } from "../generated/prisma/client.js"
+import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
-import { FileCreateSchema } from "@helios/shared"
+import { FileCreateSchema } from "@helios/shared";
 
 const prisma = new PrismaClient();
 

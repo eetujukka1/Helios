@@ -29,7 +29,7 @@ beforeEach(() => {
 });
 
 const file = {
-  name: "index.html"
+  name: "index.html",
 };
 
 describe("GET /api/files", () => {
@@ -149,7 +149,7 @@ describe("POST /api/files", () => {
       .send({
         files: [
           {
-            name: "index.html"
+            name: "index.html",
           },
         ],
       });

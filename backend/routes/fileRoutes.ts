@@ -1,10 +1,5 @@
-import { Router } from 'express';
-import {
-  getAll,
-  getOne,
-  add,
-  remove,
-} from "../controllers/fileController.js";
+import { Router } from "express";
+import { getAll, getOne, add, remove } from "../controllers/fileController.js";
 import { validateId } from "../middlewares/validateId.js";
 
 const router = Router();
