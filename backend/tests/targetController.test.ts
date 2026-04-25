@@ -231,4 +231,21 @@ describe("POST /api/targets/:id/pages", () => {
 
     expect(res.status).toBe(403);
   });
+
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app)
+      .post("/api/targets/1/pages")
+      .send({ pages });
+
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 400 on invalid body", async () => {
+    const res = await request(app)
+      .post("/api/targets/1/pages")
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
+      .send({ data: "" });
+    
+    expect(res.status).toBe(400);
+  });
 });
