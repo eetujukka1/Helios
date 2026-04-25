@@ -40,7 +40,7 @@ describe("GET /protected/user", () => {
     expect(res.body.auth).toEqual(claims);
   });
 
-  it("responds with 401 on a invalid token and role", async () => {
+  it("responds with 403 on a invalid token and role", async () => {
     const claims: AuthClaims = {
       actorType: ActorTypeEnum.Worker,
       workerId: "worker",
@@ -50,8 +50,7 @@ describe("GET /protected/user", () => {
       .get("/protected/user")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(res.status).toBe(401);
-    expect(res.body.auth).toEqual(claims);
+    expect(res.status).toBe(403);
   });
 });
 
@@ -70,7 +69,7 @@ describe("GET /protected/worker", () => {
     expect(res.body.auth).toEqual(claims);
   });
 
-  it("responds with 401 on a invalid token and role", async () => {
+  it("responds with 403 on a invalid token and role", async () => {
     const claims: AuthClaims = {
       actorType: ActorTypeEnum.User,
       username: "admin",
@@ -80,7 +79,6 @@ describe("GET /protected/worker", () => {
       .get("/protected/worker")
       .set("Authorization", `Bearer ${token}`);
 
-    expect(res.status).toBe(401);
-    expect(res.body.auth).toEqual(claims);
+    expect(res.status).toBe(403);
   });
 });

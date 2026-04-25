@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use("/api/health", healthRoute);
 app.use("/api/auth", authRoutes);
 app.use("/api/proxies", authenticateToken, requireUser, proxyRoutes);
-app.use("/api/targets", authenticateToken, requireUser, targetRoutes);
+app.use("/api/targets", authenticateToken, targetRoutes);
 app.use("/api/files", authenticateToken, requireWorker, fileRoutes);
 app.use("/api/workers/auth", workerAuthRoutes);
 

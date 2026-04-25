@@ -9,7 +9,8 @@ export const createRequireRole = (role: ActorTypeEnum) => {
     next: NextFunction,
   ): void => {
     if (req.auth?.actorType != role) {
-      res.status(401);
+      res.sendStatus(403);
+      return;
     }
     next();
   };

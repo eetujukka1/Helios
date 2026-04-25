@@ -52,11 +52,11 @@ export type TargetCreate = z.infer<typeof TargetCreateSchema>;
 
 export const PageCreateSchema = z.object({
   url: z.string(),
-  targetId: z.number(),
 });
 
 export const PageSchema = PageCreateSchema.extend({
   id: z.number(),
+  targetId: z.number(),
 });
 
 export type Page = z.infer<typeof PageSchema>;
