@@ -26,11 +26,8 @@ beforeEach(() => {
 
 const page = {
   id: 1,
-  host: "page.example.com",
-  port: 8080,
-  username: "user",
-  password: "pass",
-  enabled: true,
+  url: "example.com/blog/1",
+  targetId: 1,
 };
 
 describe("GET /api/pages", () => {
