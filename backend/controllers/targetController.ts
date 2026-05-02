@@ -50,8 +50,8 @@ export const addPages = async (req: Request, res: Response): Promise<void> => {
 export const getPages = async (req: Request, res: Response): Promise<void> => {
   const pages = await prisma.page.findMany({
     where: {
-      targetId: res.locals.id
-    }
-  })
+      targetId: res.locals.id,
+    },
+  });
   res.status(200).json(pages);
 };
