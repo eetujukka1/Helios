@@ -78,7 +78,6 @@ export type FileCreate = z.infer<typeof FileCreateSchema>;
 // Response schemas
 
 export const ResponseCreateSchema = z.object({
-  pageId: z.number(),
   fileId: z.number(),
   proxyId: z.number(),
   statusCode: z.number(),
