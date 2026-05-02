@@ -7,7 +7,7 @@ import workerAuthRoutes from "./routes/workerAuthRoutes.js";
 import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
 import fileRoutes from "./routes/fileRoutes.js";
-import pageRoutes from "./routes/pageRouter.js";
+import pageRoutes from "./routes/pageRoutes.js";
 import responseRoutes from "./routes/responseRoutes.js";
 import { authenticateToken } from "./middlewares/auth.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
