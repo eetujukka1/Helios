@@ -10,6 +10,7 @@ const mockTarget = {
 
 const mockPage = {
   createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  findMany: jest.fn<() => Promise<object[]>>(),
 };
 
 jest.unstable_mockModule("../generated/prisma/client.js", () => ({
@@ -36,6 +37,7 @@ beforeEach(() => {
   mockTarget.createManyAndReturn.mockReset();
   mockTarget.delete.mockReset();
   mockPage.createManyAndReturn.mockReset();
+  mockPage.findMany.mockReset();
 });
 
 const target = {
@@ -247,5 +249,41 @@ describe("POST /api/targets/:id/pages", () => {
       .send({ data: "" });
     
     expect(res.status).toBe(400);
+  });
+});
+
+describe("GET /api/targets/:id/pages", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).get("/api/targets/1/pages");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 on invalid token", async () => {
+    const res = await request(app)
+      .get("/api/targets/1/pages")
+      .set("Authorization", "Bearer invalidtoken");
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 200 and an array of pages", async () => {
+    mockPage.findMany.mockResolvedValue(returnedPages);
+
+    const res = await request(app)
+      .get("/api/targets/1/pages")
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(returnedPages);
+  });
+
+  it("responds with 200 and empty array when no pages exist", async () => {
+    mockPage.findMany.mockResolvedValue([]);
+
+    const res = await request(app)
+      .get("/api/targets/1/pages")
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual([]);
   });
 });

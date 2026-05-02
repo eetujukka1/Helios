@@ -5,6 +5,7 @@ import {
   add,
   remove,
   addPages,
+  getPages
 } from "../controllers/targetController.js";
 import { validateId } from "../middlewares/validateId.js";
 import { createRequireRole } from "../middlewares/requireRole.js";
@@ -24,5 +25,7 @@ router.post("/", requireUser, add);
 router.delete("/:id", requireUser, validateId, remove);
 
 router.post("/:id/pages", requireWorker, validateId, addPages);
+
+router.get('/:id/pages', getPages);
 
 export default router;
