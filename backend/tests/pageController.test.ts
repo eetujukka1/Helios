@@ -1,6 +1,11 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 
-import { mockPage, mockResponse,setupPrismaMockClient } from "./helpers.js";
+import {
+  mockPage,
+  mockResponse,
+  resetMockClient,
+  setupPrismaMockClient,
+} from "./helpers.js";
 
 setupPrismaMockClient();
 
@@ -10,14 +15,7 @@ const { default: request } = await import("supertest");
 
 beforeEach(() => {
   setupEnv();
-  mockPage.findMany.mockReset();
-  mockPage.findFirst.mockReset();
-  mockPage.createManyAndReturn.mockReset();
-  mockPage.findUniqueOrThrow.mockReset();
-  mockResponse.createManyAndReturn.mockReset();
-  mockResponse.findFirst.mockReset();
-  mockResponse.findMany.mockReset();
-  mockResponse.findUniqueOrThrow.mockReset();
+  resetMockClient();
 });
 
 const page = {

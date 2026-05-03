@@ -59,14 +59,24 @@ export const mockTarget = {
   delete: jest.fn<() => Promise<object>>(),
 };
 
-export const setupPrismaMockClient = () => {
+const mockPrismaClient = {
+  file: mockFile,
+  page: mockPage,
+  response: mockResponse,
+  proxy: mockProxy,
+  target: mockTarget,
+};
+
+export function setupPrismaMockClient(): void {
   jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-    PrismaClient: jest.fn(() => ({
-      file: mockFile,
-      page: mockPage,
-      response: mockResponse,
-      proxy: mockProxy,
-      target: mockTarget,
-    })),
-  })); 
+    PrismaClient: jest.fn(() => mockPrismaClient),
+  }));
+}
+
+export function resetMockClient(): void {
+  for (const model of Object.values(mockPrismaClient)) {
+    for (const method of Object.values(model)) {
+      method.mockReset();
+    }
+  }
 }

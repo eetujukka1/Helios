@@ -1,6 +1,6 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 
-import { mockFile, setupPrismaMockClient } from "./helpers.js";
+import { mockFile, resetMockClient, setupPrismaMockClient } from "./helpers.js";
 
 setupPrismaMockClient();
 
@@ -11,10 +11,7 @@ const { default: request } = await import("supertest");
 
 beforeEach(() => {
   setupEnv();
-  mockFile.findMany.mockReset();
-  mockFile.findFirst.mockReset();
-  mockFile.createManyAndReturn.mockReset();
-  mockFile.delete.mockReset();
+  resetMockClient();
 });
 
 const file = {
