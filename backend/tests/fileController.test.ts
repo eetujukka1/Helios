@@ -132,7 +132,7 @@ describe("POST /api/files", () => {
     expect(res.status).toBe(400);
   });
 
-  it("responds with 400 when host is empty string", async () => {
+  it("responds with 400 when name is empty string", async () => {
     const res = await request(app)
       .post("/api/files")
       .set("Authorization", `Bearer ${authToken()}`)
