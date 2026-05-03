@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 
-import { mockResponse, resetMockClient, setupPrismaMockClient } from "./helpers.js";
+import {
+  mockResponse,
+  resetMockClient,
+  setupPrismaMockClient,
+} from "./helpers.js";
 
 setupPrismaMockClient();
 

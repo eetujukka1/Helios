@@ -8,7 +8,6 @@ const { default: app } = await import("../app.js");
 const { workerAuthToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
 
-
 beforeEach(() => {
   setupEnv();
   resetMockClient();

@@ -1,13 +1,16 @@
 import { describe, it, expect, beforeEach } from "@jest/globals";
 
-import { mockProxy, resetMockClient, setupPrismaMockClient } from "./helpers.js";
+import {
+  mockProxy,
+  resetMockClient,
+  setupPrismaMockClient,
+} from "./helpers.js";
 
 setupPrismaMockClient();
 
 const { default: app } = await import("../app.js");
 const { authToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-
 
 beforeEach(() => {
   setupEnv();
