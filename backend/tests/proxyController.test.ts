@@ -16,13 +16,9 @@ jest.unstable_mockModule("../generated/prisma/client.js", () => ({
 }));
 
 const { default: app } = await import("../app.js");
-const { SECRET, setupEnv } = await import("./helpers.js");
+const { authToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-const { default: jwt } = await import("jsonwebtoken");
 
-function authToken(): string {
-  return jwt.sign({ actorType: "user", username: "admin" }, SECRET);
-}
 
 beforeEach(() => {
   setupEnv();

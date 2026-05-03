@@ -1,3 +1,5 @@
+import jwt from "jsonwebtoken";
+
 export const SECRET = "testsecret";
 
 export function setupEnv() {
@@ -6,4 +8,12 @@ export function setupEnv() {
   process.env.DEMO_USER_PASSWORD = "password123";
   process.env.DEMO_WORKER_ID = "worker";
   process.env.DEMO_WORKER_SECRET = "secretkey";
+}
+
+export function authToken(): string {
+  return jwt.sign({ actorType: "user", username: "admin" }, SECRET);
+}
+
+export function workerAuthToken(): string {
+  return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
 }

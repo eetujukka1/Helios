@@ -12,13 +12,9 @@ jest.unstable_mockModule("../generated/prisma/client.js", () => ({
 }));
 
 const { default: app } = await import("../app.js");
-const { SECRET, setupEnv } = await import("./helpers.js");
+const { workerAuthToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-const { default: jwt } = await import("jsonwebtoken");
 
-function authToken(): string {
-  return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
-}
 
 beforeEach(() => {
   setupEnv();
@@ -50,7 +46,7 @@ describe("GET /api/files", () => {
 
     const res = await request(app)
       .get("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([file]);
@@ -61,7 +57,7 @@ describe("GET /api/files", () => {
 
     const res = await request(app)
       .get("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -84,7 +80,7 @@ describe("GET /api/files/:id", () => {
   it("responds with 400 on non-numeric id", async () => {
     const res = await request(app)
       .get("/api/files/abc")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
     expect(res.status).toBe(400);
   });
 
@@ -93,7 +89,7 @@ describe("GET /api/files/:id", () => {
 
     const res = await request(app)
       .get("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(file);
@@ -104,7 +100,7 @@ describe("GET /api/files/:id", () => {
 
     const res = await request(app)
       .get("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toBeNull();
@@ -127,7 +123,7 @@ describe("POST /api/files", () => {
   it("responds with 400 on invalid body", async () => {
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({ files: [{ invalid: "data" }] });
     expect(res.status).toBe(400);
   });
@@ -135,7 +131,7 @@ describe("POST /api/files", () => {
   it("responds with 400 when host is empty string", async () => {
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({ files: [{ name: "" }] });
     expect(res.status).toBe(400);
   });
@@ -145,7 +141,7 @@ describe("POST /api/files", () => {
 
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({
         files: [
           {
@@ -175,7 +171,7 @@ describe("DELETE /api/files/:id", () => {
   it("responds with 400 on non-numeric id", async () => {
     const res = await request(app)
       .delete("/api/files/abc")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
     expect(res.status).toBe(400);
   });
 
@@ -184,7 +180,7 @@ describe("DELETE /api/files/:id", () => {
 
     const res = await request(app)
       .delete("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(file);
