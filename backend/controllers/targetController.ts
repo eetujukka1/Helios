@@ -53,5 +53,5 @@ export const getPages = async (req: Request, res: Response): Promise<void> => {
       targetId: res.locals.id,
     },
   });
-  res.status(200).json(pages);
+  res.json(pages);
 };

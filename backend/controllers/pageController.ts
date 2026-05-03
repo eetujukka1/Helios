@@ -24,7 +24,7 @@ export const getResponses = async (
       pageId: res.locals.id,
     },
   });
-  res.status(200).json(responses);
+  res.json(responses);
 };
 
 export const addResponses = async (
