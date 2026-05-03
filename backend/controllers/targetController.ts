@@ -1,7 +1,7 @@
 import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
-import { TargetCreateSchema } from "@helios/shared";
+import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 
 const prisma = new PrismaClient();
 
@@ -26,4 +26,32 @@ export const add = async (req: Request, res: Response): Promise<void> => {
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const deleted = await prisma.target.delete({ where: { id: res.locals.id } });
   res.json(deleted);
+};
+
+export const addPages = async (req: Request, res: Response): Promise<void> => {
+  const target = await prisma.target.findUniqueOrThrow({
+    where: { id: res.locals.id },
+  });
+  const pages = z
+    .array(PageCreateSchema)
+    .parse(req.body.pages)
+    .map((page) => ({
+      ...page,
+      targetId: target.id,
+    }));
+
+  const addedPages = await prisma.page.createManyAndReturn({
+    data: pages,
+  });
+
+  res.status(201).json(addedPages);
+};
+
+export const getPages = async (req: Request, res: Response): Promise<void> => {
+  const pages = await prisma.page.findMany({
+    where: {
+      targetId: res.locals.id,
+    },
+  });
+  res.json(pages);
 };

@@ -7,40 +7,40 @@ import { AuthClaimsSchema } from "../schemas/auth.js";
 
 beforeEach(setupEnv);
 
-describe("POST /api/auth/login", () => {
+describe("POST /api/workers/auth/login", () => {
   it("responds with 200 and a signed token on valid credentials", async () => {
     const res = await request(app)
-      .post("/api/auth/login")
-      .send({ username: "admin", password: "password123" });
+      .post("/api/workers/auth/login")
+      .send({ workerId: "worker", secret: "secretkey" });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("token");
     const decoded = AuthClaimsSchema.parse(jwt.verify(res.body.token, SECRET));
     expect(decoded).toEqual({
-      actorType: "user",
-      username: "admin",
+      actorType: "worker",
+      workerId: "worker",
     });
   });
 
-  it("responds with 401 on wrong password", async () => {
+  it("responds with 401 on wrong secret", async () => {
     const res = await request(app)
-      .post("/api/auth/login")
-      .send({ username: "admin", password: "wrong" });
+      .post("/api/workers/auth/login")
+      .send({ workerId: "admin", secret: "wrong" });
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ message: "Invalid credentials" });
   });
 
-  it("responds with 401 on wrong username", async () => {
+  it("responds with 401 on wrong workerId", async () => {
     const res = await request(app)
-      .post("/api/auth/login")
-      .send({ username: "unknown", password: "password123" });
+      .post("/api/workers/auth/login")
+      .send({ workerId: "unknown", secret: "password123" });
 
     expect(res.status).toBe(401);
   });
 
   it("responds with 401 when body is empty", async () => {
-    const res = await request(app).post("/api/auth/login").send({});
+    const res = await request(app).post("/api/workers/auth/login").send({});
 
     expect(res.status).toBe(401);
   });
