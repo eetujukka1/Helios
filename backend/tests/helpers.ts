@@ -1,3 +1,4 @@
+import { jest } from "@jest/globals";
 import jwt from "jsonwebtoken";
 
 export const SECRET = "testsecret";
@@ -17,3 +18,43 @@ export function authToken(): string {
 export function workerAuthToken(): string {
   return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
 }
+
+export const mockFile = {
+  findMany: jest.fn<() => Promise<object[]>>(),
+  findFirst: jest.fn<() => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  delete: jest.fn<() => Promise<object | null>>(),
+};
+
+export const mockPage = {
+  findMany: jest.fn<() => Promise<object[]>>(),
+  findFirst: jest.fn<() => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
+};
+
+export const mockResponse = {
+  findMany: jest.fn<() => Promise<object[]>>(),
+  findFirst: jest.fn<() => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
+};
+
+export const mockProxy = {
+  findMany: jest.fn<() => Promise<object[]>>(),
+  findFirst: jest.fn<() => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  update:
+    jest.fn<
+      (args: { where: { id: number }; data: object }) => Promise<object | null>
+    >(),
+  delete: jest.fn<() => Promise<object | null>>(),
+};
+
+export const mockTarget = {
+  findMany: jest.fn<() => Promise<object[]>>(),
+  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
+  findFirst: jest.fn<() => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  delete: jest.fn<() => Promise<object>>(),
+};

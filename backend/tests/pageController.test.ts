@@ -1,18 +1,6 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
-const mockPage = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
-};
-
-const mockResponse = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
-};
+import { mockPage, mockResponse } from "./helpers.js";
 
 jest.unstable_mockModule("../generated/prisma/client.js", () => ({
   PrismaClient: jest.fn(() => ({ page: mockPage, response: mockResponse })),

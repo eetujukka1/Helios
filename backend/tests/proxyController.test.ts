@@ -1,15 +1,6 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
-const mockProxy = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  update:
-    jest.fn<
-      (args: { where: { id: number }; data: object }) => Promise<object | null>
-    >(),
-  delete: jest.fn<() => Promise<object | null>>(),
-};
+import { mockProxy } from "./helpers.js";
 
 jest.unstable_mockModule("../generated/prisma/client.js", () => ({
   PrismaClient: jest.fn(() => ({ proxy: mockProxy })),

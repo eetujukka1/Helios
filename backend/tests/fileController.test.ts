@@ -1,11 +1,6 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
-const mockFile = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  delete: jest.fn<() => Promise<object | null>>(),
-};
+import { mockFile } from "./helpers.js";
 
 jest.unstable_mockModule("../generated/prisma/client.js", () => ({
   PrismaClient: jest.fn(() => ({ file: mockFile })),
