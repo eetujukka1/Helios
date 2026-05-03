@@ -58,3 +58,15 @@ export const mockTarget = {
   createManyAndReturn: jest.fn<() => Promise<object[]>>(),
   delete: jest.fn<() => Promise<object>>(),
 };
+
+export const setupPrismaMockClient = () => {
+  jest.unstable_mockModule("../generated/prisma/client.js", () => ({
+    PrismaClient: jest.fn(() => ({
+      file: mockFile,
+      page: mockPage,
+      response: mockResponse,
+      proxy: mockProxy,
+      target: mockTarget,
+    })),
+  })); 
+}

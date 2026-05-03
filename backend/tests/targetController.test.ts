@@ -1,10 +1,8 @@
 import { describe, it, expect, beforeEach, jest } from "@jest/globals";
 
-import { mockTarget, mockPage } from "./helpers.js";
+import { mockTarget, mockPage, setupPrismaMockClient } from "./helpers.js";
 
-jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-  PrismaClient: jest.fn(() => ({ target: mockTarget, page: mockPage })),
-}));
+setupPrismaMockClient();
 
 const { default: app } = await import("../app.js");
 const { authToken, workerAuthToken, setupEnv } = await import("./helpers.js");
