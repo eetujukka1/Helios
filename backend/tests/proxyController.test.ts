@@ -1,36 +1,20 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach } from "@jest/globals";
 
-const mockProxy = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  update:
-    jest.fn<
-      (args: { where: { id: number }; data: object }) => Promise<object | null>
-    >(),
-  delete: jest.fn<() => Promise<object | null>>(),
-};
+import {
+  mockProxy,
+  resetMockClient,
+  setupPrismaMockClient,
+} from "./helpers.js";
 
-jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-  PrismaClient: jest.fn(() => ({ proxy: mockProxy })),
-}));
+setupPrismaMockClient();
 
 const { default: app } = await import("../app.js");
-const { SECRET, setupEnv } = await import("./helpers.js");
+const { authToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-const { default: jwt } = await import("jsonwebtoken");
-
-function authToken(): string {
-  return jwt.sign({ actorType: "user", username: "admin" }, SECRET);
-}
 
 beforeEach(() => {
   setupEnv();
-  mockProxy.findMany.mockReset();
-  mockProxy.findFirst.mockReset();
-  mockProxy.createManyAndReturn.mockReset();
-  mockProxy.update.mockReset();
-  mockProxy.delete.mockReset();
+  resetMockClient();
 });
 
 const proxy = {

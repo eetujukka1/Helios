@@ -1,31 +1,16 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach } from "@jest/globals";
 
-const mockFile = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  delete: jest.fn<() => Promise<object | null>>(),
-};
+import { mockFile, resetMockClient, setupPrismaMockClient } from "./helpers.js";
 
-jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-  PrismaClient: jest.fn(() => ({ file: mockFile })),
-}));
+setupPrismaMockClient();
 
 const { default: app } = await import("../app.js");
-const { SECRET, setupEnv } = await import("./helpers.js");
+const { workerAuthToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-const { default: jwt } = await import("jsonwebtoken");
-
-function authToken(): string {
-  return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
-}
 
 beforeEach(() => {
   setupEnv();
-  mockFile.findMany.mockReset();
-  mockFile.findFirst.mockReset();
-  mockFile.createManyAndReturn.mockReset();
-  mockFile.delete.mockReset();
+  resetMockClient();
 });
 
 const file = {
@@ -50,7 +35,7 @@ describe("GET /api/files", () => {
 
     const res = await request(app)
       .get("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([file]);
@@ -61,7 +46,7 @@ describe("GET /api/files", () => {
 
     const res = await request(app)
       .get("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
@@ -84,7 +69,7 @@ describe("GET /api/files/:id", () => {
   it("responds with 400 on non-numeric id", async () => {
     const res = await request(app)
       .get("/api/files/abc")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
     expect(res.status).toBe(400);
   });
 
@@ -93,7 +78,7 @@ describe("GET /api/files/:id", () => {
 
     const res = await request(app)
       .get("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(file);
@@ -104,7 +89,7 @@ describe("GET /api/files/:id", () => {
 
     const res = await request(app)
       .get("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toBeNull();
@@ -127,7 +112,7 @@ describe("POST /api/files", () => {
   it("responds with 400 on invalid body", async () => {
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({ files: [{ invalid: "data" }] });
     expect(res.status).toBe(400);
   });
@@ -135,7 +120,7 @@ describe("POST /api/files", () => {
   it("responds with 400 when name is empty string", async () => {
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({ files: [{ name: "" }] });
     expect(res.status).toBe(400);
   });
@@ -145,7 +130,7 @@ describe("POST /api/files", () => {
 
     const res = await request(app)
       .post("/api/files")
-      .set("Authorization", `Bearer ${authToken()}`)
+      .set("Authorization", `Bearer ${workerAuthToken()}`)
       .send({
         files: [
           {
@@ -175,7 +160,7 @@ describe("DELETE /api/files/:id", () => {
   it("responds with 400 on non-numeric id", async () => {
     const res = await request(app)
       .delete("/api/files/abc")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
     expect(res.status).toBe(400);
   });
 
@@ -184,7 +169,7 @@ describe("DELETE /api/files/:id", () => {
 
     const res = await request(app)
       .delete("/api/files/1")
-      .set("Authorization", `Bearer ${authToken()}`);
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(file);

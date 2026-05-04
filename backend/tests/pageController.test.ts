@@ -1,46 +1,21 @@
-import { describe, it, expect, beforeEach, jest } from "@jest/globals";
+import { describe, it, expect, beforeEach } from "@jest/globals";
 
-const mockPage = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
-};
+import {
+  mockPage,
+  mockResponse,
+  resetMockClient,
+  setupPrismaMockClient,
+} from "./helpers.js";
 
-const mockResponse = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
-};
-
-jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-  PrismaClient: jest.fn(() => ({ page: mockPage, response: mockResponse })),
-}));
+setupPrismaMockClient();
 
 const { default: app } = await import("../app.js");
-const { SECRET, setupEnv } = await import("./helpers.js");
+const { authToken, workerAuthToken, setupEnv } = await import("./helpers.js");
 const { default: request } = await import("supertest");
-const { default: jwt } = await import("jsonwebtoken");
-
-function authToken(): string {
-  return jwt.sign({ actorType: "user", username: "admin" }, SECRET);
-}
-
-function workerAuthToken(): string {
-  return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
-}
 
 beforeEach(() => {
   setupEnv();
-  mockPage.findMany.mockReset();
-  mockPage.findFirst.mockReset();
-  mockPage.createManyAndReturn.mockReset();
-  mockPage.findUniqueOrThrow.mockReset();
-  mockResponse.createManyAndReturn.mockReset();
-  mockResponse.findFirst.mockReset();
-  mockResponse.findMany.mockReset();
-  mockResponse.findUniqueOrThrow.mockReset();
+  resetMockClient();
 });
 
 const page = {
