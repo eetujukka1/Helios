@@ -90,7 +90,6 @@ describe("GET /protected/worker", () => {
   });
 });
 
-
 describe("GET /protected/multi-role", () => {
   it("responds with 200 for user role", async () => {
     const claims: AuthClaims = {
