@@ -155,6 +155,28 @@ describe("POST /api/targets", () => {
     expect(res.status).toBe(201);
     expect(res.body).toEqual([target]);
   });
+
+
+  it("normalizes domains to their root URL before insert", async () => {
+    mockTarget.createManyAndReturn.mockResolvedValue([target]);
+
+    await request(app)
+      .post("/api/targets")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({
+        targets: [
+          { domain: "https://example.com/blogs" },
+          { domain: "https://example.com/path?a=1#section" },
+        ],
+      });
+
+    expect(mockTarget.createManyAndReturn).toHaveBeenCalledWith({
+      data: [
+        { domain: "https://example.com" },
+        { domain: "https://example.com" },
+      ],
+    });
+  });
 });
 
 describe("DELETE /api/targets/:id", () => {
