@@ -156,7 +156,6 @@ describe("POST /api/targets", () => {
     expect(res.body).toEqual([target]);
   });
 
-
   it("normalizes domains to their root URL before insert", async () => {
     mockTarget.createManyAndReturn.mockResolvedValue([target]);
 
