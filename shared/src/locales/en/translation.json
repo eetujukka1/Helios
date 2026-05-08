@@ -44,6 +44,13 @@
     "confirmation": {
       "destructiveTitle": "Are you absolutely sure?",
       "destructiveDescription": "This action cannot be undone."
+    },
+    "language": {
+      "label": "Language",
+      "options": {
+        "en": "English",
+        "fi": "Finnish"
+      }
     }
   },
   "auth": {

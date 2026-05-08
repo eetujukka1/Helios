@@ -1,8 +1,17 @@
 import { Link, useLocation } from "react-router-dom"
-import { Moon, Sun, LogOut } from "lucide-react"
+import { Globe, LogOut, Moon, Sun } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { Button } from "./ui/button"
 import { useTheme } from "../context/theme-provider"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 
 import {
   Sidebar,
@@ -19,11 +28,30 @@ import {
 
 import { PAGES } from "@/config"
 import { useAuth } from "@/context/auth-provider"
+import { supportedLanguages, type AppLanguage } from "@/i18n"
+
+const languageOptionKeys = {
+  en: "common.language.options.en",
+  fi: "common.language.options.fi",
+} as const satisfies Record<AppLanguage, string>
+
+function normalizeLanguage(language?: string): AppLanguage {
+  const normalizedLanguage = language?.split("-")[0];
+
+  return supportedLanguages.includes(normalizedLanguage as AppLanguage)
+    ? (normalizedLanguage as AppLanguage)
+    : "en"
+}
 
 export function AppSidebar() {
   const { pathname } = useLocation()
   const { logout } = useAuth()
   const { theme, setTheme } = useTheme()
+  const { t, i18n } = useTranslation()
+
+  const currentLanguage = normalizeLanguage(
+    i18n.resolvedLanguage ?? i18n.language
+  )
 
   const isDark =
     theme === "dark" ||
@@ -34,21 +62,21 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarHeader>
         <h1 className="scroll-m-20 py-4 text-center text-4xl font-bold tracking-tight text-balance">
-          Helios
+          {t("app.name")}
         </h1>
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Platform</SidebarGroupLabel>
+          <SidebarGroupLabel>{t("nav.group.platform")}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {PAGES.map((item) => (
-                <SidebarMenuItem key={item.title}>
+                <SidebarMenuItem key={item.path}>
                   <SidebarMenuButton
                     asChild
                     isActive={pathname === `${item.path}`}
                   >
-                    <Link to={`${item.path}`}>{item.title}</Link>
+                    <Link to={`${item.path}`}>{t(item.titleKey)}</Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -59,6 +87,34 @@ export function AppSidebar() {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label={t("common.language.label")}
+                >
+                  <Globe />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuLabel>
+                  {t("common.language.label")}
+                </DropdownMenuLabel>
+                <DropdownMenuRadioGroup
+                  value={currentLanguage}
+                  onValueChange={(language) => {
+                    void i18n.changeLanguage(language)
+                  }}
+                >
+                  {supportedLanguages.map((language) => (
+                    <DropdownMenuRadioItem key={language} value={language}>
+                      {t(languageOptionKeys[language])}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <Button
               variant="ghost"
               size="icon"
