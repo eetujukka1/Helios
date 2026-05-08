@@ -63,7 +63,7 @@ export function AddTargetModal({ buttonText }: Props) {
             <form.Field name="domain">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>URL</Label>
+                  <Label htmlFor={field.name}>Domain</Label>
                   <Input
                     id={field.name}
                     name={field.name}
