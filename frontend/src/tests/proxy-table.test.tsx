@@ -153,4 +153,20 @@ describe("ProxyTable", () => {
       password: undefined,
     })
   })
+
+  it("shows field errors in the update modal when submitting invalid proxy data", async () => {
+    mockGet.mockResolvedValue([testProxy])
+    mockUpdate.mockResolvedValue(testProxy)
+    const user = userEvent.setup()
+    render(<ProxyTable />, { wrapper })
+    await screen.findByText("1.1.1.1")
+
+    await user.click(screen.getByRole("button", { name: "Edit 1.1.1.1" }))
+    await user.clear(screen.getByLabelText("Host"))
+    await user.clear(screen.getByLabelText("Port"))
+    await user.click(screen.getByRole("button", { name: "Update" }))
+
+    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(screen.getAllByRole("alert")).toHaveLength(2)
+  })
 })
