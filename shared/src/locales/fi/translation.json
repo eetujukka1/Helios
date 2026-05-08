@@ -1,0 +1,195 @@
+{
+  "app": {
+    "name": "Helios"
+  },
+  "nav": {
+    "group": {
+      "platform": "Alusta"
+    },
+    "dashboard": "Yhteenveto",
+    "proxies": "Välityspalvelimet",
+    "targets": "Kohteet"
+  },
+  "common": {
+    "actions": {
+      "add": "Lisää",
+      "update": "Päivitä",
+      "remove": "Poista",
+      "refresh": "Virkistä",
+      "cancel": "Peruuta",
+      "view": "Näytä",
+      "login": "Kirjaudu sisään",
+      "logout": "Kirjaudu ulos",
+      "save": "Tallenna"
+    },
+    "labels": {
+      "host": "Isäntä",
+      "port": "Portti",
+      "username": "Käyttäjänimi",
+      "password": "Salasana",
+      "status": "Tila",
+      "actions": "Toiminnot",
+      "domain": "Verkkotunnus"
+    },
+    "states": {
+      "loading": "Ladataan",
+      "enabled": "Käytössä",
+      "disabled": "Poistettu käytöstä",
+      "error": "Virhe"
+    },
+    "empty": {
+      "title": "Täällä ei ole vielä mitään",
+      "description": "Näytettävää dataa ei ole vielä saatavilla."
+    },
+    "confirmation": {
+      "destructiveTitle": "Oletko aivan varma?",
+      "destructiveDescription": "Tätä toimintoa ei voi perua."
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Kirjaudu tilillesi",
+      "description": "Kirjoita käyttäjänimesi alle kirjautuaksesi tilillesi",
+      "fields": {
+        "username": {
+          "label": "Käyttäjänimi",
+          "placeholder": "kayttaja123"
+        },
+        "password": {
+          "label": "Salasana",
+          "placeholder": "salasana"
+        }
+      },
+      "submit": "Kirjaudu sisään"
+    }
+  },
+  "dashboard": {
+    "title": "Yhteenveto",
+    "cards": {
+      "proxies": {
+        "title": "Välityspalvelimet"
+      },
+      "targets": {
+        "title": "Kohteet"
+      }
+    }
+  },
+  "proxies": {
+    "page": {
+      "title": "Välityspalvelimet"
+    },
+    "table": {
+      "columns": {
+        "host": "Isäntä",
+        "port": "Portti",
+        "username": "Käyttäjänimi",
+        "status": "Tila",
+        "actions": "Toiminnot"
+      }
+    },
+    "empty": {
+      "title": "Ei välityspalvelimia",
+      "description": "Et ole vielä lisännyt välityspalvelimia"
+    },
+    "dialogs": {
+      "add": {
+        "title": "Lisää välityspalvelimia",
+        "description": "Lisää välityspalvelimen tiedot tähän. Napsauta Lisää lisätäksesi.",
+        "submit": "Lisää"
+      },
+      "update": {
+        "title": "Päivitä välityspalvelin",
+        "description": "Päivitä välityspalvelimen tiedot tässä. Napsauta Päivitä tallentaaksesi muutokset.",
+        "submit": "Päivitä"
+      },
+      "remove": {
+        "title": "Oletko aivan varma?",
+        "description": "Olet poistamassa välityspalvelinta {{host}} Heliosista. Tätä toimintoa ei voi perua.",
+        "submit": "Poista"
+      }
+    },
+    "fields": {
+      "host": {
+        "label": "Isäntä",
+        "placeholder": "1.1.1.1"
+      },
+      "port": {
+        "label": "Portti",
+        "placeholder": "8080"
+      },
+      "username": {
+        "label": "Käyttäjänimi",
+        "placeholder": "kayttaja"
+      },
+      "password": {
+        "label": "Salasana",
+        "placeholder": "salasana",
+        "keepCurrentHint": "Jätä tyhjäksi säilyttääksesi nykyisen salasanan"
+      }
+    }
+  },
+  "targets": {
+    "page": {
+      "title": "Kohteet"
+    },
+    "table": {
+      "columns": {
+        "domain": "Verkkotunnus",
+        "status": "Tila",
+        "actions": "Toiminnot"
+      }
+    },
+    "empty": {
+      "title": "Ei kohteita",
+      "description": "Et ole vielä lisännyt kohteita"
+    },
+    "dialogs": {
+      "add": {
+        "title": "Lisää kohteita",
+        "description": "Lisää kohteen tiedot tähän. Napsauta Lisää lisätäksesi.",
+        "submit": "Lisää"
+      },
+      "remove": {
+        "title": "Oletko aivan varma?",
+        "description": "Olet poistamassa kohdetta {{domain}} Heliosista. Tätä toimintoa ei voi perua.",
+        "submit": "Poista"
+      }
+    },
+    "fields": {
+      "domain": {
+        "label": "URL",
+        "placeholder": "https://example.com"
+      }
+    }
+  },
+  "errors": {
+    "generic": "Jokin meni pieleen",
+    "requestFailed": "Pyyntö epäonnistui",
+    "serverContact": "Jokin meni pieleen palvelimeen yhteyttä otettaessa",
+    "invalidCredentials": "Virheelliset kirjautumistiedot",
+    "failedToUpdateProxy": "Välityspalvelimen päivittäminen epäonnistui"
+  },
+  "toasts": {
+    "requestFailed": {
+      "title": "Pyyntö epäonnistui"
+    },
+    "proxyUpdateFailed": {
+      "title": "Välityspalvelimen päivittäminen epäonnistui"
+    }
+  },
+  "aria": {
+    "theme": {
+      "toggle": "Vaihda teemaa"
+    },
+    "auth": {
+      "logout": "Kirjaudu ulos"
+    },
+    "proxies": {
+      "edit": "Muokkaa välityspalvelinta {{host}}",
+      "remove": "Poista välityspalvelin {{host}}"
+    },
+    "targets": {
+      "remove": "Poista kohde {{domain}}"
+    }
+  }
+}
