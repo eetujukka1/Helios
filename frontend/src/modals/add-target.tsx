@@ -17,6 +17,8 @@ import { Label } from "@/components/ui/label"
 import { useTargets } from "@/hooks/use-targets"
 import { TargetCreateSchema, type TargetCreate } from "@helios/shared"
 
+import { useTranslation } from 'react-i18next';
+
 type Props = {
   buttonText?: string
 }
@@ -24,6 +26,8 @@ type Props = {
 export function AddTargetModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
   const { addTargets } = useTargets()
+  const { t } = useTranslation();
+
   const form = useForm({
     defaultValues: {
       domain: "",
@@ -43,7 +47,7 @@ export function AddTargetModal({ buttonText }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{buttonText || "Add"}</Button>
+        <Button variant="outline">{buttonText || t("common.actions.add")}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <form
@@ -54,20 +58,20 @@ export function AddTargetModal({ buttonText }: Props) {
           className="grid gap-4"
         >
           <DialogHeader>
-            <DialogTitle>Add targets</DialogTitle>
+            <DialogTitle>{t("targets.dialogs.add.title")}</DialogTitle>
             <DialogDescription>
-              Add target information here. Click Add to add.
+              {t("targets.dialogs.add.description")}
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
             <form.Field name="domain">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>Domain</Label>
+                  <Label htmlFor={field.name}>{t("targets.fields.domain.label")}</Label>
                   <Input
                     id={field.name}
                     name={field.name}
-                    placeholder="https://example.com"
+                    placeholder={t("targets.fields.domain.placeholder")}
                     value={field.state.value}
                     aria-invalid={field.state.meta.errors.length > 0}
                     onBlur={field.handleBlur}
@@ -80,9 +84,9 @@ export function AddTargetModal({ buttonText }: Props) {
           </FieldGroup>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("common.actions.cancel")}</Button>
             </DialogClose>
-            <Button type="submit">Add</Button>
+            <Button type="submit">{t("common.actions.add")}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
