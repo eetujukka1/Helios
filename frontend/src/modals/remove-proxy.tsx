@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button"
 import type { Proxy } from "@helios/shared"
 import { Trash2Icon } from "lucide-react"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 type Props = {
   proxy: Proxy
@@ -27,7 +27,7 @@ type Props = {
 export function RemoveProxyModal({ proxy }: Props) {
   const [open, setOpen] = useState(false)
   const { removeProxy } = useProxies()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const handleOnClick = async () => {
     await removeProxy(proxy.id)
@@ -46,7 +46,9 @@ export function RemoveProxyModal({ proxy }: Props) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>{t("proxies.dialogs.remove.title")}</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("proxies.dialogs.remove.title")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
             {t("proxies.dialogs.remove.description", { host: proxy.host })}
           </AlertDialogDescription>

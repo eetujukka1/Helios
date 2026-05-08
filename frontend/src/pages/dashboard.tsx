@@ -10,13 +10,13 @@ import { useTargets } from "@/hooks/use-targets"
 import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 export default function Dashboard() {
   const { targets, loading: targetsLoading, getTargets } = useTargets()
   const { proxies, loading: proxiesLoading, getProxies } = useProxies()
   const navigate = useNavigate()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const refresh = () => {
     getTargets()
@@ -36,7 +36,10 @@ export default function Dashboard() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <DataCard value={proxies.length} title={t("dashboard.cards.proxies.title")}>
+          <DataCard
+            value={proxies.length}
+            title={t("dashboard.cards.proxies.title")}
+          >
             <Button
               variant="outline"
               className="w-full"
@@ -45,7 +48,10 @@ export default function Dashboard() {
               {t("common.actions.view")}
             </Button>
           </DataCard>
-          <DataCard value={targets.length} title={t("dashboard.cards.targets.title")}>
+          <DataCard
+            value={targets.length}
+            title={t("dashboard.cards.targets.title")}
+          >
             <Button
               variant="outline"
               className="w-full"

@@ -24,11 +24,11 @@ import { useTargets } from "@/hooks/use-targets"
 import { AddTargetModal } from "@/modals/add-target"
 import { RemoveTargetModal } from "@/modals/remove-target"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 export default function TargetTable() {
   const { targets, loading, error } = useTargets()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   if (loading) {
     return (
@@ -60,9 +60,7 @@ export default function TargetTable() {
             <MonitorIcon />
           </EmptyMedia>
           <EmptyTitle>{t("targets.empty.title")}</EmptyTitle>
-          <EmptyDescription>
-            {t("targets.empty.description")}
-          </EmptyDescription>
+          <EmptyDescription>{t("targets.empty.description")}</EmptyDescription>
           <AddTargetModal />
         </EmptyHeader>
       </Empty>
@@ -74,7 +72,9 @@ export default function TargetTable() {
           <TableRow>
             <TableHead>{t("targets.table.columns.domain")}</TableHead>
             <TableHead>{t("targets.table.columns.status")}</TableHead>
-            <TableHead className="text-right">{t("targets.table.columns.actions")}</TableHead>
+            <TableHead className="text-right">
+              {t("targets.table.columns.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -83,7 +83,9 @@ export default function TargetTable() {
               <TableCell>{target.domain}</TableCell>
               <TableCell>
                 {target.disabled ? (
-                  <Badge variant="destructive">{t("common.states.disabled")}</Badge>
+                  <Badge variant="destructive">
+                    {t("common.states.disabled")}
+                  </Badge>
                 ) : (
                   <Badge variant="success">{t("common.states.enabled")}</Badge>
                 )}

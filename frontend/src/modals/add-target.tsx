@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label"
 import { useTargets } from "@/hooks/use-targets"
 import { TargetCreateSchema, type TargetCreate } from "@helios/shared"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 type Props = {
   buttonText?: string
@@ -26,7 +26,7 @@ type Props = {
 export function AddTargetModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
   const { addTargets } = useTargets()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const form = useForm({
     defaultValues: {
@@ -47,7 +47,9 @@ export function AddTargetModal({ buttonText }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{buttonText || t("common.actions.add")}</Button>
+        <Button variant="outline">
+          {buttonText || t("common.actions.add")}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <form
@@ -67,7 +69,9 @@ export function AddTargetModal({ buttonText }: Props) {
             <form.Field name="domain">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>{t("targets.fields.domain.label")}</Label>
+                  <Label htmlFor={field.name}>
+                    {t("targets.fields.domain.label")}
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}

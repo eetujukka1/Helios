@@ -26,11 +26,11 @@ import { RemoveProxyModal } from "@/modals/remove-proxy"
 import { AddProxyModal } from "@/modals/add-proxy"
 import { UpdateProxyModal } from "@/modals/update-proxy"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 export default function ProxyTable() {
   const { proxies, loading, error } = useProxies()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   if (loading) {
     return (
@@ -47,7 +47,7 @@ export default function ProxyTable() {
           <EmptyMedia>
             <InfoIcon />
           </EmptyMedia>
-          <EmptyTitle>{t('common.states.error')}</EmptyTitle>
+          <EmptyTitle>{t("common.states.error")}</EmptyTitle>
           <EmptyDescription>{error}</EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -61,10 +61,8 @@ export default function ProxyTable() {
           <EmptyMedia>
             <NetworkIcon />
           </EmptyMedia>
-          <EmptyTitle>{t('proxies.empty.title')}</EmptyTitle>
-          <EmptyDescription>
-            {t('proxies.empty.description')}
-          </EmptyDescription>
+          <EmptyTitle>{t("proxies.empty.title")}</EmptyTitle>
+          <EmptyDescription>{t("proxies.empty.description")}</EmptyDescription>
           <AddProxyModal />
         </EmptyHeader>
       </Empty>
@@ -74,11 +72,13 @@ export default function ProxyTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>{t('proxies.table.columns.host')}</TableHead>
-            <TableHead>{t('proxies.table.columns.port')}</TableHead>
-            <TableHead>{t('proxies.table.columns.username')}</TableHead>
-            <TableHead>{t('proxies.table.columns.status')}</TableHead>
-            <TableHead className="text-right">{t('proxies.table.columns.actions')}</TableHead>
+            <TableHead>{t("proxies.table.columns.host")}</TableHead>
+            <TableHead>{t("proxies.table.columns.port")}</TableHead>
+            <TableHead>{t("proxies.table.columns.username")}</TableHead>
+            <TableHead>{t("proxies.table.columns.status")}</TableHead>
+            <TableHead className="text-right">
+              {t("proxies.table.columns.actions")}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -89,7 +89,9 @@ export default function ProxyTable() {
               <TableCell>{p.username}</TableCell>
               <TableCell>
                 {p.disabled ? (
-                  <Badge variant="destructive">{t("common.states.disabled")}</Badge>
+                  <Badge variant="destructive">
+                    {t("common.states.disabled")}
+                  </Badge>
                 ) : (
                   <Badge variant="success">{t("common.states.enabled")}</Badge>
                 )}

@@ -6,11 +6,11 @@ import AppHeader from "@/components/app-header"
 import { Button } from "@/components/ui/button"
 import { useProxies } from "@/hooks/use-proxies"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 export default function Proxies() {
   const { getProxies } = useProxies()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   return (
     <Protected>

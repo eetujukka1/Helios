@@ -36,7 +36,7 @@ const languageOptionKeys = {
 } as const satisfies Record<AppLanguage, string>
 
 function normalizeLanguage(language?: string): AppLanguage {
-  const normalizedLanguage = language?.split("-")[0];
+  const normalizedLanguage = language?.split("-")[0]
 
   return supportedLanguages.includes(normalizedLanguage as AppLanguage)
     ? (normalizedLanguage as AppLanguage)

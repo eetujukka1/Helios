@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label"
 import { useProxies } from "@/hooks/use-proxies"
 import { ProxyCreateSchema, type ProxyCreate } from "@helios/shared"
 
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next"
 
 type Props = {
   buttonText?: string
@@ -31,7 +31,7 @@ type AddProxyFormValues = Omit<z.input<typeof ProxyCreateSchema>, "port"> & {
 export function AddProxyModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
   const { addProxies } = useProxies()
-  const { t } = useTranslation();
+  const { t } = useTranslation()
 
   const defaultValues: AddProxyFormValues = {
     host: "",
@@ -57,7 +57,9 @@ export function AddProxyModal({ buttonText }: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{buttonText || t("common.actions.add")}</Button>
+        <Button variant="outline">
+          {buttonText || t("common.actions.add")}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
         <form
@@ -77,7 +79,9 @@ export function AddProxyModal({ buttonText }: Props) {
             <form.Field name="host">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>{t("proxies.fields.host.label")}</Label>
+                  <Label htmlFor={field.name}>
+                    {t("proxies.fields.host.label")}
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -94,7 +98,9 @@ export function AddProxyModal({ buttonText }: Props) {
             <form.Field name="port">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>{t("proxies.fields.port.label")}</Label>
+                  <Label htmlFor={field.name}>
+                    {t("proxies.fields.port.label")}
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -118,7 +124,9 @@ export function AddProxyModal({ buttonText }: Props) {
             <form.Field name="username">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>{t("proxies.fields.username.label")}</Label>
+                  <Label htmlFor={field.name}>
+                    {t("proxies.fields.username.label")}
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}
@@ -135,7 +143,9 @@ export function AddProxyModal({ buttonText }: Props) {
             <form.Field name="password">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={field.name}>{t("proxies.fields.password.label")}</Label>
+                  <Label htmlFor={field.name}>
+                    {t("proxies.fields.password.label")}
+                  </Label>
                   <Input
                     id={field.name}
                     name={field.name}
