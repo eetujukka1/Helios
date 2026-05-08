@@ -1,11 +1,7 @@
 import { useState } from "react"
 import { revalidateLogic, useForm } from "@tanstack/react-form"
 import type { z } from "zod"
-import {
-  ProxyCreateSchema,
-  type Proxy,
-  type ProxyCreate,
-} from "@helios/shared"
+import { ProxyCreateSchema, type Proxy, type ProxyCreate } from "@helios/shared"
 import { PencilIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import {
