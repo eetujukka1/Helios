@@ -1,5 +1,6 @@
 import { isAxiosError } from "axios"
 import { toast } from "sonner"
+import { useTranslation } from "react-i18next"
 
 const DEFAULT_ERROR_MESSAGE = "Something went wrong while contacting the server"
 
@@ -46,7 +47,8 @@ function getErrorMessage(error: unknown): string {
 }
 
 export function showServerErrorToast(error: unknown): void {
-  toast.error("Request failed", {
+  const { t } = useTranslation()
+  toast.error(t("errors.requestFailed"), {
     description: getErrorMessage(error),
     position: "top-center",
   })
