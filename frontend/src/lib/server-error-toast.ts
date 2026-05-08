@@ -1,7 +1,8 @@
 import { isAxiosError } from "axios"
 import { toast } from "sonner"
+import i18n from "@/i18n"
 
-const DEFAULT_ERROR_MESSAGE = "Something went wrong while contacting the server"
+const DEFAULT_ERROR_MESSAGE_KEY = "errors.serverContact"
 
 /**
  * Converts unknown query/mutation failures into a user-facing message.
@@ -42,11 +43,11 @@ function getErrorMessage(error: unknown): string {
     return error.message
   }
 
-  return DEFAULT_ERROR_MESSAGE
+  return i18n.t(DEFAULT_ERROR_MESSAGE_KEY)
 }
 
 export function showServerErrorToast(error: unknown): void {
-  toast.error("Request failed", {
+  toast.error(i18n.t("toasts.requestFailed.title"), {
     description: getErrorMessage(error),
     position: "top-center",
   })

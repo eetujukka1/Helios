@@ -30,7 +30,7 @@ export function Login({ className, ...props }: React.ComponentProps<"div">) {
     try {
       await login(username, password)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
+      setError(err instanceof Error ? err.message : t("errors.generic"))
     }
   }
 
