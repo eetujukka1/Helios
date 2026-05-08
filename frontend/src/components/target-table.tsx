@@ -24,8 +24,12 @@ import { useTargets } from "@/hooks/use-targets"
 import { AddTargetModal } from "@/modals/add-target"
 import { RemoveTargetModal } from "@/modals/remove-target"
 
+import { useTranslation } from 'react-i18next';
+
 export default function TargetTable() {
   const { targets, loading, error } = useTargets()
+  const { t } = useTranslation();
+
   if (loading) {
     return (
       <div className="flex justify-center py-8">
@@ -41,7 +45,7 @@ export default function TargetTable() {
           <EmptyMedia>
             <InfoIcon />
           </EmptyMedia>
-          <EmptyTitle>Error</EmptyTitle>
+          <EmptyTitle>{t("common.states.error")}</EmptyTitle>
           <EmptyDescription>{error}</EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -55,9 +59,9 @@ export default function TargetTable() {
           <EmptyMedia>
             <MonitorIcon />
           </EmptyMedia>
-          <EmptyTitle>No targets</EmptyTitle>
+          <EmptyTitle>{t("targets.empty.title")}</EmptyTitle>
           <EmptyDescription>
-            You have not added any targets yet
+            {t("targets.empty.description")}
           </EmptyDescription>
           <AddTargetModal />
         </EmptyHeader>
@@ -68,24 +72,24 @@ export default function TargetTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Domain</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead>{t("targets.table.columns.domain")}</TableHead>
+            <TableHead>{t("targets.table.columns.status")}</TableHead>
+            <TableHead className="text-right">{t("targets.table.columns.actions")}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {targets.map((t) => (
-            <TableRow key={t.id}>
-              <TableCell>{t.domain}</TableCell>
+          {targets.map((target) => (
+            <TableRow key={target.id}>
+              <TableCell>{target.domain}</TableCell>
               <TableCell>
-                {t.disabled ? (
-                  <Badge variant="destructive">Disabled</Badge>
+                {target.disabled ? (
+                  <Badge variant="destructive">{t("common.states.disabled")}</Badge>
                 ) : (
-                  <Badge variant="success">Enabled</Badge>
+                  <Badge variant="success">{t("common.states.enabled")}</Badge>
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveTargetModal target={t} />
+                <RemoveTargetModal target={target} />
               </TableCell>
             </TableRow>
           ))}
