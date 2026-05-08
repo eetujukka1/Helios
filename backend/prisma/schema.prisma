@@ -17,12 +17,16 @@ datasource db {
 
 model User {
   id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   targetId    Int
   proxyId     Int
 }
 
 model Proxy {
   id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   host        String
   port        Int
   username    String?
@@ -33,6 +37,8 @@ model Proxy {
 
 model Target {
   id          Int       @id @default(autoincrement())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   domain      String
   disabled    Boolean   @default(false)
   pages       Page[]
@@ -55,7 +61,7 @@ model Response {
   proxy       Proxy     @relation(fields: [proxyId], references: [id], onDelete: SetNull)
   proxyId     Int
   statusCode  Int
-  date        DateTime  @default(now()) 
+  date        DateTime  @default(now())
 }
 
 model File {
