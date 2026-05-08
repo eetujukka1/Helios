@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import TargetTable from "@/components/target-table"
+import { AddTargetModal } from "@/modals/add-target"
 import * as targetService from "@/services/target-service"
 
 vi.mock("@/services/target-service", () => ({
@@ -12,6 +13,7 @@ vi.mock("@/services/target-service", () => ({
 }))
 
 const mockGet = vi.mocked(targetService.get)
+const mockAdd = vi.mocked(targetService.add)
 const mockRemove = vi.mocked(targetService.remove)
 
 function wrapper({ children }: { children: React.ReactNode }) {
@@ -93,5 +95,32 @@ describe("TargetTable", () => {
     await user.click(screen.getByRole("button", { name: "Remove" }))
 
     expect(mockRemove).toHaveBeenCalledWith(1)
+  })
+
+  it("opens add modal with empty target field and placeholder", async () => {
+    mockAdd.mockResolvedValue([])
+    const user = userEvent.setup()
+    render(<AddTargetModal />, { wrapper })
+
+    await user.click(screen.getByRole("button", { name: "Add" }))
+
+    expect(screen.getByText("Add targets")).toBeInTheDocument()
+    expect(screen.getByLabelText("URL")).toHaveValue("")
+    expect(screen.getByLabelText("URL")).toHaveAttribute(
+      "placeholder",
+      "https://example.com"
+    )
+  })
+
+  it("shows field errors in the modal when submitting invalid target data", async () => {
+    mockAdd.mockResolvedValue([])
+    const user = userEvent.setup()
+    render(<AddTargetModal />, { wrapper })
+
+    await user.click(screen.getByRole("button", { name: "Add" }))
+    await user.click(screen.getByRole("button", { name: "Add" }))
+
+    expect(mockAdd).not.toHaveBeenCalled()
+    expect(screen.getAllByRole("alert")).toHaveLength(1)
   })
 })

@@ -1,4 +1,6 @@
+
 import { useState } from "react"
+import { revalidateLogic, useForm } from "@tanstack/react-form"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -10,10 +12,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Field, FieldGroup } from "@/components/ui/field"
+import { Field, FieldError, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useTargets } from "@/hooks/use-targets"
+import { TargetCreateSchema, type TargetCreate } from "@helios/shared"
 
 type Props = {
   buttonText?: string
@@ -22,19 +25,21 @@ type Props = {
 export function AddTargetModal({ buttonText }: Props) {
   const [open, setOpen] = useState(false)
   const { addTargets } = useTargets()
-
-  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const form = e.currentTarget
-    const data = new FormData(form)
-    await addTargets([
-      {
-        domain: data.get("domain") as string,
-      },
-    ])
-    form.reset()
-    setOpen(false)
-  }
+  const form = useForm({
+    defaultValues: {
+      domain: "",
+    },
+    validationLogic: revalidateLogic(),
+    validators: {
+      onDynamic: TargetCreateSchema,
+    },
+    onSubmit: async ({ value, formApi }) => {
+      const target: TargetCreate = TargetCreateSchema.parse(value)
+      await addTargets([target])
+      formApi.reset()
+      setOpen(false)
+    },
+  })
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -42,7 +47,13 @@ export function AddTargetModal({ buttonText }: Props) {
         <Button variant="outline">{buttonText || "Add"}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-sm">
-        <form onSubmit={handleSubmit} className="grid gap-4">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            void form.handleSubmit()
+          }}
+          className="grid gap-4"
+        >
           <DialogHeader>
             <DialogTitle>Add targets</DialogTitle>
             <DialogDescription>
@@ -50,15 +61,23 @@ export function AddTargetModal({ buttonText }: Props) {
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
-            <Field>
-              <Label htmlFor="domain">URL</Label>
-              <Input
-                id="domain"
-                name="domain"
-                placeholder="https://example.com"
-                required
-              />
-            </Field>
+            <form.Field name="domain">
+              {(field) => (
+                <Field data-invalid={field.state.meta.errors.length > 0}>
+                  <Label htmlFor={field.name}>URL</Label>
+                  <Input
+                    id={field.name}
+                    name={field.name}
+                    placeholder="https://example.com"
+                    value={field.state.value}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                    onBlur={field.handleBlur}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                  />
+                  <FieldError errors={field.state.meta.errors} />
+                </Field>
+              )}
+            </form.Field>
           </FieldGroup>
           <DialogFooter>
             <DialogClose asChild>
