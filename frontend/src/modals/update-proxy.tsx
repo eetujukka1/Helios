@@ -19,6 +19,8 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useProxies } from "@/hooks/use-proxies"
 
+import { useTranslation } from 'react-i18next';
+
 type Props = {
   proxy: Proxy
 }
@@ -30,6 +32,8 @@ type UpdateProxyFormValues = Omit<z.input<typeof ProxyCreateSchema>, "port"> & {
 export function UpdateProxyModal({ proxy }: Props) {
   const [open, setOpen] = useState(false)
   const { updateProxy } = useProxies()
+  const { t } = useTranslation();
+
   const defaultValues: UpdateProxyFormValues = {
     host: proxy.host,
     port: proxy.port,
@@ -69,16 +73,16 @@ export function UpdateProxyModal({ proxy }: Props) {
           className="grid gap-4"
         >
           <DialogHeader>
-            <DialogTitle>Update proxy</DialogTitle>
+            <DialogTitle>{t("proxies.dialogs.update.title")}</DialogTitle>
             <DialogDescription>
-              Update proxy information here. Click Update to save changes.
+              {t("proxies.dialogs.update.description")}
             </DialogDescription>
           </DialogHeader>
           <FieldGroup>
             <form.Field name="host">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={`host-${proxy.id}`}>Host</Label>
+                  <Label htmlFor={`host-${proxy.id}`}>{t("proxies.fields.host.label")}</Label>
                   <Input
                     id={`host-${proxy.id}`}
                     name={field.name}
@@ -94,7 +98,7 @@ export function UpdateProxyModal({ proxy }: Props) {
             <form.Field name="port">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={`port-${proxy.id}`}>Port</Label>
+                  <Label htmlFor={`port-${proxy.id}`}>{t("proxies.fields.port.label")}</Label>
                   <Input
                     id={`port-${proxy.id}`}
                     name={field.name}
@@ -117,10 +121,11 @@ export function UpdateProxyModal({ proxy }: Props) {
             <form.Field name="username">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={`username-${proxy.id}`}>Username</Label>
+                  <Label htmlFor={`username-${proxy.id}`}>{t("proxies.fields.username.label")}</Label>
                   <Input
                     id={`username-${proxy.id}`}
                     name={field.name}
+                    placeholder={t("proxies.fields.username.placeholder")}
                     value={field.state.value ?? ""}
                     aria-invalid={field.state.meta.errors.length > 0}
                     onBlur={field.handleBlur}
@@ -133,11 +138,11 @@ export function UpdateProxyModal({ proxy }: Props) {
             <form.Field name="password">
               {(field) => (
                 <Field data-invalid={field.state.meta.errors.length > 0}>
-                  <Label htmlFor={`password-${proxy.id}`}>Password</Label>
+                  <Label htmlFor={`password-${proxy.id}`}>{t("proxies.fields.password.label")}</Label>
                   <Input
                     id={`password-${proxy.id}`}
                     name={field.name}
-                    placeholder="Leave blank to keep current password"
+                    placeholder={t("proxies.fields.password.keepCurrentHint")}
                     type="password"
                     value={field.state.value ?? ""}
                     aria-invalid={field.state.meta.errors.length > 0}
@@ -151,9 +156,9 @@ export function UpdateProxyModal({ proxy }: Props) {
           </FieldGroup>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button variant="outline">{t("common.actions.cancel")}</Button>
             </DialogClose>
-            <Button type="submit">Update</Button>
+            <Button type="submit">{t("common.actions.update")}</Button>
           </DialogFooter>
         </form>
       </DialogContent>
