@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import ProxyTable from "@/components/proxy-table"
+import { AddProxyModal } from "@/modals/add-proxy"
 import * as proxyService from "@/services/proxy-service"
 
 vi.mock("@/services/proxy-service", () => ({
@@ -13,6 +14,7 @@ vi.mock("@/services/proxy-service", () => ({
 }))
 
 const mockGet = vi.mocked(proxyService.get)
+const mockAdd = vi.mocked(proxyService.add)
 const mockRemove = vi.mocked(proxyService.remove)
 const mockUpdate = vi.mocked(proxyService.update)
 
@@ -88,6 +90,35 @@ describe("ProxyTable", () => {
     ).toBeInTheDocument()
   })
 
+  it("opens add modal with empty proxy fields and placeholders", async () => {
+    mockAdd.mockResolvedValue([])
+    const user = userEvent.setup()
+    render(<AddProxyModal />, { wrapper })
+
+    await user.click(screen.getByRole("button", { name: "Add" }))
+
+    expect(screen.getByText("Add proxies")).toBeInTheDocument()
+    expect(screen.getByLabelText("Host")).toHaveValue("")
+    expect(screen.getByLabelText("Host")).toHaveAttribute(
+      "placeholder",
+      "1.1.1.1"
+    )
+    expect(screen.getByLabelText("Port")).toHaveValue(null)
+    expect(screen.getByLabelText("Port")).toHaveAttribute("placeholder", "8080")
+  })
+
+  it("shows field errors in the modal when submitting invalid proxy data", async () => {
+    mockAdd.mockResolvedValue([])
+    const user = userEvent.setup()
+    render(<AddProxyModal />, { wrapper })
+
+    await user.click(screen.getByRole("button", { name: "Add" }))
+    await user.click(screen.getByRole("button", { name: "Add" }))
+
+    expect(mockAdd).not.toHaveBeenCalled()
+    expect(screen.getAllByRole("alert")).toHaveLength(2)
+  })
+
   it("calls remove service on confirm", async () => {
     mockGet.mockResolvedValue([testProxy])
     mockRemove.mockResolvedValue([])
@@ -121,5 +152,21 @@ describe("ProxyTable", () => {
       username: "user",
       password: undefined,
     })
+  })
+
+  it("shows field errors in the update modal when submitting invalid proxy data", async () => {
+    mockGet.mockResolvedValue([testProxy])
+    mockUpdate.mockResolvedValue(testProxy)
+    const user = userEvent.setup()
+    render(<ProxyTable />, { wrapper })
+    await screen.findByText("1.1.1.1")
+
+    await user.click(screen.getByRole("button", { name: "Edit 1.1.1.1" }))
+    await user.clear(screen.getByLabelText("Host"))
+    await user.clear(screen.getByLabelText("Port"))
+    await user.click(screen.getByRole("button", { name: "Update" }))
+
+    expect(mockUpdate).not.toHaveBeenCalled()
+    expect(screen.getAllByRole("alert")).toHaveLength(2)
   })
 })
