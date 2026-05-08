@@ -164,7 +164,7 @@
     },
     "fields": {
       "domain": {
-        "label": "URL",
+        "label": "Verkkotunnus",
         "placeholder": "https://example.com"
       }
     }
