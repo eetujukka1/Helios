@@ -29,11 +29,23 @@ export const add = async (req: Request, res: Response): Promise<void> => {
       ...target,
       domain: new URL(target.domain).origin,
     }));
-  const addedTargets = await prisma.target.createManyAndReturn({ data: targets });
+  const addedTargets = await prisma.target.createManyAndReturn({
+    data: targets,
+  });
 
-  const addedPages = await prisma.page.createManyAndReturn({data: addedTargets.map(target => ({url: target.domain, targetId: target.id}))});
+  const addedPages = await prisma.page.createManyAndReturn({
+    data: addedTargets.map((target) => ({
+      url: target.domain,
+      targetId: target.id,
+    })),
+  });
 
-  await pageLoadQueue.addBulk(addedPages.map(page => ({ name: "load", data: { id: page.id, url: page.url } })));
+  await pageLoadQueue.addBulk(
+    addedPages.map((page) => ({
+      name: "load",
+      data: { id: page.id, url: page.url },
+    })),
+  );
 
   res.status(201).json(addedTargets);
 };
