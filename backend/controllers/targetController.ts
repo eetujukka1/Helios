@@ -2,8 +2,12 @@ import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
+import { createRedisConnection, createPageLoadQueue } from "@helios/queue";
 
 const prisma = new PrismaClient();
+
+const redisConnection = createRedisConnection();
+const pageLoadQueue = createPageLoadQueue(redisConnection);
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const targets = await prisma.target.findMany();
@@ -25,8 +29,13 @@ export const add = async (req: Request, res: Response): Promise<void> => {
       ...target,
       domain: new URL(target.domain).origin,
     }));
-  const addedSites = await prisma.target.createManyAndReturn({ data: targets });
-  res.status(201).json(addedSites);
+  const addedTargets = await prisma.target.createManyAndReturn({ data: targets });
+
+  const addedPages = await prisma.page.createManyAndReturn({data: addedTargets.map(target => ({url: target.domain, targetId: target.id}))});
+
+  await pageLoadQueue.addBulk(addedPages.map(page => ({ name: "load", data: { id: page.id, url: page.url } })));
+
+  res.status(201).json(addedTargets);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
