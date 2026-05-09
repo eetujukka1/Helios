@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import app from "./app.js";
-import { scheduleMissedPages } from "./utils/enqueuePages.js";
+import { scheduleMissedPages } from "./utils/scheduleMissedPages.js";
 
 const env = process.env.NODE_ENV;
 

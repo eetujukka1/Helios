@@ -1,7 +1,7 @@
 import { createPageLoadQueue, createRedisConnection } from "@helios/queue";
 
 type PageLoadJob = {
-  id: number;
+  targetId: number;
   url: string;
 };
 
@@ -12,7 +12,7 @@ export async function enqueuePageLoads(pages: PageLoadJob[]): Promise<void> {
     await pageLoadQueue.addBulk(
       pages.map((page) => ({
         name: "load",
-        data: { id: page.id, url: page.url },
+        data: { targetId: page.targetId, url: page.url },
       })),
     );
   } finally {
