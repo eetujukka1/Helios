@@ -6,7 +6,8 @@
     "frontend",
     "backend",
     "shared",
-    "queue"
+    "queue",
+    "loader"
   ],
   "scripts": {
     "dev:frontend": "npm run dev -w frontend",
