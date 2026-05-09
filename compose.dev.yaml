@@ -47,9 +47,6 @@ services:
     build:
       context: .
       dockerfile: loader/dev.Dockerfile
-    deploy:
-      mode: replicated
-      replicas: 3
     environment:
       HELIOS_URL: ${HELIOS_URL}
       DEMO_WORKER_ID: ${DEMO_WORKER_ID}
