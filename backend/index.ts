@@ -1,11 +1,14 @@
 import dotenv from "dotenv";
 import app from "./app.js";
+import { scheduleMissedPages } from "./utils/enqueuePages.js";
 
 const env = process.env.NODE_ENV;
 
 dotenv.config({
   path: env ? `../.env.${env}` : "../.env",
 });
+
+scheduleMissedPages();
 
 const PORT = process.env.PORT || 3000;
 

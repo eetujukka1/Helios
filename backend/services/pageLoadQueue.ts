@@ -5,9 +5,7 @@ type PageLoadJob = {
   url: string;
 };
 
-export async function enqueuePageLoads(
-  pages: PageLoadJob[],
-): Promise<void> {
+export async function enqueuePageLoads(pages: PageLoadJob[]): Promise<void> {
   const pageLoadQueue = createPageLoadQueue(createRedisConnection());
 
   try {
@@ -17,6 +15,15 @@ export async function enqueuePageLoads(
         data: { id: page.id, url: page.url },
       })),
     );
+  } finally {
+    await pageLoadQueue.close();
+  }
+}
+
+export async function obliteratePageQueue(): Promise<void> {
+  const pageLoadQueue = createPageLoadQueue(createRedisConnection());
+  try {
+    await pageLoadQueue.obliterate({ force: true });
   } finally {
     await pageLoadQueue.close();
   }
