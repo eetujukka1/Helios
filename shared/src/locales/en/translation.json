@@ -1,0 +1,202 @@
+{
+  "app": {
+    "name": "Helios"
+  },
+  "nav": {
+    "group": {
+      "platform": "Platform"
+    },
+    "dashboard": "Dashboard",
+    "proxies": "Proxies",
+    "targets": "Targets"
+  },
+  "common": {
+    "actions": {
+      "add": "Add",
+      "update": "Update",
+      "remove": "Remove",
+      "refresh": "Refresh",
+      "cancel": "Cancel",
+      "view": "View",
+      "login": "Login",
+      "logout": "Logout",
+      "save": "Save"
+    },
+    "labels": {
+      "host": "Host",
+      "port": "Port",
+      "username": "Username",
+      "password": "Password",
+      "status": "Status",
+      "actions": "Actions",
+      "domain": "Domain"
+    },
+    "states": {
+      "loading": "Loading",
+      "enabled": "Enabled",
+      "disabled": "Disabled",
+      "error": "Error"
+    },
+    "empty": {
+      "title": "Nothing here yet",
+      "description": "There is no data to show yet."
+    },
+    "confirmation": {
+      "destructiveTitle": "Are you absolutely sure?",
+      "destructiveDescription": "This action cannot be undone."
+    },
+    "language": {
+      "label": "Language",
+      "options": {
+        "en": "English",
+        "fi": "Finnish"
+      }
+    }
+  },
+  "auth": {
+    "login": {
+      "title": "Login to your account",
+      "description": "Enter your username below to login to your account",
+      "fields": {
+        "username": {
+          "label": "Username",
+          "placeholder": "user123"
+        },
+        "password": {
+          "label": "Password",
+          "placeholder": "password"
+        }
+      },
+      "submit": "Login"
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "cards": {
+      "proxies": {
+        "title": "Proxies"
+      },
+      "targets": {
+        "title": "Targets"
+      }
+    }
+  },
+  "proxies": {
+    "page": {
+      "title": "Proxies"
+    },
+    "table": {
+      "columns": {
+        "host": "Host",
+        "port": "Port",
+        "username": "Username",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "empty": {
+      "title": "No proxies",
+      "description": "You have not added any proxies yet"
+    },
+    "dialogs": {
+      "add": {
+        "title": "Add proxies",
+        "description": "Add proxy information here. Click Add to add.",
+        "submit": "Add"
+      },
+      "update": {
+        "title": "Update proxy",
+        "description": "Update proxy information here. Click Update to save changes.",
+        "submit": "Update"
+      },
+      "remove": {
+        "title": "Are you absolutely sure?",
+        "description": "You are about to remove {{host}} from Helios. This action cannot be undone.",
+        "submit": "Remove"
+      }
+    },
+    "fields": {
+      "host": {
+        "label": "Host",
+        "placeholder": "1.1.1.1"
+      },
+      "port": {
+        "label": "Port",
+        "placeholder": "8080"
+      },
+      "username": {
+        "label": "Username",
+        "placeholder": "user"
+      },
+      "password": {
+        "label": "Password",
+        "placeholder": "password",
+        "keepCurrentHint": "Leave blank to keep current password"
+      }
+    }
+  },
+  "targets": {
+    "page": {
+      "title": "Targets"
+    },
+    "table": {
+      "columns": {
+        "domain": "Domain",
+        "status": "Status",
+        "actions": "Actions"
+      }
+    },
+    "empty": {
+      "title": "No targets",
+      "description": "You have not added any targets yet"
+    },
+    "dialogs": {
+      "add": {
+        "title": "Add targets",
+        "description": "Add target information here. Click Add to add.",
+        "submit": "Add"
+      },
+      "remove": {
+        "title": "Are you absolutely sure?",
+        "description": "You are about to remove {{domain}} from Helios. This action cannot be undone.",
+        "submit": "Remove"
+      }
+    },
+    "fields": {
+      "domain": {
+        "label": "URL",
+        "placeholder": "https://example.com"
+      }
+    }
+  },
+  "errors": {
+    "generic": "Something went wrong",
+    "requestFailed": "Request failed",
+    "serverContact": "Something went wrong while contacting the server",
+    "invalidCredentials": "Invalid credentials",
+    "failedToUpdateProxy": "Failed to update proxy"
+  },
+  "toasts": {
+    "requestFailed": {
+      "title": "Request failed"
+    },
+    "proxyUpdateFailed": {
+      "title": "Failed to update proxy"
+    }
+  },
+  "aria": {
+    "theme": {
+      "toggle": "Toggle theme"
+    },
+    "auth": {
+      "logout": "Log out"
+    },
+    "proxies": {
+      "edit": "Edit {{host}}",
+      "remove": "Remove {{host}}"
+    },
+    "targets": {
+      "remove": "Remove {{domain}}"
+    }
+  }
+}
