@@ -2,12 +2,9 @@ import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
-import { createRedisConnection, createPageLoadQueue } from "@helios/queue";
+import { enqueuePageLoads } from "../services/pageLoadQueue.js";
 
 const prisma = new PrismaClient();
-
-const redisConnection = createRedisConnection();
-const pageLoadQueue = createPageLoadQueue(redisConnection);
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const targets = await prisma.target.findMany();
@@ -40,12 +37,7 @@ export const add = async (req: Request, res: Response): Promise<void> => {
     })),
   });
 
-  await pageLoadQueue.addBulk(
-    addedPages.map((page) => ({
-      name: "load",
-      data: { id: page.id, url: page.url },
-    })),
-  );
+  await enqueuePageLoads(addedPages);
 
   res.status(201).json(addedTargets);
 };
@@ -70,6 +62,8 @@ export const addPages = async (req: Request, res: Response): Promise<void> => {
   const addedPages = await prisma.page.createManyAndReturn({
     data: pages,
   });
+
+  await enqueuePageLoads(addedPages);
 
   res.status(201).json(addedPages);
 };
