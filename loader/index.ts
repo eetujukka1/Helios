@@ -9,7 +9,7 @@ dotenv.config({
   path: env ? `../.env.${env}` : "../.env",
 });
 
-setToken(await getAuth())
+setToken(await getAuth());
 
 async function main(): Promise<void> {
   createWorker();

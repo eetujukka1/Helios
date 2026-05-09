@@ -27,4 +27,4 @@ async function processJob(page: QueuePage): Promise<void> {
   );
 }
 
-export default processJob
+export default processJob;

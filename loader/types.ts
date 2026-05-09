@@ -1,3 +1,3 @@
-import { Page } from "@helios/shared"
+import { Page } from "@helios/shared";
 
-export type QueuePage = Omit<Page, "id">
+export type QueuePage = Omit<Page, "id">;
