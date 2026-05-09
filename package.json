@@ -5,7 +5,8 @@
   "workspaces": [
     "frontend",
     "backend",
-    "shared"
+    "shared",
+    "queue"
   ],
   "scripts": {
     "dev:frontend": "npm run dev -w frontend",
