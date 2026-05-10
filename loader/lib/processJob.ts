@@ -1,30 +1,45 @@
 import { QueuePage } from "../types.js";
-import postResult from "./postResult.js";
+import { loadDefaultPage } from "jsilk";
+import * as cheerio from "cheerio";
+import { PageCreate } from "@helios/shared";
+import postNextPages from "./postResult.js";
+import { resolveHref } from "./resolveHref.js";
 
 async function processJob(page: QueuePage): Promise<void> {
-  const suffixMatch = page.url.match(/(\d+)$/);
+  const pageToLoad = {
+    url: page.url,
+    content: null,
+    status: null,
+    lastLoaded: null,
+  };
+  const loadedPage = await loadDefaultPage(pageToLoad);
 
-  const nextPages = !suffixMatch
-    ? [{ ...page, url: `${page.url}1` }]
-    : (() => {
-        const [currentSuffix] = suffixMatch;
-        const nextSuffix = String(Number(currentSuffix) + 1).padStart(
-          currentSuffix.length,
-          "0",
-        );
+  if (loadedPage.content && typeof loadedPage.content === "string") {
+    const parser = cheerio.load(loadedPage.content);
+    const sourceUrl = new URL(page.url);
+    const nextPages: PageCreate[] = parser("a")
+      .toArray()
+      .map((element) => parser(element).attr("href"))
+      .filter((href): href is string => typeof href === "string")
+      .flatMap((href) => {
+        const resolvedUrl = resolveHref(href, sourceUrl);
 
-        return [
-          {
-            targetId: page.targetId,
-            url: `${page.url.slice(0, -currentSuffix.length)}${nextSuffix}`,
-          },
-        ];
-      })();
+        if (
+          resolvedUrl &&
+          (resolvedUrl.protocol === "http:" ||
+            resolvedUrl.protocol === "https:") &&
+          resolvedUrl.hostname === sourceUrl.hostname
+        ) {
+          return [{ url: resolvedUrl.toString() }];
+        }
 
-  await postResult(
-    nextPages.map(({ url }) => ({ url })),
-    page.targetId,
-  );
+        return [];
+      });
+
+    if (nextPages.length > 0) {
+      await postNextPages(nextPages, page.targetId);
+    }
+  }
 }
 
 export default processJob;

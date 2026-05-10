@@ -2,7 +2,6 @@ import dotenv from "dotenv";
 import createWorker from "./lib/createWorker.js";
 import getAuth from "./lib/getAuth.js";
 import setToken from "./lib/setToken.js";
-
 const env = process.env.NODE_ENV;
 
 dotenv.config({

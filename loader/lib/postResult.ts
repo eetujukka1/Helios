@@ -3,7 +3,7 @@ import getBaseUrl from "./getBaseUrl.js";
 import getToken from "./getToken.js";
 import { PageCreate } from "@helios/shared";
 
-async function postResult(
+async function postNextPages(
   pages: PageCreate[],
   targetId: number,
 ): Promise<void> {
@@ -18,4 +18,4 @@ async function postResult(
   );
 }
 
-export default postResult;
+export default postNextPages;
