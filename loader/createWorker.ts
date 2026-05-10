@@ -1,7 +1,7 @@
 import { createRedisConnection, queueNames } from "@helios/queue";
 import { Job, Worker } from "bullmq";
-import { QueuePage } from "../types.js";
-import processJob from "./processJob.js";
+import { QueuePage } from "./types.js";
+import processJob from "./lib/processJob.js";
 
 const connection = createRedisConnection();
 

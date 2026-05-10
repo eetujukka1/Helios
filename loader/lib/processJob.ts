@@ -2,7 +2,7 @@ import { QueuePage } from "../types.js";
 import { loadDefaultPage } from "jsilk";
 import * as cheerio from "cheerio";
 import { PageCreate } from "@helios/shared";
-import postNextPages from "./postResult.js";
+import add from "../services/pages.js";
 import { resolveHref } from "./resolveHref.js";
 
 async function processJob(page: QueuePage): Promise<void> {
@@ -37,7 +37,7 @@ async function processJob(page: QueuePage): Promise<void> {
       });
 
     if (nextPages.length > 0) {
-      await postNextPages(nextPages, page.targetId);
+      await add(nextPages, page.targetId);
     }
   }
 }

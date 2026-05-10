@@ -1,9 +1,9 @@
 import axios from "axios";
-import getBaseUrl from "./getBaseUrl.js";
-import getToken from "./getToken.js";
+import getBaseUrl from "../lib/getBaseUrl.js";
+import getToken from "../lib/getToken.js";
 import { PageCreate } from "@helios/shared";
 
-async function postNextPages(
+async function add(
   pages: PageCreate[],
   targetId: number,
 ): Promise<void> {
@@ -18,4 +18,4 @@ async function postNextPages(
   );
 }
 
-export default postNextPages;
+export default add;
