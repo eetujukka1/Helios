@@ -6,14 +6,17 @@ import AppHeader from "@/components/app-header"
 import { Button } from "@/components/ui/button"
 import { useProxies } from "@/hooks/use-proxies"
 
+import { useTranslation } from "react-i18next"
+
 export default function Proxies() {
   const { getProxies } = useProxies()
+  const { t } = useTranslation()
 
   return (
     <Protected>
-      <AppHeader title="Proxies">
+      <AppHeader title={t("proxies.page.title")}>
         <Button onClick={getProxies} variant="outline">
-          Refresh
+          {t("common.actions.refresh")}
         </Button>
         <AddProxyModal />
       </AppHeader>

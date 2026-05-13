@@ -6,13 +6,17 @@ import { Button } from "@/components/ui/button"
 import { useTargets } from "@/hooks/use-targets"
 import { AddTargetModal } from "@/modals/add-target"
 
+import { useTranslation } from "react-i18next"
+
 export default function Targets() {
   const { getTargets } = useTargets()
+  const { t } = useTranslation()
+
   return (
     <Protected>
-      <AppHeader title="Targets">
+      <AppHeader title={t("targets.page.title")}>
         <Button onClick={getTargets} variant="outline">
-          Refresh
+          {t("common.actions.refresh")}
         </Button>
         <AddTargetModal />
       </AppHeader>

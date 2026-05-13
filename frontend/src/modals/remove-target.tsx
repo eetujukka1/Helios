@@ -18,6 +18,8 @@ import { Button } from "@/components/ui/button"
 import type { Target } from "@helios/shared"
 import { Trash2Icon } from "lucide-react"
 
+import { useTranslation } from "react-i18next"
+
 type Props = {
   target: Target
 }
@@ -25,6 +27,7 @@ type Props = {
 export function RemoveTargetModal({ target }: Props) {
   const [open, setOpen] = useState(false)
   const { removeTarget } = useTargets()
+  const { t } = useTranslation()
 
   const handleOnClick = async () => {
     await removeTarget(target.id)
@@ -39,15 +42,17 @@ export function RemoveTargetModal({ target }: Props) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>
+            {t("targets.dialogs.remove.title")}
+          </AlertDialogTitle>
           <AlertDialogDescription>
-            {`You are about to remove ${target.domain} from Helios. This action cannot be undone.`}
+            {t("targets.dialogs.remove.description", { domain: target.domain })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("common.actions.cancel")}</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={handleOnClick}>
-            Remove
+            {t("common.actions.remove")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

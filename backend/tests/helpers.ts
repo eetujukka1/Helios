@@ -19,6 +19,8 @@ export function workerAuthToken(): string {
   return jwt.sign({ actorType: "worker", workerId: "worker" }, SECRET);
 }
 
+export const mockEnqueuePageLoads = jest.fn<() => Promise<void>>();
+
 export const mockFile = {
   findMany: jest.fn<() => Promise<object[]>>(),
   findFirst: jest.fn<() => Promise<object | null>>(),
@@ -71,6 +73,9 @@ export function setupPrismaMockClient(): void {
   jest.unstable_mockModule("../generated/prisma/client.js", () => ({
     PrismaClient: jest.fn(() => mockPrismaClient),
   }));
+  jest.unstable_mockModule("../services/pageLoadQueue.js", () => ({
+    enqueuePageLoads: mockEnqueuePageLoads,
+  }));
 }
 
 export function resetMockClient(): void {
@@ -79,4 +84,5 @@ export function resetMockClient(): void {
       method.mockReset();
     }
   }
+  mockEnqueuePageLoads.mockReset();
 }
