@@ -146,6 +146,9 @@ describe("POST /api/targets", () => {
 
   it("responds with 201 and the created targets", async () => {
     mockTarget.createManyAndReturn.mockResolvedValue([target]);
+    mockPage.createManyAndReturn.mockResolvedValue([
+      { id: 1, url: target.domain, targetId: target.id },
+    ]);
 
     const res = await request(app)
       .post("/api/targets")
@@ -154,6 +157,30 @@ describe("POST /api/targets", () => {
 
     expect(res.status).toBe(201);
     expect(res.body).toEqual([target]);
+  });
+
+  it("normalizes domains to their root URL before insert", async () => {
+    mockTarget.createManyAndReturn.mockResolvedValue([target]);
+    mockPage.createManyAndReturn.mockResolvedValue([
+      { id: 1, url: target.domain, targetId: target.id },
+    ]);
+
+    await request(app)
+      .post("/api/targets")
+      .set("Authorization", `Bearer ${authToken()}`)
+      .send({
+        targets: [
+          { domain: "https://example.com/blogs" },
+          { domain: "https://example.com/path?a=1#section" },
+        ],
+      });
+
+    expect(mockTarget.createManyAndReturn).toHaveBeenCalledWith({
+      data: [
+        { domain: "https://example.com" },
+        { domain: "https://example.com" },
+      ],
+    });
   });
 });
 

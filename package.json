@@ -4,8 +4,11 @@
   "version": "0.0.1",
   "workspaces": [
     "frontend",
+    "mobile",
     "backend",
-    "shared"
+    "shared",
+    "queue",
+    "loader"
   ],
   "scripts": {
     "dev:frontend": "npm run dev -w frontend",

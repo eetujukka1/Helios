@@ -12,9 +12,12 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { useAuth } from "@/context/auth-provider"
 
+import { useTranslation } from "react-i18next"
+
 export function Login({ className, ...props }: React.ComponentProps<"div">) {
   const { login } = useAuth()
   const [error, setError] = useState<string | null>(null)
+  const { t } = useTranslation()
 
   const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -27,7 +30,7 @@ export function Login({ className, ...props }: React.ComponentProps<"div">) {
     try {
       await login(username, password)
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong")
+      setError(err instanceof Error ? err.message : t("errors.generic"))
     }
   }
 
@@ -37,32 +40,39 @@ export function Login({ className, ...props }: React.ComponentProps<"div">) {
         <div className={cn("flex flex-col gap-6", className)} {...props}>
           <Card>
             <CardHeader>
-              <CardTitle>Login to your account</CardTitle>
-              <CardDescription>
-                Enter your username below to login to your account
-              </CardDescription>
+              <CardTitle>{t("auth.login.title")}</CardTitle>
+              <CardDescription>{t("auth.login.description")}</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit}>
                 <FieldGroup>
                   <Field>
-                    <FieldLabel htmlFor="username">Username</FieldLabel>
+                    <FieldLabel htmlFor="username">
+                      {t("auth.login.fields.username.label")}
+                    </FieldLabel>
                     <Input
                       id="username"
                       type="username"
-                      placeholder="user123"
+                      placeholder={t("auth.login.fields.username.placeholder")}
                       required
                     />
                   </Field>
                   <Field>
                     <div className="flex items-center">
-                      <FieldLabel htmlFor="password">Password</FieldLabel>
+                      <FieldLabel htmlFor="password">
+                        {t("auth.login.fields.password.label")}
+                      </FieldLabel>
                     </div>
-                    <Input id="password" type="password" required />
+                    <Input
+                      id="password"
+                      type="password"
+                      required
+                      placeholder={t("auth.login.fields.password.placeholder")}
+                    />
                   </Field>
                   {error && <p className="text-sm text-red-500">{error}</p>}
                   <Field>
-                    <Button type="submit">Login</Button>
+                    <Button type="submit">{t("auth.login.submit")}</Button>
                   </Field>
                 </FieldGroup>
               </form>

@@ -1,24 +1,4 @@
 services:
-  postgres:
-    image: postgres:16-alpine
-    container_name: helios-postgres-dev
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - helios-postgres-dev-data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  redis:
-    image: redis:latest
-    container_name: helios-redis-dev
-    ports:
-      - "6379:6379"
 
   frontend:
     image: helios-frontend-dev
@@ -26,6 +6,8 @@ services:
     build:
       context: .
       dockerfile: frontend/dev.Dockerfile
+    depends_on:
+      - backend
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -46,6 +28,10 @@ services:
       S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:-}
       S3_SESSION_TOKEN: ${S3_SESSION_TOKEN:-}
       S3_FORCE_PATH_STYLE: ${S3_FORCE_PATH_STYLE:-false}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_USERNAME: ${REDIS_USERNAME}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     depends_on:
       postgres:
         condition: service_healthy
@@ -53,6 +39,38 @@ services:
       - .:/usr/src/app
       - /usr/src/app/node_modules
       - /usr/src/app/backend/node_modules
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3000/api/health').then((res) => process.exit(res.ok ? 0 : 1)).catch(() => process.exit(1))",
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+  loader:
+    image: helios-loader-dev
+    build:
+      context: .
+      dockerfile: loader/dev.Dockerfile
+    environment:
+      HELIOS_URL: ${HELIOS_URL}
+      DEMO_WORKER_ID: ${DEMO_WORKER_ID}
+      DEMO_WORKER_SECRET: ${DEMO_WORKER_SECRET}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_USERNAME: ${REDIS_USERNAME}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/loader/node_modules
+    depends_on:
+      - nginx
 
   nginx:
     image: nginx:latest
@@ -62,8 +80,7 @@ services:
     ports:
       - "8080:80"
     depends_on:
-      - frontend
-      - backend
-
-volumes:
-  helios-postgres-dev-data:
+      frontend:
+        condition: service_started
+      backend:
+        condition: service_healthy

@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ProxyCreate, ProxyUpdate } from "@helios/shared"
 import { get, add, remove, update } from "@/services/proxy-service"
 import { toast } from "sonner"
+import i18n from "@/i18n"
 
 export function useProxies() {
   const queryClient = useQueryClient()
@@ -33,7 +34,7 @@ export function useProxies() {
       update(id, proxy),
     onSuccess: () => getProxies(),
     onError: (error: Error) =>
-      toast.error("Failed to update proxy", {
+      toast.error(i18n.t("toasts.proxyUpdateFailed.title"), {
         description: error.message,
         position: "top-center",
       }),

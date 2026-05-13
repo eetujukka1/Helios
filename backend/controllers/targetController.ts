@@ -2,6 +2,7 @@ import * as z from "zod";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
+import { enqueuePageLoads } from "../services/pageLoadQueue.js";
 
 const prisma = new PrismaClient();
 
@@ -18,9 +19,27 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 };
 
 export const add = async (req: Request, res: Response): Promise<void> => {
-  const targets = z.array(TargetCreateSchema).parse(req.body.targets);
-  const addedSites = await prisma.target.createManyAndReturn({ data: targets });
-  res.status(201).json(addedSites);
+  const targets = z
+    .array(TargetCreateSchema)
+    .parse(req.body.targets)
+    .map((target) => ({
+      ...target,
+      domain: new URL(target.domain).origin,
+    }));
+  const addedTargets = await prisma.target.createManyAndReturn({
+    data: targets,
+  });
+
+  const addedPages = await prisma.page.createManyAndReturn({
+    data: addedTargets.map((target) => ({
+      url: target.domain,
+      targetId: target.id,
+    })),
+  });
+
+  await enqueuePageLoads(addedPages);
+
+  res.status(201).json(addedTargets);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
@@ -42,7 +61,10 @@ export const addPages = async (req: Request, res: Response): Promise<void> => {
 
   const addedPages = await prisma.page.createManyAndReturn({
     data: pages,
+    skipDuplicates: true
   });
+
+  await enqueuePageLoads(addedPages);
 
   res.status(201).json(addedPages);
 };
