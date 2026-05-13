@@ -15,6 +15,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1045.0",
     "@helios/queue": "*",
     "@helios/shared": "*",
     "@prisma/client": "^6.19.2",
