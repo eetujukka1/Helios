@@ -61,7 +61,7 @@ export const addPages = async (req: Request, res: Response): Promise<void> => {
 
   const addedPages = await prisma.page.createManyAndReturn({
     data: pages,
-    skipDuplicates: true
+    skipDuplicates: true,
   });
 
   await enqueuePageLoads(addedPages);
