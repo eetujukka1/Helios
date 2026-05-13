@@ -46,7 +46,7 @@ model Target {
 
 model Page {
   id          Int       @id @default(autoincrement())
-  url         String
+  url         String    @unique
   target      Target    @relation(fields: [targetId], references: [id], onDelete: Cascade)
   targetId    Int
   response    Response[]
