@@ -17,7 +17,7 @@
     "lint": "npm run lint --workspaces",
     "format": "npm run format --workspaces",
     "checkformat": "npm run checkformat --workspaces",
-    "test": "npm run test -w backend -w frontend",
+    "test": "npm run test --workspaces",
     "precommit": "npm run format && npm run lint && npm run test"
   }
 }

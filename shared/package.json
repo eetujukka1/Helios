@@ -13,6 +13,7 @@
   "scripts": {
     "lint": "eslint .",
     "format": "prettier --write .",
+    "test": "echo \"Warning: no tests specified\"",
     "checkformat": "prettier --check ."
   },
   "peerDependencies": {

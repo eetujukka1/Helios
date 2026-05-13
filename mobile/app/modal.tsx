@@ -1,1 +1,1 @@
-export { default } from '@/screens/ModalScreen';
+export { default } from "@/screens/ModalScreen";
