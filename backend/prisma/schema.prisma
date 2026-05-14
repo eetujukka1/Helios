@@ -56,10 +56,10 @@ model Response {
   id          Int       @id @default(autoincrement())
   page        Page      @relation(fields: [pageId], references: [id], onDelete: Cascade)
   pageId      Int
-  file        File      @relation(fields: [fileId], references: [id])
-  fileId      Int       @unique
-  proxy       Proxy     @relation(fields: [proxyId], references: [id], onDelete: SetNull)
-  proxyId     Int
+  file        File?     @relation(fields: [fileId], references: [id], onDelete: SetNull)
+  fileId      Int?      @unique
+  proxy       Proxy?    @relation(fields: [proxyId], references: [id], onDelete: SetNull)
+  proxyId     Int?
   statusCode  Int
   date        DateTime  @default(now())
 }
