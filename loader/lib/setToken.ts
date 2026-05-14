@@ -1,5 +1,7 @@
+import { envService } from "./envService.js";
+
 function setToken(token: string): void {
-  process.env.WORKER_AUTH_TOKEN = token;
+  envService.set("WORKER_AUTH_TOKEN", token);
 }
 
 export default setToken;

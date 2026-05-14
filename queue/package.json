@@ -17,7 +17,8 @@
     "checkformat": "prettier --check ."
   },
   "dependencies": {
-    "bullmq": "^5.76.6"
+    "bullmq": "^5.76.6",
+    "@helios/shared": "*"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

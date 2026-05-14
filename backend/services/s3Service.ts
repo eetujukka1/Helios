@@ -11,6 +11,11 @@ import {
   type PutObjectCommandOutput,
   type S3ClientConfig,
 } from "@aws-sdk/client-s3";
+import {
+  createEnvService,
+  type EnvService,
+  type EnvValues,
+} from "@helios/shared";
 type S3ObjectBody = PutObjectCommandInput["Body"];
 
 export type S3ServiceConfig = {
@@ -31,35 +36,30 @@ export type UploadObjectInput = {
   cacheControl?: string;
 };
 
-const getRequiredEnv = (env: NodeJS.ProcessEnv, name: string): string => {
-  const value = env[name];
+const isEnvService = (env?: EnvService | EnvValues): env is EnvService =>
+  typeof (env as EnvService | undefined)?.get === "function";
 
-  if (!value) {
-    throw new Error(`${name} must be configured before using S3 storage`);
-  }
+const createS3EnvService = (env?: EnvService | EnvValues): EnvService =>
+  isEnvService(env) ? env : createEnvService(env);
 
-  return value;
-};
-
-const parseBooleanEnv = (value: string | undefined): boolean | undefined => {
-  if (value === undefined || value === "") {
-    return undefined;
-  }
-
-  return ["1", "true", "yes", "on"].includes(value.toLowerCase());
-};
+const getRequiredS3Env = (env: EnvService, name: string): string =>
+  env.getRequired(name, `${name} must be configured before using S3 storage`);
 
 export const getS3ConfigFromEnv = (
-  env: NodeJS.ProcessEnv = process.env,
-): S3ServiceConfig => ({
-  bucket: getRequiredEnv(env, "S3_BUCKET"),
-  region: getRequiredEnv(env, "S3_REGION"),
-  endpoint: env.S3_ENDPOINT || undefined,
-  accessKeyId: env.S3_ACCESS_KEY_ID || undefined,
-  secretAccessKey: env.S3_SECRET_ACCESS_KEY || undefined,
-  sessionToken: env.S3_SESSION_TOKEN || undefined,
-  forcePathStyle: parseBooleanEnv(env.S3_FORCE_PATH_STYLE),
-});
+  env?: EnvService | EnvValues,
+): S3ServiceConfig => {
+  const envService = createS3EnvService(env);
+
+  return {
+    bucket: getRequiredS3Env(envService, "S3_BUCKET"),
+    region: getRequiredS3Env(envService, "S3_REGION"),
+    endpoint: envService.get("S3_ENDPOINT") || undefined,
+    accessKeyId: envService.get("S3_ACCESS_KEY_ID") || undefined,
+    secretAccessKey: envService.get("S3_SECRET_ACCESS_KEY") || undefined,
+    sessionToken: envService.get("S3_SESSION_TOKEN") || undefined,
+    forcePathStyle: envService.getBoolean("S3_FORCE_PATH_STYLE"),
+  };
+};
 
 const getClientConfig = (config: S3ServiceConfig): S3ClientConfig => ({
   region: config.region,
