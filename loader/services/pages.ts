@@ -1,18 +1,8 @@
-import axios from "axios";
-import getBaseUrl from "../lib/getBaseUrl.js";
-import getToken from "../lib/getToken.js";
 import { PageCreate } from "@helios/shared";
+import apiClient from "./api-client.js";
 
 async function add(pages: PageCreate[], targetId: number): Promise<void> {
-  await axios.post(
-    `${getBaseUrl()}/api/targets/${targetId}/pages`,
-    { pages },
-    {
-      headers: {
-        Authorization: `Bearer ${getToken()}`,
-      },
-    },
-  );
+  await apiClient.post(`/targets/${targetId}/pages`, { pages });
 }
 
 export default add;

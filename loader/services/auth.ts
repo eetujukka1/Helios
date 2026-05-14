@@ -1,5 +1,6 @@
-import axios from "axios";
-import getBaseUrl from "./getBaseUrl.js";
+import { envService } from "../lib/envService.js";
+import getBaseUrl from "../lib/getBaseUrl.js";
+import apiClient from "./api-client.js";
 
 type WorkerAuthResponse = {
   token: string;
@@ -7,8 +8,8 @@ type WorkerAuthResponse = {
 
 async function getAuth(): Promise<string> {
   const baseUrl = getBaseUrl();
-  const workerId = process.env.DEMO_WORKER_ID;
-  const secret = process.env.DEMO_WORKER_SECRET;
+  const workerId = envService.get("DEMO_WORKER_ID");
+  const secret = envService.get("DEMO_WORKER_SECRET");
 
   if (!baseUrl) {
     throw new Error("HELIOS_URL is not set");
@@ -22,8 +23,8 @@ async function getAuth(): Promise<string> {
     throw new Error("DEMO_WORKER_SECRET is not set");
   }
 
-  const { data } = await axios.post<WorkerAuthResponse>(
-    `${baseUrl}/api/workers/auth/login`,
+  const { data } = await apiClient.post<WorkerAuthResponse>(
+    "/workers/auth/login",
     {
       workerId,
       secret,
