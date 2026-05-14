@@ -50,7 +50,10 @@ export function RemoveProxyModal({ proxy }: Props) {
             {t("proxies.dialogs.remove.title")}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("proxies.dialogs.remove.description", { host: proxy.host })}
+            {t("proxies.dialogs.remove.description", {
+              host: proxy.host,
+              name: t("app.name"),
+            })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

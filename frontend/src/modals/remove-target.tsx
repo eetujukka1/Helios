@@ -46,7 +46,10 @@ export function RemoveTargetModal({ target }: Props) {
             {t("targets.dialogs.remove.title")}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {t("targets.dialogs.remove.description", { domain: target.domain })}
+            {t("targets.dialogs.remove.description", {
+              domain: target.domain,
+              name: t("app.name"),
+            })}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

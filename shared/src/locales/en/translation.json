@@ -111,7 +111,7 @@
       },
       "remove": {
         "title": "Are you absolutely sure?",
-        "description": "You are about to remove {{host}} from Helios. This action cannot be undone.",
+        "description": "You are about to remove {{host}} from {{name}}. This action cannot be undone.",
         "submit": "Remove"
       }
     },
@@ -158,7 +158,7 @@
       },
       "remove": {
         "title": "Are you absolutely sure?",
-        "description": "You are about to remove {{domain}} from Helios. This action cannot be undone.",
+        "description": "You are about to remove {{domain}} from {{name}}. This action cannot be undone.",
         "submit": "Remove"
       }
     },
