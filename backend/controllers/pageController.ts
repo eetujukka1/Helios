@@ -1,5 +1,8 @@
+import { randomUUID } from "node:crypto";
 import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
+import { ResponseCreateSchema } from "@helios/shared";
+import { createS3Service } from "../services/s3Service.js";
 
 const prisma = new PrismaClient();
 
@@ -23,4 +26,49 @@ export const getResponses = async (
     },
   });
   res.json(responses);
+};
+
+export const addResponse = async (
+  req: Request,
+  res: Response,
+): Promise<void> => {
+  const response = ResponseCreateSchema.parse(req.body);
+  const contentsFile = req.file;
+  const s3Key = contentsFile ? randomUUID() : undefined;
+
+  if (contentsFile && s3Key) {
+    await createS3Service().uploadObject({
+      key: s3Key,
+      body: contentsFile.buffer,
+      contentType: contentsFile.mimetype,
+      metadata: {
+        originalName: contentsFile.originalname,
+      },
+    });
+  }
+
+  const addedResponse = await prisma.response.create({
+    data: {
+      page: {
+        connect: { id: res.locals.id },
+      },
+      statusCode: response.statusCode,
+      proxy: response.proxyId
+        ? {
+            connect: { id: response.proxyId },
+          }
+        : undefined,
+      file: s3Key
+        ? {
+            create: { name: s3Key },
+          }
+        : response.fileId
+          ? {
+              connect: { id: response.fileId },
+            }
+          : undefined,
+    },
+  });
+
+  res.status(201).json(addedResponse);
 };

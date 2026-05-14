@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 export const ResponseCreateSchema = z.object({
-  fileId: z.number().optional(),
-  proxyId: z.number().optional(),
-  statusCode: z.number(),
+  fileId: z.coerce.number().int().positive().optional(),
+  proxyId: z.coerce.number().int().positive().optional(),
+  statusCode: z.coerce.number().int(),
 });
 
 export const ResponseSchema = ResponseCreateSchema.extend({
