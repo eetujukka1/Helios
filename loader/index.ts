@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 import createWorker from "./createWorker.js";
-import getAuth from "./lib/getAuth.js";
+import getAuth from "./services/auth.js";
 import setToken from "./lib/setToken.js";
 const env = process.env.NODE_ENV;
 
