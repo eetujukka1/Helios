@@ -1,6 +1,7 @@
 import { createContext, useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { login as authLogin } from "@/services/auth-service"
+import { localStorageService } from "@/services/local-storage-service"
 
 interface AuthContextType {
   token: string | null
@@ -12,19 +13,19 @@ const AuthContext = createContext<AuthContextType | null>(null)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("helios-token")
+    localStorageService.getItem("helios-token")
   )
   const navigate = useNavigate()
 
   const login = async (username: string, password: string) => {
     const token = await authLogin(username, password)
-    localStorage.setItem("helios-token", token)
+    localStorageService.setItem("helios-token", token)
     setToken(token)
     navigate("/dashboard")
   }
 
   const logout = () => {
-    localStorage.removeItem("helios-token")
+    localStorageService.removeItem("helios-token")
     setToken(null)
     navigate("/login")
   }
