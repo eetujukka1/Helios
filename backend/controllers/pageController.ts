@@ -47,27 +47,26 @@ export const addResponse = async (
     });
   }
 
-  const addedResponse = await prisma.response.create({
-    data: {
-      page: {
-        connect: { id: res.locals.id },
-      },
-      statusCode: response.statusCode,
-      proxy: response.proxyId
-        ? {
-            connect: { id: response.proxyId },
-          }
-        : undefined,
-      file: s3Key
-        ? {
-            create: { name: s3Key },
-          }
-        : response.fileId
-          ? {
-              connect: { id: response.fileId },
-            }
-          : undefined,
+  // eslint-disable-next-line
+  const responseData: any = {
+    page: {
+      connect: { id: res.locals.id },
     },
+    statusCode: response.statusCode,
+  };
+
+  if (response.proxyId) {
+    responseData.proxy = { connect: { id: response.proxyId } };
+  }
+
+  if (s3Key) {
+    responseData.file = { create: { name: s3Key } };
+  } else if (response.fileId) {
+    responseData.file = { connect: { id: response.fileId } };
+  }
+
+  const addedResponse = await prisma.response.create({
+    data: responseData,
   });
 
   res.status(201).json(addedResponse);

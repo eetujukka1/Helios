@@ -15,17 +15,19 @@ async function processJob(page: QueuePage): Promise<void> {
   };
   const loadedPage = await loadDefaultPage(pageToLoad);
 
+  console.log("1");
   if (loadedPage.content && typeof loadedPage.content === "string") {
+    console.log("2");
     if (typeof loadedPage.status !== "number") {
       throw new Error(`Loaded page ${page.url} is missing a response status`);
     }
-
+    console.log("3");
     await addResponse(
       page.id,
       { statusCode: loadedPage.status },
       loadedPage.content,
     );
-
+    console.log("4");
     const parser = cheerio.load(loadedPage.content);
     const sourceUrl = new URL(page.url);
     const nextPages: PageCreate[] = parser("a")
@@ -46,7 +48,7 @@ async function processJob(page: QueuePage): Promise<void> {
 
         return [];
       });
-
+    console.log("5");
     if (nextPages.length > 0) {
       await add(nextPages, page.targetId);
     }

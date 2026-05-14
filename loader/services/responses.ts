@@ -7,14 +7,14 @@ function appendResponseDetails(
   formData: FormData,
   response: ResponseCreate,
 ): void {
-  formData.append("response[statusCode]", response.statusCode.toString());
+  formData.append("statusCode", response.statusCode.toString());
 
   if (typeof response.fileId === "number") {
-    formData.append("response[fileId]", response.fileId.toString());
+    formData.append("fileId", response.fileId.toString());
   }
 
   if (typeof response.proxyId === "number") {
-    formData.append("response[proxyId]", response.proxyId.toString());
+    formData.append("proxyId", response.proxyId.toString());
   }
 }
 
@@ -26,7 +26,7 @@ async function addResponse(
   const formData = new FormData();
 
   formData.append(
-    "file",
+    CONTENTS_FILE_NAME,
     new Blob([htmlContent], { type: "text/html" }),
     CONTENTS_FILE_NAME,
   );
