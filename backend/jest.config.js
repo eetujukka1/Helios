@@ -4,6 +4,8 @@ const config = {
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
   moduleNameMapper: {
+    "^\\.\\./generated/prisma/client\\.js$":
+      "<rootDir>/tests/prismaClientMock.ts",
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
   transform: {

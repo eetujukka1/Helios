@@ -22,47 +22,59 @@ export function workerAuthToken(): string {
 
 export const mockEnqueuePageLoads = jest.fn<() => Promise<void>>();
 
+type MockUploadObjectInput = {
+  key: string;
+  body: Buffer;
+  contentType?: string;
+  metadata?: Record<string, string>;
+};
+
+export const mockUploadObject =
+  jest.fn<(input: MockUploadObjectInput) => Promise<object>>();
+
 export const mockFile = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  delete: jest.fn<() => Promise<object | null>>(),
+  findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  delete: jest.fn<(args?: unknown) => Promise<object | null>>(),
 };
 
 export const mockPage = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
+  findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  create: jest.fn<(args?: unknown) => Promise<object>>(),
+  findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
 };
 
 export const mockResponse = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
+  findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  create: jest.fn<(args?: unknown) => Promise<object>>(),
+  findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
 };
 
 export const mockProxy = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
+  findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
   update:
     jest.fn<
-      (args: { where: { id: number }; data: object }) => Promise<object | null>
+      (args?: { where: { id: number }; data: object }) => Promise<object | null>
     >(),
-  delete: jest.fn<() => Promise<object | null>>(),
+  delete: jest.fn<(args?: unknown) => Promise<object | null>>(),
 };
 
 export const mockTarget = {
-  findMany: jest.fn<() => Promise<object[]>>(),
-  findUniqueOrThrow: jest.fn<() => Promise<object | null>>(),
-  findFirst: jest.fn<() => Promise<object | null>>(),
-  createManyAndReturn: jest.fn<() => Promise<object[]>>(),
-  delete: jest.fn<() => Promise<object>>(),
+  findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
+  createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  delete: jest.fn<(args?: unknown) => Promise<object>>(),
 };
 
-const mockPrismaClient = {
+export const mockPrismaClient = {
   file: mockFile,
   page: mockPage,
   response: mockResponse,
@@ -71,11 +83,13 @@ const mockPrismaClient = {
 };
 
 export function setupPrismaMockClient(): void {
-  jest.unstable_mockModule("../generated/prisma/client.js", () => ({
-    PrismaClient: jest.fn(() => mockPrismaClient),
-  }));
   jest.unstable_mockModule("../services/pageLoadQueue.js", () => ({
     enqueuePageLoads: mockEnqueuePageLoads,
+  }));
+  jest.unstable_mockModule("../services/s3Service.js", () => ({
+    createS3Service: jest.fn(() => ({
+      uploadObject: mockUploadObject,
+    })),
   }));
 }
 
@@ -86,4 +100,5 @@ export function resetMockClient(): void {
     }
   }
   mockEnqueuePageLoads.mockReset();
+  mockUploadObject.mockReset();
 }
