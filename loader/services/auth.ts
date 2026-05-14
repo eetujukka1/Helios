@@ -1,4 +1,5 @@
 import { envService } from "../lib/envService.js";
+import getBaseUrl from "../lib/getBaseUrl.js";
 import apiClient from "./api-client.js";
 
 type WorkerAuthResponse = {
@@ -6,9 +7,9 @@ type WorkerAuthResponse = {
 };
 
 async function getAuth(): Promise<string> {
-  const baseUrl = envService.get("HELIOS_URL");
-  const workerId = process.env.DEMO_WORKER_ID;
-  const secret = process.env.DEMO_WORKER_SECRET;
+  const baseUrl = getBaseUrl();
+  const workerId = envService.get("DEMO_WORKER_ID");
+  const secret = envService.get("DEMO_WORKER_SECRET");
 
   if (!baseUrl) {
     throw new Error("HELIOS_URL is not set");
