@@ -2,6 +2,7 @@ import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 
 import { en, fi } from "@helios/shared"
+import { localStorageService } from "@/services/local-storage-service"
 
 export const defaultNS = "translation"
 export const LANGUAGE_STORAGE_KEY = "helios-language"
@@ -26,7 +27,7 @@ function resolveInitialLanguage(): AppLanguage {
     return "en"
   }
 
-  const storedLanguage = window.localStorage.getItem(LANGUAGE_STORAGE_KEY)
+  const storedLanguage = localStorageService.getItem(LANGUAGE_STORAGE_KEY)
   if (storedLanguage && isSupportedLanguage(storedLanguage)) {
     return storedLanguage
   }
@@ -58,7 +59,7 @@ i18n.on("languageChanged", (language) => {
     typeof window !== "undefined" &&
     isSupportedLanguage(normalizedLanguage)
   ) {
-    window.localStorage.setItem(LANGUAGE_STORAGE_KEY, normalizedLanguage)
+    localStorageService.setItem(LANGUAGE_STORAGE_KEY, normalizedLanguage)
   }
 })
 
