@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { AuthClaimsSchema } from "../schemas/auth.js";
 import type { AuthenticatedRequest } from "../schemas/auth.js";
+import { envService } from "../services/envService.js";
 
 export const authenticateToken = (
   req: Request,
@@ -16,7 +17,7 @@ export const authenticateToken = (
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+    const decoded = jwt.verify(token, envService.getRequired("JWT_SECRET"));
     const claims = AuthClaimsSchema.safeParse(decoded);
 
     if (!claims.success) {

@@ -1,5 +1,7 @@
+import { envService } from "./envService.js";
+
 function getBaseUrl(): string | undefined {
-  return process.env.HELIOS_URL;
+  return envService.get("HELIOS_URL");
 }
 
 export default getBaseUrl;
