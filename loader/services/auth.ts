@@ -1,6 +1,6 @@
-import axios from "axios";
-import { envService } from "./envService.js";
-import getBaseUrl from "./getBaseUrl.js";
+import { envService } from "../lib/envService.js";
+import getBaseUrl from "../lib/getBaseUrl.js";
+import apiClient from "./api-client.js";
 
 type WorkerAuthResponse = {
   token: string;
@@ -23,8 +23,8 @@ async function getAuth(): Promise<string> {
     throw new Error("DEMO_WORKER_SECRET is not set");
   }
 
-  const { data } = await axios.post<WorkerAuthResponse>(
-    `${baseUrl}/api/workers/auth/login`,
+  const { data } = await apiClient.post<WorkerAuthResponse>(
+    "/workers/auth/login",
     {
       workerId,
       secret,
