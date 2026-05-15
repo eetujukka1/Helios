@@ -111,7 +111,7 @@
       },
       "remove": {
         "title": "Oletko aivan varma?",
-        "description": "Olet poistamassa välityspalvelinta {{host}} Heliosista. Tätä toimintoa ei voi perua.",
+        "description": "Olet poistamassa välityspalvelinta {{host}} {{name}}-palvelusta. Tätä toimintoa ei voi perua.",
         "submit": "Poista"
       }
     },
@@ -158,7 +158,7 @@
       },
       "remove": {
         "title": "Oletko aivan varma?",
-        "description": "Olet poistamassa kohdetta {{domain}} Heliosista. Tätä toimintoa ei voi perua.",
+        "description": "Olet poistamassa kohdetta {{domain}} {{name}}-palvelusta. Tätä toimintoa ei voi perua.",
         "submit": "Poista"
       }
     },
