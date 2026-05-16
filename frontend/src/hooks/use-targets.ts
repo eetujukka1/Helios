@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { TargetCreate } from "@helios/shared"
-import { get, add, remove } from "@/services/target-service"
+import { get, add, remove, enable, disable } from "@/services/target-service"
 
 export function useTargets() {
   const queryClient = useQueryClient()
@@ -27,6 +27,16 @@ export function useTargets() {
     onSuccess: () => getTargets(),
   })
 
+  const { mutateAsync: disableTarget } = useMutation({
+    mutationFn: (id: number | string) => disable(id),
+    onSuccess: () => getTargets(),
+  })
+
+  const { mutateAsync: enableTarget } = useMutation({
+    mutationFn: (id: number | string) => enable(id),
+    onSuccess: () => getTargets(),
+  })
+
   return {
     targets,
     loading,
@@ -34,5 +44,7 @@ export function useTargets() {
     getTargets,
     addTargets,
     removeTarget,
+    disableTarget,
+    enableTarget,
   }
 }

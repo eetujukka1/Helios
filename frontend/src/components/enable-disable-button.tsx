@@ -10,8 +10,8 @@ export default function EnableDisableButton({disabled, onClick}: EnableDisableBu
   return (
     <Button variant="outline" size="xs" onClick={onClick}>
       {disabled
-      ? <PowerOffIcon/>
-      : <PowerIcon/>
+      ? <PowerIcon/>
+      : <PowerOffIcon/>
       }
     </Button>
   )
