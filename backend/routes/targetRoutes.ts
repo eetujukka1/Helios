@@ -4,6 +4,8 @@ import {
   getOne,
   add,
   remove,
+  enable,
+  disable,
   addPages,
   getPages,
 } from "../controllers/targetController.js";
@@ -23,6 +25,10 @@ router.get("/:id", requireUser, validateId, getOne);
 router.post("/", requireUser, add);
 
 router.delete("/:id", requireUser, validateId, remove);
+
+router.patch('/:id/disable', validateId, disable);
+
+router.patch('/:id/enable', validateId, enable);
 
 router.post("/:id/pages", requireWorker, validateId, addPages);
 
