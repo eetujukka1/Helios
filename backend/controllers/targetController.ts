@@ -3,6 +3,7 @@ import { PrismaClient } from "../generated/prisma/client.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 import { enqueuePageLoads } from "../services/pageLoadQueue.js";
+import { bulkAddTarget, removeTarget } from "@helios/queue";
 
 const prisma = new PrismaClient();
 
@@ -37,6 +38,10 @@ export const add = async (req: Request, res: Response): Promise<void> => {
     })),
   });
 
+  await bulkAddTarget(
+    addedTargets.map(target => ({ id: target.id, value: target }))
+  )
+
   await enqueuePageLoads(addedPages);
 
   res.status(201).json(addedTargets);
@@ -44,6 +49,7 @@ export const add = async (req: Request, res: Response): Promise<void> => {
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const deleted = await prisma.target.delete({ where: { id: res.locals.id } });
+  await removeTarget(deleted.id);
   res.json(deleted);
 };
 
