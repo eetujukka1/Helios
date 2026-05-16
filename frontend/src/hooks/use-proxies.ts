@@ -1,6 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ProxyCreate, ProxyUpdate } from "@helios/shared"
-import { get, add, remove, update } from "@/services/proxy-service"
+import { get, add, remove, update, enable, disable } from "@/services/proxy-service"
 import { toast } from "sonner"
 import i18n from "@/i18n"
 
@@ -29,6 +29,16 @@ export function useProxies() {
     onSuccess: () => getProxies(),
   })
 
+  const { mutateAsync: disableProxy } = useMutation({
+    mutationFn: (id: number | string) => disable(id),
+    onSuccess: () => getProxies(),
+  })
+
+  const { mutateAsync: enableProxy } = useMutation({
+    mutationFn: (id: number | string) => enable(id),
+    onSuccess: () => getProxies(),
+  })
+
   const { mutateAsync: updateProxy } = useMutation({
     mutationFn: ({ id, proxy }: { id: number | string; proxy: ProxyUpdate }) =>
       update(id, proxy),
@@ -48,5 +58,7 @@ export function useProxies() {
     addProxies,
     removeProxy,
     updateProxy,
+    enableProxy,
+    disableProxy
   }
 }
