@@ -25,9 +25,10 @@ import { AddTargetModal } from "@/modals/add-target"
 import { RemoveTargetModal } from "@/modals/remove-target"
 
 import { useTranslation } from "react-i18next"
+import EnableDisableButton from "./enable-disable-button"
 
 export default function TargetTable() {
-  const { targets, loading, error } = useTargets()
+  const { targets, loading, error, enableTarget, disableTarget } = useTargets()
   const { t } = useTranslation()
 
   if (loading) {
@@ -91,7 +92,14 @@ export default function TargetTable() {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveTargetModal target={target} />
+                <div className="flex justify-end gap-2">
+                  <EnableDisableButton disabled={target.disabled} onClick={
+                    target.disabled
+                    ? () => enableTarget(target.id)
+                    : () => disableTarget(target.id)
+                  }/>
+                  <RemoveTargetModal target={target} />
+                </div>
               </TableCell>
             </TableRow>
           ))}

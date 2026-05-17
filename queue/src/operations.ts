@@ -15,6 +15,11 @@ export type RedisGetRandomOperationOptions<TValue = RedisStoredValue> =
     scanCount?: number;
   };
 
+export type RedisBulkAddOperationEntry<TValue = RedisStoredValue> = {
+  id: RedisKeyId;
+  value: TValue;
+};
+
 let defaultRedisService: RedisService | undefined;
 
 const getDefaultRedisService = (): RedisService => {
@@ -109,6 +114,25 @@ export function createAddOperation<TValue = RedisStoredValue>(
 
   return (id: RedisKeyId, value: TValue): Promise<"OK" | null> =>
     getRedisClient(options.client).set(`${keyPrefix}:${id}`, serialize(value));
+}
+
+export function createBulkAddOperation<TValue = RedisStoredValue>(
+  keyPrefix: string,
+  options: RedisOperationOptions<TValue> = {},
+): (entries: RedisBulkAddOperationEntry<TValue>[]) => Promise<"OK"> {
+  const serialize = options.serialize ?? serializeValue<TValue>;
+
+  return (entries: RedisBulkAddOperationEntry<TValue>[]): Promise<"OK"> => {
+    if (entries.length === 0) {
+      return Promise.resolve("OK");
+    }
+
+    const valuesByKey = Object.fromEntries(
+      entries.map(({ id, value }) => [`${keyPrefix}:${id}`, serialize(value)]),
+    );
+
+    return getRedisClient(options.client).mset(valuesByKey);
+  };
 }
 
 export function createDeleteOperation(
