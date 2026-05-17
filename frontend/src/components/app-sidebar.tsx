@@ -26,6 +26,8 @@ import {
   SidebarContent,
 } from "@/components/ui/sidebar"
 
+import { HoverCardWrapper, HoverCardContentWrapper, HoverCardTriggerWrapper } from "@/components/reusables/hover-card"
+
 import { PAGES } from "@/config"
 import { useAuth } from "@/context/auth-provider"
 import { supportedLanguages, type AppLanguage } from "@/i18n"
@@ -88,15 +90,24 @@ export function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  aria-label={t("common.language.label")}
-                >
-                  <Globe />
-                </Button>
-              </DropdownMenuTrigger>
+              <HoverCardWrapper>
+                <HoverCardTriggerWrapper>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      aria-label={t("common.language.label")}
+                    >
+                      <Globe />
+                    </Button>
+                  </DropdownMenuTrigger>
+                </HoverCardTriggerWrapper>
+                <HoverCardContentWrapper>
+                  <div>
+                    {t("common.actions.changeLanguage")}
+                  </div>
+                </HoverCardContentWrapper>
+              </HoverCardWrapper>
               <DropdownMenuContent align="end">
                 <DropdownMenuLabel>
                   {t("common.language.label")}
@@ -115,16 +126,34 @@ export function AppSidebar() {
                 </DropdownMenuRadioGroup>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setTheme(isDark ? "light" : "dark")}
-            >
-              {isDark ? <Sun /> : <Moon />}
-            </Button>
-            <Button variant="ghost" size="icon" onClick={logout}>
-              <LogOut />
-            </Button>
+            <HoverCardWrapper>
+              <HoverCardTriggerWrapper>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(isDark ? "light" : "dark")}
+                >
+                  {isDark ? <Sun /> : <Moon />}
+                </Button>
+              </HoverCardTriggerWrapper>
+              <HoverCardContentWrapper>
+                <div>
+                  {t("common.actions.toggleTheme")}
+                </div>
+              </HoverCardContentWrapper>
+            </HoverCardWrapper>
+            <HoverCardWrapper>
+              <HoverCardTriggerWrapper>
+                <Button variant="ghost" size="icon" onClick={logout}>
+                  <LogOut />
+                </Button>
+              </HoverCardTriggerWrapper>
+              <HoverCardContentWrapper>
+                <div>
+                  {t("common.actions.logout")}
+                </div>
+              </HoverCardContentWrapper>
+            </HoverCardWrapper>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>

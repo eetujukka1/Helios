@@ -13,6 +13,8 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
+import { HoverCardWrapper, HoverCardContentWrapper, HoverCardTriggerWrapper } from "@/components/reusables/hover-card"
+
 import { Button } from "@/components/ui/button"
 
 import type { Target } from "@helios/shared"
@@ -35,11 +37,20 @@ export function RemoveTargetModal({ target }: Props) {
   }
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogTrigger asChild>
-        <Button size="xs" variant="destructive">
-          <Trash2Icon />
-        </Button>
-      </AlertDialogTrigger>
+      <HoverCardWrapper>
+        <HoverCardTriggerWrapper>
+          <AlertDialogTrigger asChild>
+            <Button size="xs" variant="destructive">
+              <Trash2Icon />
+            </Button>
+          </AlertDialogTrigger>
+        </HoverCardTriggerWrapper>
+        <HoverCardContentWrapper>
+          <div>
+            {t("common.actions.remove")}
+          </div>
+        </HoverCardContentWrapper>
+      </HoverCardWrapper>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
