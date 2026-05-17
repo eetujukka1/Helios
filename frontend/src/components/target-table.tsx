@@ -93,11 +93,14 @@ export default function TargetTable() {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                  <EnableDisableButton disabled={target.disabled} onClick={
-                    target.disabled
-                    ? () => enableTarget(target.id)
-                    : () => disableTarget(target.id)
-                  }/>
+                  <EnableDisableButton
+                    disabled={target.disabled}
+                    onClick={
+                      target.disabled
+                        ? () => enableTarget(target.id)
+                        : () => disableTarget(target.id)
+                    }
+                  />
                   <RemoveTargetModal target={target} />
                 </div>
               </TableCell>

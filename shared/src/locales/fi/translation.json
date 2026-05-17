@@ -13,9 +13,14 @@
   "common": {
     "actions": {
       "add": "Lisää",
+      "changeLanguage": "Muuta kieltä",
+      "disable": "Poista käytöstä",
+      "edit": "Muokkaa",
+      "enable": "Ota käyttöön",
       "update": "Päivitä",
       "remove": "Poista",
       "refresh": "Virkistä",
+      "toggleTheme": "Vaihda teemaa",
       "cancel": "Peruuta",
       "view": "Näytä",
       "login": "Kirjaudu sisään",

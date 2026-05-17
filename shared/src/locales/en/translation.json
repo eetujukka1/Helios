@@ -13,9 +13,14 @@
   "common": {
     "actions": {
       "add": "Add",
+      "changeLanguage": "Change language",
+      "disable": "Disable",
+      "edit": "Edit",
+      "enable": "Enable",
       "update": "Update",
       "remove": "Remove",
       "refresh": "Refresh",
+      "toggleTheme": "Toggle theme",
       "cancel": "Cancel",
       "view": "View",
       "login": "Login",

@@ -99,11 +99,14 @@ export default function ProxyTable() {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                  <EnableDisableButton disabled={p.disabled} onClick={
-                    p.disabled
-                    ? () => enableProxy(p.id)
-                    : () => disableProxy(p.id)
-                  }/>
+                  <EnableDisableButton
+                    disabled={p.disabled}
+                    onClick={
+                      p.disabled
+                        ? () => enableProxy(p.id)
+                        : () => disableProxy(p.id)
+                    }
+                  />
                   <UpdateProxyModal proxy={p} />
                   <RemoveProxyModal proxy={p} />
                 </div>
