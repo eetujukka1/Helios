@@ -32,7 +32,7 @@ import {
   HoverCardTriggerWrapper,
 } from "@/components/reusables/hover-card"
 
-import { PAGES } from "@/config"
+import { SECTIONS } from "@/config"
 import { useAuth } from "@/context/auth-provider"
 import { supportedLanguages, type AppLanguage } from "@/i18n"
 
@@ -73,21 +73,23 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{t("nav.group.platform")}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {PAGES.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === `${item.path}`}
-                  >
-                    <Link to={`${item.path}`}>{t(item.titleKey)}</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {SECTIONS.map((item) => (
+            <div key={item.titleKey}>
+              <SidebarGroupLabel>{t(item.titleKey)}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                {item.pages.map((item) => (
+                  <SidebarMenuItem key={item.path}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={pathname === `${item.path}`}
+                    >
+                      <Link to={`${item.path}`}>{t(item.titleKey)}</Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarGroupContent>
+            </div>
+          ))}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
