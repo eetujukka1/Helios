@@ -6,7 +6,7 @@ import {
   remove,
   update,
   enable,
-  disable
+  disable,
 } from "../controllers/proxyController.js";
 import { validateId } from "../middlewares/validateId.js";
 
@@ -22,8 +22,8 @@ router.patch("/:id", validateId, update);
 
 router.delete("/:id", validateId, remove);
 
-router.patch('/:id/disable', validateId, disable);
+router.patch("/:id/disable", validateId, disable);
 
-router.patch('/:id/enable', validateId, enable);
+router.patch("/:id/enable", validateId, enable);
 
 export default router;

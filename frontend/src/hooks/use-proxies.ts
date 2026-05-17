@@ -1,6 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ProxyCreate, ProxyUpdate } from "@helios/shared"
-import { get, add, remove, update, enable, disable } from "@/services/proxy-service"
+import {
+  get,
+  add,
+  remove,
+  update,
+  enable,
+  disable,
+} from "@/services/proxy-service"
 import { toast } from "sonner"
 import i18n from "@/i18n"
 
@@ -59,6 +66,6 @@ export function useProxies() {
     removeProxy,
     updateProxy,
     enableProxy,
-    disableProxy
+    disableProxy,
   }
 }

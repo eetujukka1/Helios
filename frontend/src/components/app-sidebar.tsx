@@ -26,7 +26,11 @@ import {
   SidebarContent,
 } from "@/components/ui/sidebar"
 
-import { HoverCardWrapper, HoverCardContentWrapper, HoverCardTriggerWrapper } from "@/components/reusables/hover-card"
+import {
+  HoverCardWrapper,
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+} from "@/components/reusables/hover-card"
 
 import { PAGES } from "@/config"
 import { useAuth } from "@/context/auth-provider"
@@ -103,9 +107,7 @@ export function AppSidebar() {
                   </DropdownMenuTrigger>
                 </HoverCardTriggerWrapper>
                 <HoverCardContentWrapper>
-                  <div>
-                    {t("common.actions.changeLanguage")}
-                  </div>
+                  <div>{t("common.actions.changeLanguage")}</div>
                 </HoverCardContentWrapper>
               </HoverCardWrapper>
               <DropdownMenuContent align="end">
@@ -137,9 +139,7 @@ export function AppSidebar() {
                 </Button>
               </HoverCardTriggerWrapper>
               <HoverCardContentWrapper>
-                <div>
-                  {t("common.actions.toggleTheme")}
-                </div>
+                <div>{t("common.actions.toggleTheme")}</div>
               </HoverCardContentWrapper>
             </HoverCardWrapper>
             <HoverCardWrapper>
@@ -149,9 +149,7 @@ export function AppSidebar() {
                 </Button>
               </HoverCardTriggerWrapper>
               <HoverCardContentWrapper>
-                <div>
-                  {t("common.actions.logout")}
-                </div>
+                <div>{t("common.actions.logout")}</div>
               </HoverCardContentWrapper>
             </HoverCardWrapper>
           </SidebarMenuItem>

@@ -14,7 +14,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { HoverCardWrapper, HoverCardContentWrapper, HoverCardTriggerWrapper } from "@/components/reusables/hover-card"
+import {
+  HoverCardWrapper,
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+} from "@/components/reusables/hover-card"
 import { Field, FieldError, FieldGroup } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -63,15 +67,17 @@ export function UpdateProxyModal({ proxy }: Props) {
       <HoverCardWrapper>
         <HoverCardTriggerWrapper>
           <DialogTrigger asChild>
-            <Button size="xs" variant="outline" aria-label={`Edit ${proxy.host}`}>
+            <Button
+              size="xs"
+              variant="outline"
+              aria-label={`Edit ${proxy.host}`}
+            >
               <PencilIcon />
             </Button>
           </DialogTrigger>
         </HoverCardTriggerWrapper>
         <HoverCardContentWrapper>
-          <div>
-            {t("common.actions.edit")}
-          </div>
+          <div>{t("common.actions.edit")}</div>
         </HoverCardContentWrapper>
       </HoverCardWrapper>
       <DialogContent className="sm:max-w-sm">

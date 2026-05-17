@@ -13,7 +13,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-import { HoverCardWrapper, HoverCardContentWrapper, HoverCardTriggerWrapper } from "@/components/reusables/hover-card"
+import {
+  HoverCardWrapper,
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+} from "@/components/reusables/hover-card"
 
 import { Button } from "@/components/ui/button"
 
@@ -50,9 +54,7 @@ export function RemoveProxyModal({ proxy }: Props) {
           </AlertDialogTrigger>
         </HoverCardTriggerWrapper>
         <HoverCardContentWrapper>
-          <div>
-            {t("common.actions.remove")}
-          </div>
+          <div>{t("common.actions.remove")}</div>
         </HoverCardContentWrapper>
       </HoverCardWrapper>
       <AlertDialogContent>

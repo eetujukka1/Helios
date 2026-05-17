@@ -14,6 +14,8 @@ export const bulkAdd = createBulkAddOperation<Proxy>(ResourceTypeEnum.Proxy);
 
 export const get = createGetOperation<Proxy>(ResourceTypeEnum.Proxy);
 
-export const getRandom = createGetRandomOperation<Proxy>(ResourceTypeEnum.Proxy);
+export const getRandom = createGetRandomOperation<Proxy>(
+  ResourceTypeEnum.Proxy,
+);
 
 export const remove = createDeleteOperation(ResourceTypeEnum.Proxy);

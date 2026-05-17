@@ -26,9 +26,9 @@ router.post("/", requireUser, add);
 
 router.delete("/:id", requireUser, validateId, remove);
 
-router.patch('/:id/disable', validateId, disable);
+router.patch("/:id/disable", validateId, disable);
 
-router.patch('/:id/enable', validateId, enable);
+router.patch("/:id/enable", validateId, enable);
 
 router.post("/:id/pages", requireWorker, validateId, addPages);
 

@@ -22,7 +22,7 @@ export const add = async (req: Request, res: Response): Promise<void> => {
     data: proxies,
   });
   await bulkAddProxy(
-    addedProxies.map(proxy => ({ id: proxy.id, value: proxy })),
+    addedProxies.map((proxy) => ({ id: proxy.id, value: proxy })),
   );
   res.status(201).json(addedProxies);
 };
@@ -42,11 +42,10 @@ export const update = async (req: Request, res: Response): Promise<void> => {
   res.json(updated);
 };
 
-
 export const enable = async (req: Request, res: Response): Promise<void> => {
   const enabled = await prisma.proxy.update({
     where: { id: res.locals.id },
-    data: { disabled: false }
+    data: { disabled: false },
   });
   await addProxy(enabled.id, enabled);
   res.json(enabled);
@@ -55,8 +54,8 @@ export const enable = async (req: Request, res: Response): Promise<void> => {
 export const disable = async (req: Request, res: Response): Promise<void> => {
   const disabled = await prisma.proxy.update({
     where: { id: res.locals.id },
-    data: { disabled: true }
+    data: { disabled: true },
   });
-  await removeProxy(disabled.id)
-  res.json(disabled)
+  await removeProxy(disabled.id);
+  res.json(disabled);
 };

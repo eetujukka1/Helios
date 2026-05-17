@@ -1,4 +1,4 @@
 export enum ResourceTypeEnum {
   Target = "target",
-  Proxy = "proxy"
+  Proxy = "proxy",
 }

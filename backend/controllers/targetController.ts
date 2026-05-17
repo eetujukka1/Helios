@@ -39,8 +39,8 @@ export const add = async (req: Request, res: Response): Promise<void> => {
   });
 
   await bulkAddTarget(
-    addedTargets.map(target => ({ id: target.id, value: target }))
-  )
+    addedTargets.map((target) => ({ id: target.id, value: target })),
+  );
 
   await enqueuePageLoads(addedPages);
 
@@ -56,7 +56,7 @@ export const remove = async (req: Request, res: Response): Promise<void> => {
 export const enable = async (req: Request, res: Response): Promise<void> => {
   const enabled = await prisma.target.update({
     where: { id: res.locals.id },
-    data: { disabled: false }
+    data: { disabled: false },
   });
   await addTarget(enabled.id, enabled);
   res.json(enabled);
@@ -65,10 +65,10 @@ export const enable = async (req: Request, res: Response): Promise<void> => {
 export const disable = async (req: Request, res: Response): Promise<void> => {
   const disabled = await prisma.target.update({
     where: { id: res.locals.id },
-    data: { disabled: true }
+    data: { disabled: true },
   });
-  await addTarget(disabled.id, disabled)
-  res.json(disabled)
+  await addTarget(disabled.id, disabled);
+  res.json(disabled);
 };
 
 export const addPages = async (req: Request, res: Response): Promise<void> => {

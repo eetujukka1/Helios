@@ -47,6 +47,7 @@ function getProxyUrl(proxy: Proxy): string {
 }
 
 async function processJob(
+  // eslint-disable-next-line
   job: Job<QueuePage, any, string>,
   token?: string,
 ): Promise<void> {
@@ -71,11 +72,14 @@ async function processJob(
       });
 
     if (response.data && typeof response.data === "string") {
-      await addResponse(page.id, { statusCode: response.status }, response.data)
-        .catch((error: unknown) => {
-          logAxiosError("Saving page response failed", error);
-          throw error;
-        });
+      await addResponse(
+        page.id,
+        { statusCode: response.status },
+        response.data,
+      ).catch((error: unknown) => {
+        logAxiosError("Saving page response failed", error);
+        throw error;
+      });
       const parser = cheerio.load(response.data);
       const sourceUrl = new URL(page.url);
       const nextPages: PageCreate[] = parser("a")
