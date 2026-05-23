@@ -119,6 +119,22 @@ export function createDeleteOperation(
     getRedisClient(options.client).del(`${keyPrefix}:${id}`);
 }
 
+
+export function createRemoveMultipleOperation(
+  keyPrefix: string,
+  options: Pick<RedisOperationOptions, "client"> = {},
+): (ids: RedisKeyId[]) => Promise<number> {
+  return async (ids: RedisKeyId[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
+    return getRedisClient(options.client).del(
+      ...ids.map((id) => `${keyPrefix}:${id}`),
+    );
+  };
+}
+
 export async function closeDefaultRedisOperationClient(): Promise<void> {
   await defaultRedisService?.close();
   defaultRedisService = undefined;
