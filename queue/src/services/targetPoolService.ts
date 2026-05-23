@@ -3,6 +3,7 @@ import {
   createBulkAddOperation,
   createGetOperation,
   createDeleteOperation,
+  createObliterateCacheOperation,
 } from "../operations.js";
 import { ResourceTypeEnum } from "../config/resourcePools.js";
 import type { Target } from "@helios/shared";
@@ -14,3 +15,7 @@ export const bulkAdd = createBulkAddOperation<Target>(ResourceTypeEnum.Target);
 export const get = createGetOperation<Target>(ResourceTypeEnum.Target);
 
 export const remove = createDeleteOperation(ResourceTypeEnum.Target);
+
+export const obliterate = createObliterateCacheOperation(
+  ResourceTypeEnum.Target,
+);

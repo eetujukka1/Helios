@@ -6,8 +6,8 @@ import { PrismaClient } from "../generated/prisma/client.js";
 
 const prisma = new PrismaClient();
 
-export async function scheduleMissedPages() {
-  obliteratePageQueue();
+export async function loadPages() {
+  await obliteratePageQueue();
 
   const pages = await prisma.page.findMany({
     where: {
