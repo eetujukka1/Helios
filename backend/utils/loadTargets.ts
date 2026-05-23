@@ -1,9 +1,6 @@
 import { loadTargetsToCache } from "../services/targetCache.js";
 import { obliterateTarget } from "@helios/queue";
-
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "../services/prisma.js";
 
 export const loadTargets = async (): Promise<void> => {
   await obliterateTarget();

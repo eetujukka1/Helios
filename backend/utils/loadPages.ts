@@ -2,9 +2,7 @@ import {
   enqueuePageLoads,
   obliteratePageQueue,
 } from "../services/pageLoadQueue.js";
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "../services/prisma.js";
 
 export async function loadPages() {
   await obliteratePageQueue();

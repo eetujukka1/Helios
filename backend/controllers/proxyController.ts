@@ -1,10 +1,8 @@
 import * as z from "zod";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
 import { ProxyCreateSchema, ProxyUpdateSchema } from "@helios/shared";
 import { addProxy, bulkAddProxy, removeProxy } from "@helios/queue";
-
-const prisma = new PrismaClient();
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const proxies = await prisma.proxy.findMany();

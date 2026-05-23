@@ -1,8 +1,6 @@
 import { loadProxiesToCache } from "../services/proxyCache.js";
 import { obliterateProxy } from "@helios/queue";
-import { PrismaClient } from "../generated/prisma/client.js";
-
-const prisma = new PrismaClient();
+import { prisma } from "../services/prisma.js";
 
 export const loadProxies = async () => {
   await obliterateProxy();
