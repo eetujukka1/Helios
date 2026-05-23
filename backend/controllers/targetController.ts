@@ -67,7 +67,7 @@ export const disable = async (req: Request, res: Response): Promise<void> => {
     where: { id: res.locals.id },
     data: { disabled: true },
   });
-  await addTarget(disabled.id, disabled);
+  await removeTarget(disabled.id)
   res.json(disabled);
 };
 

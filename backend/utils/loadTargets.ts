@@ -8,7 +8,11 @@ const prisma = new PrismaClient();
 export const loadTargets = async (): Promise<void> => {
   await obliterateTarget();
 
-  const targets = await prisma.target.findMany()
+  const targets = await prisma.target.findMany({
+    where: {
+      disabled: false
+    }
+  })
 
   if (targets.length > 0) {
     await loadTargetsToCache(targets);

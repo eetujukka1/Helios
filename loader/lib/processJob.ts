@@ -7,7 +7,7 @@ import { PageCreate, Proxy } from "@helios/shared";
 import add from "../services/pages.js";
 import addResponse from "../services/responses.js";
 import { resolveHref } from "./resolveHref.js";
-import { getRandomProxy } from "@helios/queue";
+import { getRandomProxy, getTarget } from "@helios/queue";
 
 const noProxyRetryDelayMs = 4000;
 const pageLoadTimeoutMs = 30000;
@@ -52,9 +52,10 @@ async function processJob(
   token?: string,
 ): Promise<void> {
   const page = job.data;
-
   const proxy = await getRandomProxy();
-  if (proxy !== null) {
+  const target = await getTarget(page.targetId);
+
+  if (proxy !== null && target !== null) {
     const proxyAgent = new HttpsProxyAgent(getProxyUrl(proxy));
     const response = await axios
       .get<string>(page.url, {
