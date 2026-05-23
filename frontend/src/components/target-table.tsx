@@ -67,7 +67,11 @@ export default function TargetTable() {
               <HoverCardTriggerWrapper>
                 <CircleQuestionMark className="size-4" />
               </HoverCardTriggerWrapper>
-              <HoverCardContentWrapper></HoverCardContentWrapper>
+              <HoverCardContentWrapper>
+                {t("targets.empty.hovercard", {
+                  name: t("app.name")
+                })}
+              </HoverCardContentWrapper>
             </HoverCardWrapper>
           </div>
           <EmptyDescription>{t("targets.empty.description")}</EmptyDescription>

@@ -101,7 +101,8 @@
     },
     "empty": {
       "title": "Ei välityspalvelimia",
-      "description": "Et ole vielä lisännyt välityspalvelimia"
+      "description": "Et ole vielä lisännyt välityspalvelimia",
+      "hovercard": "{{name}} tarvitsee välityspalvelimia voidakseen harvavoida kohteita. Lisää välityspalvelin aloittaaksesi."
     },
     "dialogs": {
       "add": {
@@ -153,7 +154,8 @@
     },
     "empty": {
       "title": "Ei kohteita",
-      "description": "Et ole vielä lisännyt kohteita"
+      "description": "Et ole vielä lisännyt kohteita",
+      "hovercard": "{{name}} tarvitsee kohteita voidakseen harvavoida niitä. Lisää kohteita aloittaaksesi."
     },
     "dialogs": {
       "add": {

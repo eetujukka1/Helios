@@ -101,7 +101,8 @@
     },
     "empty": {
       "title": "No proxies",
-      "description": "You have not added any proxies yet"
+      "description": "You have not added any proxies yet",
+      "hovercard": "{{name}} needs proxies to scrape targets. Add proxies to get started."
     },
     "dialogs": {
       "add": {
@@ -153,7 +154,8 @@
     },
     "empty": {
       "title": "No targets",
-      "description": "You have not added any targets yet"
+      "description": "You have not added any targets yet",
+      "hovercard": "{{name}} needs targets to scrape. Add targets to get started."
     },
     "dialogs": {
       "add": {

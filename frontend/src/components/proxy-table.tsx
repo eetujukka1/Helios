@@ -74,7 +74,11 @@ export default function ProxyTable() {
               <HoverCardTriggerWrapper>
                 <CircleQuestionMark className="size-4" />
               </HoverCardTriggerWrapper>
-              <HoverCardContentWrapper></HoverCardContentWrapper>
+              <HoverCardContentWrapper>
+                {t("proxies.empty.hovercard", {
+                  name: t("app.name")
+                })}
+              </HoverCardContentWrapper>
             </HoverCardWrapper>
           </div>
           <EmptyDescription>{t("proxies.empty.description")}</EmptyDescription>
