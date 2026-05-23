@@ -15,6 +15,13 @@ export type RedisGetRandomOperationOptions<TValue = RedisStoredValue> =
     scanCount?: number;
   };
 
+export type RedisObliterateCacheOperationOptions = Pick<
+  RedisOperationOptions,
+  "client"
+> & {
+  scanCount?: number;
+};
+
 export type RedisBulkAddOperationEntry<TValue = RedisStoredValue> = {
   id: RedisKeyId;
   value: TValue;
@@ -143,7 +150,6 @@ export function createDeleteOperation(
     getRedisClient(options.client).del(`${keyPrefix}:${id}`);
 }
 
-
 export function createRemoveMultipleOperation(
   keyPrefix: string,
   options: Pick<RedisOperationOptions, "client"> = {},
@@ -156,6 +162,37 @@ export function createRemoveMultipleOperation(
     return getRedisClient(options.client).del(
       ...ids.map((id) => `${keyPrefix}:${id}`),
     );
+  };
+}
+
+export function createObliterateCacheOperation(
+  keyPrefix: string,
+  options: RedisObliterateCacheOperationOptions = {},
+): () => Promise<number> {
+  return async (): Promise<number> => {
+    const client = getRedisClient(options.client);
+    const pattern = `${keyPrefix}:*`;
+    const scanCount = options.scanCount ?? 100;
+    let cursor = "0";
+    let removed = 0;
+
+    do {
+      const [nextCursor, keys] = await client.scan(
+        cursor,
+        "MATCH",
+        pattern,
+        "COUNT",
+        scanCount,
+      );
+
+      cursor = nextCursor;
+
+      if (keys.length > 0) {
+        removed += await client.del(...keys);
+      }
+    } while (cursor !== "0");
+
+    return removed;
   };
 }
 

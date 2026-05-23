@@ -4,6 +4,7 @@ import {
   createGetOperation,
   createDeleteOperation,
   createGetRandomOperation,
+  createObliterateCacheOperation,
 } from "../operations.js";
 import { ResourceTypeEnum } from "../config/resourcePools.js";
 import type { Proxy } from "@helios/shared";
@@ -19,3 +20,5 @@ export const getRandom = createGetRandomOperation<Proxy>(
 );
 
 export const remove = createDeleteOperation(ResourceTypeEnum.Proxy);
+
+export const obliterate = createObliterateCacheOperation(ResourceTypeEnum.Proxy);
