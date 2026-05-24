@@ -1,10 +1,8 @@
 import { randomUUID } from "node:crypto";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
 import { ResponseCreateSchema } from "@helios/shared";
 import { createS3Service } from "../services/s3Service.js";
-
-const prisma = new PrismaClient();
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const pages = await prisma.page.findMany();

@@ -1,11 +1,9 @@
 import * as z from "zod";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../services/prisma.js"
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 import { enqueuePageLoads } from "../services/pageLoadQueue.js";
 import { addTarget, bulkAddTarget, removeTarget } from "@helios/queue";
-
-const prisma = new PrismaClient();
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const targets = await prisma.target.findMany();
@@ -67,7 +65,7 @@ export const disable = async (req: Request, res: Response): Promise<void> => {
     where: { id: res.locals.id },
     data: { disabled: true },
   });
-  await addTarget(disabled.id, disabled);
+  await removeTarget(disabled.id)
   res.json(disabled);
 };
 

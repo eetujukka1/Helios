@@ -2,12 +2,10 @@ import {
   enqueuePageLoads,
   obliteratePageQueue,
 } from "../services/pageLoadQueue.js";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../services/prisma.js";
 
-const prisma = new PrismaClient();
-
-export async function scheduleMissedPages() {
-  obliteratePageQueue();
+export async function loadPages() {
+  await obliteratePageQueue();
 
   const pages = await prisma.page.findMany({
     where: {
