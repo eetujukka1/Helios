@@ -1,17 +1,14 @@
 import { Link, useLocation } from "react-router-dom"
-import { Globe, LogOut, Moon, Sun } from "lucide-react"
+import { ChevronRight, Globe, LogOut, Moon, Sun } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import { Button } from "./ui/button"
 import { useTheme } from "../context/theme-provider"
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 
 import {
   Sidebar,
@@ -24,6 +21,9 @@ import {
   SidebarGroupContent,
   SidebarMenuButton,
   SidebarContent,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 
 import {
@@ -32,7 +32,17 @@ import {
   HoverCardTriggerWrapper,
 } from "@/components/reusables/hover-card"
 
-import { PAGES } from "@/config"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu.tsx"
+
+import { SECTIONS } from "@/config/nav/sections.ts"
+import type { NavItem } from "@/config/nav/types.ts"
 import { useAuth } from "@/context/auth-provider"
 import { supportedLanguages, type AppLanguage } from "@/i18n"
 
@@ -40,6 +50,36 @@ const languageOptionKeys = {
   en: "common.language.options.en",
   fi: "common.language.options.fi",
 } as const satisfies Record<AppLanguage, string>
+
+type SidebarNavItem = {
+  titleKey: NavItem["titleKey"]
+  path?: string
+  component?: unknown
+} & Record<string, unknown>
+
+const navItemKeys = new Set(["titleKey", "path", "component"])
+
+function isSidebarNavItem(item: unknown): item is SidebarNavItem {
+  return typeof item === "object" && item !== null && "titleKey" in item
+}
+
+function getChildNavItems(item: SidebarNavItem): SidebarNavItem[] {
+  return Object.values(
+    Object.fromEntries(
+      Object.entries(item).filter(
+        ([key, value]) => !navItemKeys.has(key) && isSidebarNavItem(value)
+      )
+    ) as Record<string, SidebarNavItem>
+  )
+}
+
+function getLeafNavItems(items: SidebarNavItem[]): SidebarNavItem[] {
+  return items.flatMap((item) => {
+    const children = getChildNavItems(item)
+
+    return children.length > 0 ? getLeafNavItems(children) : item
+  })
+}
 
 function normalizeLanguage(language?: string): AppLanguage {
   const normalizedLanguage = language?.split("-")[0]
@@ -73,21 +113,71 @@ export function AppSidebar() {
       </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>{t("nav.group.platform")}</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {PAGES.map((item) => (
-                <SidebarMenuItem key={item.path}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === `${item.path}`}
-                  >
-                    <Link to={`${item.path}`}>{t(item.titleKey)}</Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+          {Object.values(SECTIONS).map((group) => (
+            <div key={group.titleKey}>
+              <SidebarGroupLabel>{t(group.titleKey)}</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {getChildNavItems(group).map((section) => {
+                    const children = getChildNavItems(section)
+                    const childPages = getLeafNavItems(children).filter(
+                      (item) => item.path
+                    )
+                    const isSectionActive = childPages.some(
+                      (item) => pathname === item.path
+                    )
+
+                    return (
+                      <Collapsible
+                        key={section.titleKey}
+                        asChild
+                        defaultOpen={isSectionActive}
+                        className="group/collapsible"
+                      >
+                        <SidebarMenuItem>
+                          {childPages.length > 0 ? (
+                            <>
+                              <CollapsibleTrigger asChild>
+                                <SidebarMenuButton isActive={isSectionActive}>
+                                  <span>{t(section.titleKey)}</span>
+                                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                </SidebarMenuButton>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <SidebarMenuSub>
+                                  {childPages.map((item) => (
+                                    <SidebarMenuSubItem key={item.path}>
+                                      <SidebarMenuSubButton
+                                        asChild
+                                        isActive={pathname === item.path}
+                                      >
+                                        <Link to={item.path ?? "/"}>
+                                          <span>{t(item.titleKey)}</span>
+                                        </Link>
+                                      </SidebarMenuSubButton>
+                                    </SidebarMenuSubItem>
+                                  ))}
+                                </SidebarMenuSub>
+                              </CollapsibleContent>
+                            </>
+                          ) : (
+                            <SidebarMenuButton
+                              asChild
+                              isActive={pathname === section.path}
+                            >
+                              <Link to={section.path ?? "/"}>
+                                {t(section.titleKey)}
+                              </Link>
+                            </SidebarMenuButton>
+                          )}
+                        </SidebarMenuItem>
+                      </Collapsible>
+                    )
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </div>
+          ))}
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
@@ -154,7 +244,7 @@ export function AppSidebar() {
             </HoverCardWrapper>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>
+      </SidebarFooter>{" "}
     </Sidebar>
   )
 }

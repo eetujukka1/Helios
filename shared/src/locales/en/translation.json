@@ -6,9 +6,14 @@
     "group": {
       "platform": "Platform"
     },
-    "dashboard": "Dashboard",
-    "proxies": "Proxies",
-    "targets": "Targets"
+    "section": {
+      "scrape": "Scrape"
+    },
+    "page": {
+      "dashboard": "Dashboard",
+      "proxies": "Proxies",
+      "targets": "Targets"
+    }
   },
   "common": {
     "actions": {

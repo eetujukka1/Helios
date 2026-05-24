@@ -76,9 +76,7 @@ describe("TargetTable", () => {
     render(<TargetTable />, { wrapper })
     await screen.findByText("example.com")
 
-    await user.click(
-      screen.getByRole("button", { name: "Remove example.com" })
-    )
+    await user.click(screen.getByRole("button", { name: "Remove example.com" }))
 
     expect(screen.getByText("Are you absolutely sure?")).toBeInTheDocument()
     expect(
@@ -93,9 +91,7 @@ describe("TargetTable", () => {
     render(<TargetTable />, { wrapper })
     await screen.findByText("example.com")
 
-    await user.click(
-      screen.getByRole("button", { name: "Remove example.com" })
-    )
+    await user.click(screen.getByRole("button", { name: "Remove example.com" }))
     await user.click(screen.getByRole("button", { name: "Remove" }))
 
     expect(mockRemove).toHaveBeenCalledWith(1)

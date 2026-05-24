@@ -6,9 +6,14 @@
     "group": {
       "platform": "Alusta"
     },
-    "dashboard": "Yhteenveto",
-    "proxies": "Välityspalvelimet",
-    "targets": "Kohteet"
+    "section": {
+      "scrape": "Haravointi"
+    },
+    "page": {
+      "dashboard": "Yhteenveto",
+      "proxies": "Välityspalvelimet",
+      "targets": "Kohteet"
+    }
   },
   "common": {
     "actions": {

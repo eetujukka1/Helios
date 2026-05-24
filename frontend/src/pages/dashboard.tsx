@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 
 import { useTranslation } from "react-i18next"
+import { SECTIONS } from "@/config/nav/sections.ts"
 
 export default function Dashboard() {
   const { targets, loading: targetsLoading, getTargets } = useTargets()
@@ -43,7 +44,7 @@ export default function Dashboard() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => navigate("/proxies")}
+              onClick={() => navigate(SECTIONS.platform.scrape.proxies.path)}
             >
               {t("common.actions.view")}
             </Button>
@@ -55,7 +56,7 @@ export default function Dashboard() {
             <Button
               variant="outline"
               className="w-full"
-              onClick={() => navigate("/targets")}
+              onClick={() => navigate(SECTIONS.platform.scrape.targets.path)}
             >
               {t("common.actions.view")}
             </Button>
