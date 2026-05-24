@@ -20,6 +20,7 @@ import {
   SidebarGroupLabel,
   SidebarGroupContent,
   SidebarMenuButton,
+  SidebarMenuAction,
   SidebarContent,
   SidebarMenuSub,
   SidebarMenuSubButton,
@@ -123,9 +124,12 @@ export function AppSidebar() {
                     const childPages = getLeafNavItems(children).filter(
                       (item) => item.path
                     )
-                    const isSectionActive = childPages.some(
-                      (item) => pathname === item.path
+                    const hasSectionRoute = Boolean(
+                      section.path && section.component
                     )
+                    const isSectionActive =
+                      childPages.some((item) => pathname === item.path) ||
+                      pathname === section.path
 
                     return (
                       <Collapsible
@@ -137,12 +141,32 @@ export function AppSidebar() {
                         <SidebarMenuItem>
                           {childPages.length > 0 ? (
                             <>
-                              <CollapsibleTrigger asChild>
-                                <SidebarMenuButton isActive={isSectionActive}>
-                                  <span>{t(section.titleKey)}</span>
-                                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
-                                </SidebarMenuButton>
-                              </CollapsibleTrigger>
+                              {hasSectionRoute ? (
+                                <>
+                                  <SidebarMenuButton
+                                    asChild
+                                    isActive={isSectionActive}
+                                  >
+                                    <Link to={section.path ?? "/"}>
+                                      <span>{t(section.titleKey)}</span>
+                                    </Link>
+                                  </SidebarMenuButton>
+                                  <CollapsibleTrigger asChild>
+                                    <SidebarMenuAction
+                                      aria-label={`Toggle ${t(section.titleKey)}`}
+                                    >
+                                      <ChevronRight className="transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                    </SidebarMenuAction>
+                                  </CollapsibleTrigger>
+                                </>
+                              ) : (
+                                <CollapsibleTrigger asChild>
+                                  <SidebarMenuButton isActive={isSectionActive}>
+                                    <span>{t(section.titleKey)}</span>
+                                    <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                                  </SidebarMenuButton>
+                                </CollapsibleTrigger>
+                              )}
                               <CollapsibleContent>
                                 <SidebarMenuSub>
                                   {childPages.map((item) => (
@@ -244,7 +268,7 @@ export function AppSidebar() {
             </HoverCardWrapper>
           </SidebarMenuItem>
         </SidebarMenu>
-      </SidebarFooter>{" "}
+      </SidebarFooter>
     </Sidebar>
   )
 }

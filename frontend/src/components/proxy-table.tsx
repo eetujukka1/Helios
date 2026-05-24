@@ -76,7 +76,7 @@ export default function ProxyTable() {
               </HoverCardTriggerWrapper>
               <HoverCardContentWrapper>
                 {t("proxies.empty.hovercard", {
-                  name: t("app.name")
+                  name: t("app.name"),
                 })}
               </HoverCardContentWrapper>
             </HoverCardWrapper>

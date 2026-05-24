@@ -22,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = await authLogin(username, password)
     localStorageService.setItem("helios-token", token)
     setToken(token)
-    navigate(SECTIONS.platform.scrape.dashboard.path)
+    navigate(SECTIONS.platform.scrape.path)
   }
 
   const logout = () => {

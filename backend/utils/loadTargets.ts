@@ -7,11 +7,11 @@ export const loadTargets = async (): Promise<void> => {
 
   const targets = await prisma.target.findMany({
     where: {
-      disabled: false
-    }
-  })
+      disabled: false,
+    },
+  });
 
   if (targets.length > 0) {
     await loadTargetsToCache(targets);
   }
-}
+};

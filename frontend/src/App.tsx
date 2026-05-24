@@ -11,46 +11,46 @@ export function App() {
     <BrowserRouter>
       <AuthProvider>
         <Routes>
-          {(
-            function routesFromSections(
-              sections: Record<string, unknown>
-            ): ReactElement[] {
-              return Object.values(sections).flatMap((item) => {
-                if (typeof item !== "object" || item === null) {
-                  return []
-                }
+          {(function routesFromSections(
+            sections: Record<string, unknown>
+          ): ReactElement[] {
+            return Object.values(sections).flatMap((item) => {
+              if (typeof item !== "object" || item === null) {
+                return []
+              }
 
-                const { path, component: Component, ...children } = item as {
-                  path?: string
-                  component?: ComponentType
-                } & Record<string, unknown>
+              const {
+                path,
+                component: Component,
+                ...children
+              } = item as {
+                path?: string
+                component?: ComponentType
+              } & Record<string, unknown>
 
-                const childRoutes: ReactElement[] = routesFromSections(
-                  Object.fromEntries(
-                    Object.entries(children).filter(
-                      ([key, value]) =>
-                        key !== "titleKey" &&
-                        typeof value === "object" &&
-                        value !== null
-                    )
+              const childRoutes: ReactElement[] = routesFromSections(
+                Object.fromEntries(
+                  Object.entries(children).filter(
+                    ([key, value]) =>
+                      key !== "titleKey" &&
+                      typeof value === "object" &&
+                      value !== null
                   )
                 )
+              )
 
-                return path && Component
-                  ? [
-                      <Route key={path} path={path} element={<Component />} />,
-                      ...childRoutes,
-                    ]
-                  : childRoutes
-              })
-            }
-          )(SECTIONS)}
+              return path && Component
+                ? [
+                    <Route key={path} path={path} element={<Component />} />,
+                    ...childRoutes,
+                  ]
+                : childRoutes
+            })
+          })(SECTIONS)}
           <Route path="/login" element={<Login />} />
           <Route
             path="*"
-            element={
-              <Navigate to={SECTIONS.platform.scrape.dashboard.path} replace />
-            }
+            element={<Navigate to={SECTIONS.platform.scrape.path} replace />}
           />
         </Routes>
         <Toaster />

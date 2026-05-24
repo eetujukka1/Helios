@@ -26,7 +26,11 @@ import { RemoveTargetModal } from "@/modals/remove-target"
 
 import { useTranslation } from "react-i18next"
 import EnableDisableButton from "./enable-disable-button"
-import { HoverCardContentWrapper, HoverCardTriggerWrapper, HoverCardWrapper } from "@/components/reusables/hover-card.tsx"
+import {
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+  HoverCardWrapper,
+} from "@/components/reusables/hover-card.tsx"
 
 export default function TargetTable() {
   const { targets, loading, error, enableTarget, disableTarget } = useTargets()
@@ -47,7 +51,7 @@ export default function TargetTable() {
           <EmptyMedia>
             <InfoIcon />
           </EmptyMedia>
-            <EmptyTitle>{t("common.states.error")}</EmptyTitle>
+          <EmptyTitle>{t("common.states.error")}</EmptyTitle>
           <EmptyDescription>{error}</EmptyDescription>
         </EmptyHeader>
       </Empty>
@@ -69,7 +73,7 @@ export default function TargetTable() {
               </HoverCardTriggerWrapper>
               <HoverCardContentWrapper>
                 {t("targets.empty.hovercard", {
-                  name: t("app.name")
+                  name: t("app.name"),
                 })}
               </HoverCardContentWrapper>
             </HoverCardWrapper>

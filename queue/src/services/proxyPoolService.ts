@@ -21,4 +21,6 @@ export const getRandom = createGetRandomOperation<Proxy>(
 
 export const remove = createDeleteOperation(ResourceTypeEnum.Proxy);
 
-export const obliterate = createObliterateCacheOperation(ResourceTypeEnum.Proxy);
+export const obliterate = createObliterateCacheOperation(
+  ResourceTypeEnum.Proxy,
+);

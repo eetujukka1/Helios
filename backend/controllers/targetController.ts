@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { prisma } from "../services/prisma.js"
+import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 import { enqueuePageLoads } from "../services/pageLoadQueue.js";
@@ -65,7 +65,7 @@ export const disable = async (req: Request, res: Response): Promise<void> => {
     where: { id: res.locals.id },
     data: { disabled: true },
   });
-  await removeTarget(disabled.id)
+  await removeTarget(disabled.id);
   res.json(disabled);
 };
 

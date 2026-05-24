@@ -10,13 +10,9 @@ const rawSections = {
     children: {
       scrape: {
         titleKey: "nav.section.scrape",
+        component: Dashboard,
         path: "/scrape",
         children: {
-          dashboard: {
-            titleKey: "nav.page.dashboard",
-            path: "/dashboard",
-            component: Dashboard,
-          },
           proxies: {
             titleKey: "nav.page.proxies",
             path: "/proxies",

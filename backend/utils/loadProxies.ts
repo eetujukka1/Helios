@@ -7,11 +7,11 @@ export const loadProxies = async () => {
 
   const proxies = await prisma.proxy.findMany({
     where: {
-      disabled: false
-    }
-  })
+      disabled: false,
+    },
+  });
 
   if (proxies.length > 0) {
-    await loadProxiesToCache(proxies)
+    await loadProxiesToCache(proxies);
   }
-}
+};

@@ -44,7 +44,11 @@ export function RemoveTargetModal({ target }: Props) {
       <HoverCardWrapper>
         <HoverCardTriggerWrapper>
           <AlertDialogTrigger asChild>
-            <Button size="xs" variant="destructive">
+            <Button
+              size="xs"
+              variant="destructive"
+              aria-label={`Remove ${target.domain}`}
+            >
               <Trash2Icon />
             </Button>
           </AlertDialogTrigger>
