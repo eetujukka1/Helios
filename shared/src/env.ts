@@ -3,7 +3,11 @@ export type EnvValues = Record<string, string | undefined>;
 declare const process: { env: EnvValues };
 
 export class EnvService {
-  constructor(private readonly values: EnvValues) {}
+  private readonly values: EnvValues;
+
+  constructor(values: EnvValues) {
+    this.values = values;
+  }
 
   get(name: string): string | undefined {
     return this.values[name];
