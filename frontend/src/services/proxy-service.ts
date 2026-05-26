@@ -18,6 +18,16 @@ export async function remove(id: number | string): Promise<Proxy[]> {
   return response.data
 }
 
+export async function disable(id: number | string): Promise<Proxy[]> {
+  const response = await apiClient.patch(`/proxies/${id}/disable`)
+  return response.data
+}
+
+export async function enable(id: number | string): Promise<Proxy[]> {
+  const response = await apiClient.patch(`/proxies/${id}/enable`)
+  return response.data
+}
+
 export async function update(
   id: number | string,
   proxy: ProxyUpdate

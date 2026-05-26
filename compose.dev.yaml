@@ -46,7 +46,7 @@ services:
         ]
       interval: 5s
       timeout: 5s
-      retries: 12
+      retries: 30
       start_period: 10s
 
   loader:
@@ -68,6 +68,10 @@ services:
       - /usr/src/app/loader/node_modules
     depends_on:
       - nginx
+    deploy:
+      mode: replicated
+      replicas: 3
+    restart: on-failure
 
   nginx:
     image: nginx:latest

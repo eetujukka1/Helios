@@ -8,7 +8,7 @@ const connection = createRedisConnection();
 function createWorker(): void {
   new Worker(
     queueNames.pageLoad,
-    async (job: Job<QueuePage>) => processJob(job.data),
+    async (job: Job<QueuePage>, token?: string) => processJob(job, token),
     {
       connection,
       removeOnComplete: { count: 0 },

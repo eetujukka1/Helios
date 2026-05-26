@@ -9,7 +9,7 @@ import {
 
 import { Badge } from "@/components/ui/badge"
 
-import { MonitorIcon, InfoIcon } from "lucide-react"
+import { MonitorIcon, InfoIcon, CircleQuestionMark } from "lucide-react"
 
 import {
   Empty,
@@ -25,9 +25,15 @@ import { AddTargetModal } from "@/modals/add-target"
 import { RemoveTargetModal } from "@/modals/remove-target"
 
 import { useTranslation } from "react-i18next"
+import EnableDisableButton from "./enable-disable-button"
+import {
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+  HoverCardWrapper,
+} from "@/components/reusables/hover-card.tsx"
 
 export default function TargetTable() {
-  const { targets, loading, error } = useTargets()
+  const { targets, loading, error, enableTarget, disableTarget } = useTargets()
   const { t } = useTranslation()
 
   if (loading) {
@@ -59,7 +65,19 @@ export default function TargetTable() {
           <EmptyMedia>
             <MonitorIcon />
           </EmptyMedia>
-          <EmptyTitle>{t("targets.empty.title")}</EmptyTitle>
+          <div className={"flex items-center gap-2"}>
+            <EmptyTitle>{t("targets.empty.title")}</EmptyTitle>
+            <HoverCardWrapper>
+              <HoverCardTriggerWrapper>
+                <CircleQuestionMark className="size-4" />
+              </HoverCardTriggerWrapper>
+              <HoverCardContentWrapper>
+                {t("targets.empty.hovercard", {
+                  name: t("app.name"),
+                })}
+              </HoverCardContentWrapper>
+            </HoverCardWrapper>
+          </div>
           <EmptyDescription>{t("targets.empty.description")}</EmptyDescription>
           <AddTargetModal />
         </EmptyHeader>
@@ -91,7 +109,17 @@ export default function TargetTable() {
                 )}
               </TableCell>
               <TableCell className="text-right">
-                <RemoveTargetModal target={target} />
+                <div className="flex justify-end gap-2">
+                  <EnableDisableButton
+                    disabled={target.disabled}
+                    onClick={
+                      target.disabled
+                        ? () => enableTarget(target.id)
+                        : () => disableTarget(target.id)
+                    }
+                  />
+                  <RemoveTargetModal target={target} />
+                </div>
               </TableCell>
             </TableRow>
           ))}

@@ -21,6 +21,12 @@ export function workerAuthToken(): string {
 }
 
 export const mockEnqueuePageLoads = jest.fn<() => Promise<void>>();
+export const mockAddProxy = jest.fn<() => Promise<void>>();
+export const mockBulkAddProxy = jest.fn<() => Promise<void>>();
+export const mockRemoveProxy = jest.fn<() => Promise<void>>();
+export const mockAddTarget = jest.fn<() => Promise<void>>();
+export const mockBulkAddTarget = jest.fn<() => Promise<void>>();
+export const mockRemoveTarget = jest.fn<() => Promise<void>>();
 
 type MockUploadObjectInput = {
   key: string;
@@ -83,6 +89,14 @@ export const mockPrismaClient = {
 };
 
 export function setupPrismaMockClient(): void {
+  jest.unstable_mockModule("@helios/queue", () => ({
+    addProxy: mockAddProxy,
+    bulkAddProxy: mockBulkAddProxy,
+    removeProxy: mockRemoveProxy,
+    addTarget: mockAddTarget,
+    bulkAddTarget: mockBulkAddTarget,
+    removeTarget: mockRemoveTarget,
+  }));
   jest.unstable_mockModule("../services/pageLoadQueue.js", () => ({
     enqueuePageLoads: mockEnqueuePageLoads,
   }));
@@ -100,5 +114,11 @@ export function resetMockClient(): void {
     }
   }
   mockEnqueuePageLoads.mockReset();
+  mockAddProxy.mockReset();
+  mockBulkAddProxy.mockReset();
+  mockRemoveProxy.mockReset();
+  mockAddTarget.mockReset();
+  mockBulkAddTarget.mockReset();
+  mockRemoveTarget.mockReset();
   mockUploadObject.mockReset();
 }

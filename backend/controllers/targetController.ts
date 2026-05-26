@@ -1,10 +1,9 @@
 import * as z from "zod";
-import { PrismaClient } from "../generated/prisma/client.js";
+import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 import { enqueuePageLoads } from "../services/pageLoadQueue.js";
-
-const prisma = new PrismaClient();
+import { addTarget, bulkAddTarget, removeTarget } from "@helios/queue";
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const targets = await prisma.target.findMany();
@@ -37,6 +36,10 @@ export const add = async (req: Request, res: Response): Promise<void> => {
     })),
   });
 
+  await bulkAddTarget(
+    addedTargets.map((target) => ({ id: target.id, value: target })),
+  );
+
   await enqueuePageLoads(addedPages);
 
   res.status(201).json(addedTargets);
@@ -44,7 +47,26 @@ export const add = async (req: Request, res: Response): Promise<void> => {
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const deleted = await prisma.target.delete({ where: { id: res.locals.id } });
+  await removeTarget(deleted.id);
   res.json(deleted);
+};
+
+export const enable = async (req: Request, res: Response): Promise<void> => {
+  const enabled = await prisma.target.update({
+    where: { id: res.locals.id },
+    data: { disabled: false },
+  });
+  await addTarget(enabled.id, enabled);
+  res.json(enabled);
+};
+
+export const disable = async (req: Request, res: Response): Promise<void> => {
+  const disabled = await prisma.target.update({
+    where: { id: res.locals.id },
+    data: { disabled: true },
+  });
+  await removeTarget(disabled.id);
+  res.json(disabled);
 };
 
 export const addPages = async (req: Request, res: Response): Promise<void> => {

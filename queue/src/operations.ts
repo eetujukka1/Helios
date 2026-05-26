@@ -15,6 +15,18 @@ export type RedisGetRandomOperationOptions<TValue = RedisStoredValue> =
     scanCount?: number;
   };
 
+export type RedisObliterateCacheOperationOptions = Pick<
+  RedisOperationOptions,
+  "client"
+> & {
+  scanCount?: number;
+};
+
+export type RedisBulkAddOperationEntry<TValue = RedisStoredValue> = {
+  id: RedisKeyId;
+  value: TValue;
+};
+
 let defaultRedisService: RedisService | undefined;
 
 const getDefaultRedisService = (): RedisService => {
@@ -111,12 +123,77 @@ export function createAddOperation<TValue = RedisStoredValue>(
     getRedisClient(options.client).set(`${keyPrefix}:${id}`, serialize(value));
 }
 
+export function createBulkAddOperation<TValue = RedisStoredValue>(
+  keyPrefix: string,
+  options: RedisOperationOptions<TValue> = {},
+): (entries: RedisBulkAddOperationEntry<TValue>[]) => Promise<"OK"> {
+  const serialize = options.serialize ?? serializeValue<TValue>;
+
+  return (entries: RedisBulkAddOperationEntry<TValue>[]): Promise<"OK"> => {
+    if (entries.length === 0) {
+      return Promise.resolve("OK");
+    }
+
+    const valuesByKey = Object.fromEntries(
+      entries.map(({ id, value }) => [`${keyPrefix}:${id}`, serialize(value)]),
+    );
+
+    return getRedisClient(options.client).mset(valuesByKey);
+  };
+}
+
 export function createDeleteOperation(
   keyPrefix: string,
   options: Pick<RedisOperationOptions, "client"> = {},
 ): (id: RedisKeyId) => Promise<number> {
   return (id: RedisKeyId): Promise<number> =>
     getRedisClient(options.client).del(`${keyPrefix}:${id}`);
+}
+
+export function createRemoveMultipleOperation(
+  keyPrefix: string,
+  options: Pick<RedisOperationOptions, "client"> = {},
+): (ids: RedisKeyId[]) => Promise<number> {
+  return async (ids: RedisKeyId[]): Promise<number> => {
+    if (ids.length === 0) {
+      return 0;
+    }
+
+    return getRedisClient(options.client).del(
+      ...ids.map((id) => `${keyPrefix}:${id}`),
+    );
+  };
+}
+
+export function createObliterateCacheOperation(
+  keyPrefix: string,
+  options: RedisObliterateCacheOperationOptions = {},
+): () => Promise<number> {
+  return async (): Promise<number> => {
+    const client = getRedisClient(options.client);
+    const pattern = `${keyPrefix}:*`;
+    const scanCount = options.scanCount ?? 100;
+    let cursor = "0";
+    let removed = 0;
+
+    do {
+      const [nextCursor, keys] = await client.scan(
+        cursor,
+        "MATCH",
+        pattern,
+        "COUNT",
+        scanCount,
+      );
+
+      cursor = nextCursor;
+
+      if (keys.length > 0) {
+        removed += await client.del(...keys);
+      }
+    } while (cursor !== "0");
+
+    return removed;
+  };
 }
 
 export async function closeDefaultRedisOperationClient(): Promise<void> {

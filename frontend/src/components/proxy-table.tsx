@@ -7,9 +7,15 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
+import {
+  HoverCardWrapper,
+  HoverCardContentWrapper,
+  HoverCardTriggerWrapper,
+} from "@/components/reusables/hover-card"
+
 import { Badge } from "@/components/ui/badge"
 
-import { NetworkIcon, InfoIcon } from "lucide-react"
+import { NetworkIcon, InfoIcon, CircleQuestionMark } from "lucide-react"
 
 import {
   Empty,
@@ -27,9 +33,10 @@ import { AddProxyModal } from "@/modals/add-proxy"
 import { UpdateProxyModal } from "@/modals/update-proxy"
 
 import { useTranslation } from "react-i18next"
+import EnableDisableButton from "@/components/enable-disable-button"
 
 export default function ProxyTable() {
-  const { proxies, loading, error } = useProxies()
+  const { proxies, loading, error, enableProxy, disableProxy } = useProxies()
   const { t } = useTranslation()
 
   if (loading) {
@@ -61,7 +68,19 @@ export default function ProxyTable() {
           <EmptyMedia>
             <NetworkIcon />
           </EmptyMedia>
-          <EmptyTitle>{t("proxies.empty.title")}</EmptyTitle>
+          <div className={"flex items-center gap-2"}>
+            <EmptyTitle>{t("proxies.empty.title")}</EmptyTitle>
+            <HoverCardWrapper>
+              <HoverCardTriggerWrapper>
+                <CircleQuestionMark className="size-4" />
+              </HoverCardTriggerWrapper>
+              <HoverCardContentWrapper>
+                {t("proxies.empty.hovercard", {
+                  name: t("app.name"),
+                })}
+              </HoverCardContentWrapper>
+            </HoverCardWrapper>
+          </div>
           <EmptyDescription>{t("proxies.empty.description")}</EmptyDescription>
           <AddProxyModal />
         </EmptyHeader>
@@ -98,6 +117,14 @@ export default function ProxyTable() {
               </TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
+                  <EnableDisableButton
+                    disabled={p.disabled}
+                    onClick={
+                      p.disabled
+                        ? () => enableProxy(p.id)
+                        : () => disableProxy(p.id)
+                    }
+                  />
                   <UpdateProxyModal proxy={p} />
                   <RemoveProxyModal proxy={p} />
                 </div>

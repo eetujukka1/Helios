@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { login as authLogin } from "@/services/auth-service"
 import { localStorageService } from "@/services/local-storage-service"
+import { SECTIONS } from "@/config/nav/sections.ts"
 
 interface AuthContextType {
   token: string | null
@@ -21,7 +22,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = await authLogin(username, password)
     localStorageService.setItem("helios-token", token)
     setToken(token)
-    navigate("/dashboard")
+    navigate(SECTIONS.platform.scrape.path)
   }
 
   const logout = () => {

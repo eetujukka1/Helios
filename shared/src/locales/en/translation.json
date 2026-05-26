@@ -6,16 +6,26 @@
     "group": {
       "platform": "Platform"
     },
-    "dashboard": "Dashboard",
-    "proxies": "Proxies",
-    "targets": "Targets"
+    "section": {
+      "scrape": "Scrape"
+    },
+    "page": {
+      "dashboard": "Dashboard",
+      "proxies": "Proxies",
+      "targets": "Targets"
+    }
   },
   "common": {
     "actions": {
       "add": "Add",
+      "changeLanguage": "Change language",
+      "disable": "Disable",
+      "edit": "Edit",
+      "enable": "Enable",
       "update": "Update",
       "remove": "Remove",
       "refresh": "Refresh",
+      "toggleTheme": "Toggle theme",
       "cancel": "Cancel",
       "view": "View",
       "login": "Login",
@@ -96,7 +106,8 @@
     },
     "empty": {
       "title": "No proxies",
-      "description": "You have not added any proxies yet"
+      "description": "You have not added any proxies yet",
+      "hovercard": "{{name}} needs proxies to scrape targets. Add proxies to get started."
     },
     "dialogs": {
       "add": {
@@ -148,7 +159,8 @@
     },
     "empty": {
       "title": "No targets",
-      "description": "You have not added any targets yet"
+      "description": "You have not added any targets yet",
+      "hovercard": "{{name}} needs targets to scrape. Add targets to get started."
     },
     "dialogs": {
       "add": {

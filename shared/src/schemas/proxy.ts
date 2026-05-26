@@ -18,6 +18,8 @@ export const ProxyCreateSchema = z.object({
 
 export const ProxySchema = ProxyCreateSchema.extend({
   id: z.number(),
+  username: z.string().min(1).nullable().optional(),
+  password: z.string().min(1).nullable().optional(),
   disabled: z.boolean(),
 });
 

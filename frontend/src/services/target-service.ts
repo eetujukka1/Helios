@@ -17,3 +17,13 @@ export async function remove(id: number | string): Promise<Target> {
   const response = await apiClient.delete(`/targets/${id}`)
   return response.data
 }
+
+export async function disable(id: number | string): Promise<Target[]> {
+  const response = await apiClient.patch(`/targets/${id}/disable`)
+  return response.data
+}
+
+export async function enable(id: number | string): Promise<Target[]> {
+  const response = await apiClient.patch(`/targets/${id}/enable`)
+  return response.data
+}
