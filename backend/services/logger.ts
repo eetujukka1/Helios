@@ -2,7 +2,7 @@ import { logs } from "@opentelemetry/api-logs";
 import { getPostHogLogAttributes } from "../posthog.js";
 import type { LogAttributes } from "../config/logAttributes.js";
 
-const shouldLogToConsole = process.env.NODE_ENV !== "prod";
+const shouldLogToConsole = process.env.NODE_ENV === "dev";
 const postHogLogger = logs.getLogger("helios-backend");
 
 export type LoggerAttributes = LogAttributes;
