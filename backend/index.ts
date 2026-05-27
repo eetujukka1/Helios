@@ -8,6 +8,10 @@ dotenv.config({
 });
 
 const { default: app } = await import("./app.js");
+const { LogComponent, LogEvent, LogResult } = await import(
+  "./config/logAttributes.js"
+);
+const { logger } = await import("./services/logger.js");
 const { shutdownPostHog } = await import("./posthog.js");
 const { loadPages } = await import("./utils/loadPages.js");
 const { loadProxies } = await import("./utils/loadProxies.js");
@@ -20,7 +24,12 @@ await loadTargets();
 const PORT = envService.get("PORT") || 3000;
 
 const server = app.listen(PORT, () =>
-  console.log(`Server running on http://localhost:${PORT}`),
+  logger.info(`Server running on http://localhost:${PORT}`, {
+    component: LogComponent.Backend,
+    event: LogEvent.BackendStarted,
+    result: LogResult.Success,
+    port: PORT,
+  }),
 );
 
 let isShuttingDown = false;
@@ -31,17 +40,29 @@ async function shutdown(signal: NodeJS.Signals) {
   }
 
   isShuttingDown = true;
-  console.log(`Received ${signal}, shutting down...`);
+  logger.info(`Received ${signal}, shutting down...`, {
+    component: LogComponent.Backend,
+    event: LogEvent.BackendShutdownRequested,
+    signal,
+  });
 
   server.close(async (error) => {
     try {
       if (error) {
-        console.error("Error closing server:", error);
+        logger.error("Error closing server", error, {
+          component: LogComponent.Backend,
+          event: LogEvent.BackendServerCloseFailed,
+          result: LogResult.Failure,
+        });
       }
 
       await shutdownPostHog();
     } catch (shutdownError) {
-      console.error("Error during shutdown:", shutdownError);
+      logger.fatal("Error during shutdown", shutdownError, {
+        component: LogComponent.Backend,
+        event: LogEvent.BackendShutdownFailed,
+        result: LogResult.Failure,
+      });
       process.exit(1);
     }
 
