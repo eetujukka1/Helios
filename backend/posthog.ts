@@ -6,7 +6,8 @@ import { resourceFromAttributes } from "@opentelemetry/resources";
 import { envService } from "./services/envService.js";
 
 const posthogKey = envService.get("POSTHOG_KEY");
-const posthogHost = envService.get("POSTHOG_HOST") ?? "https://us.i.posthog.com";
+const posthogHost =
+  envService.get("POSTHOG_HOST") ?? "https://us.i.posthog.com";
 const environment = envService.get("NODE_ENV") ?? "unknown";
 const serviceName = "helios-backend";
 

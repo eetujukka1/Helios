@@ -8,9 +8,8 @@ dotenv.config({
 });
 
 const { default: app } = await import("./app.js");
-const { LogComponent, LogEvent, LogResult } = await import(
-  "./config/logAttributes.js"
-);
+const { LogComponent, LogEvent, LogResult } =
+  await import("./config/logAttributes.js");
 const { logger } = await import("./services/logger.js");
 const { shutdownPostHog } = await import("./posthog.js");
 const { loadPages } = await import("./utils/loadPages.js");
