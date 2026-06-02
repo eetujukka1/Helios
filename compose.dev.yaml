@@ -1,5 +1,4 @@
 services:
-
   frontend:
     image: helios-frontend-dev
     container_name: helios-frontend-dev
@@ -64,6 +63,7 @@ services:
       REDIS_PORT: ${REDIS_PORT}
       REDIS_USERNAME: ${REDIS_USERNAME}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
+      LOADER_CONCURRENCY: ${LOADER_CONCURRENCY:-5}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
