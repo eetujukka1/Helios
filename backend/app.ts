@@ -11,7 +11,6 @@ import { authenticateToken } from "./middlewares/auth.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { createRequireRole } from "./middlewares/requireRole.js";
 import { ActorTypeEnum } from "./schemas/auth.js";
-
 const app = express();
 
 const requireUser = createRequireRole(ActorTypeEnum.User);

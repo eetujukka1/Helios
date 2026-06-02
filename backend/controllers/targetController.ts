@@ -4,6 +4,8 @@ import { Request, Response } from "express";
 import { TargetCreateSchema, PageCreateSchema } from "@helios/shared";
 import { enqueuePageLoads } from "../services/pageLoadQueue.js";
 import { addTarget, bulkAddTarget, removeTarget } from "@helios/queue";
+import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
+import { logger } from "../services/logger.js";
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const targets = await prisma.target.findMany();
@@ -42,12 +44,25 @@ export const add = async (req: Request, res: Response): Promise<void> => {
 
   await enqueuePageLoads(addedPages);
 
+  logger.info("Targets created", {
+    component: LogComponent.Target,
+    event: LogEvent.TargetCreated,
+    result: LogResult.Success,
+    count: addedTargets.length,
+  });
+
   res.status(201).json(addedTargets);
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
   const deleted = await prisma.target.delete({ where: { id: res.locals.id } });
   await removeTarget(deleted.id);
+  logger.info("Target deleted", {
+    component: LogComponent.Target,
+    event: LogEvent.TargetDeleted,
+    result: LogResult.Success,
+    target_id: deleted.id,
+  });
   res.json(deleted);
 };
 
@@ -57,6 +72,12 @@ export const enable = async (req: Request, res: Response): Promise<void> => {
     data: { disabled: false },
   });
   await addTarget(enabled.id, enabled);
+  logger.info("Target enabled", {
+    component: LogComponent.Target,
+    event: LogEvent.TargetEnabled,
+    result: LogResult.Success,
+    target_id: enabled.id,
+  });
   res.json(enabled);
 };
 
@@ -66,6 +87,12 @@ export const disable = async (req: Request, res: Response): Promise<void> => {
     data: { disabled: true },
   });
   await removeTarget(disabled.id);
+  logger.info("Target disabled", {
+    component: LogComponent.Target,
+    event: LogEvent.TargetDisabled,
+    result: LogResult.Success,
+    target_id: disabled.id,
+  });
   res.json(disabled);
 };
 
@@ -87,6 +114,14 @@ export const addPages = async (req: Request, res: Response): Promise<void> => {
   });
 
   await enqueuePageLoads(addedPages);
+
+  logger.info("Target pages created", {
+    component: LogComponent.Target,
+    event: LogEvent.TargetPagesCreated,
+    result: LogResult.Success,
+    target_id: target.id,
+    count: addedPages.length,
+  });
 
   res.status(201).json(addedPages);
 };

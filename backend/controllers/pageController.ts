@@ -3,6 +3,8 @@ import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
 import { ResponseCreateSchema } from "@helios/shared";
 import { createS3Service } from "../services/s3Service.js";
+import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
+import { logger } from "../services/logger.js";
 
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const pages = await prisma.page.findMany();
@@ -65,6 +67,16 @@ export const addResponse = async (
 
   const addedResponse = await prisma.response.create({
     data: responseData,
+  });
+
+  logger.info("Page response created", {
+    component: LogComponent.Page,
+    event: LogEvent.PageResponseCreated,
+    result: LogResult.Success,
+    page_id: res.locals.id,
+    proxy_id: response.proxyId,
+    response_id: addedResponse.id,
+    status_code: response.statusCode,
   });
 
   res.status(201).json(addedResponse);
