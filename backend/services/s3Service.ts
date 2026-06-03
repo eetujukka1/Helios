@@ -16,6 +16,8 @@ import {
   type EnvService,
   type EnvValues,
 } from "@helios/shared";
+import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
+import { logger } from "./logger.js";
 type S3ObjectBody = PutObjectCommandInput["Body"];
 
 export type S3ServiceConfig = {
@@ -91,17 +93,41 @@ export class S3Service {
     contentType,
     metadata,
     cacheControl,
-  }: UploadObjectInput): Promise<PutObjectCommandOutput> =>
-    this.client.send(
-      new PutObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-        Body: body,
-        ContentType: contentType,
-        Metadata: metadata,
-        CacheControl: cacheControl,
-      }),
-    );
+  }: UploadObjectInput): Promise<PutObjectCommandOutput> => {
+    try {
+      const response = await this.client.send(
+        new PutObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+          Body: body,
+          ContentType: contentType,
+          Metadata: metadata,
+          CacheControl: cacheControl,
+        }),
+      );
+
+      logger.info("Object uploaded to storage", {
+        component: LogComponent.Storage,
+        event: LogEvent.StorageUploaded,
+        result: LogResult.Success,
+        bucket: this.bucket,
+        object_key: key,
+        content_type: contentType,
+      });
+
+      return response;
+    } catch (error) {
+      logger.error("Object upload to storage failed", error, {
+        component: LogComponent.Storage,
+        event: LogEvent.StorageUploadFailed,
+        result: LogResult.Failure,
+        bucket: this.bucket,
+        object_key: key,
+        content_type: contentType,
+      });
+      throw error;
+    }
+  };
 
   getObject = async (key: string): Promise<GetObjectCommandOutput> =>
     this.client.send(
@@ -119,13 +145,35 @@ export class S3Service {
       }),
     );
 
-  deleteObject = async (key: string): Promise<DeleteObjectCommandOutput> =>
-    this.client.send(
-      new DeleteObjectCommand({
-        Bucket: this.bucket,
-        Key: key,
-      }),
-    );
+  deleteObject = async (key: string): Promise<DeleteObjectCommandOutput> => {
+    try {
+      const response = await this.client.send(
+        new DeleteObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+
+      logger.info("Object deleted from storage", {
+        component: LogComponent.Storage,
+        event: LogEvent.StorageDeleted,
+        result: LogResult.Success,
+        bucket: this.bucket,
+        object_key: key,
+      });
+
+      return response;
+    } catch (error) {
+      logger.error("Object delete from storage failed", error, {
+        component: LogComponent.Storage,
+        event: LogEvent.StorageDeleteFailed,
+        result: LogResult.Failure,
+        bucket: this.bucket,
+        object_key: key,
+      });
+      throw error;
+    }
+  };
 }
 
 export const createS3Service = (

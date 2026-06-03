@@ -3,6 +3,7 @@ const config = {
   preset: "ts-jest/presets/default-esm",
   testEnvironment: "node",
   extensionsToTreatAsEsm: [".ts"],
+  testPathIgnorePatterns: ["<rootDir>/dist/"],
   moduleNameMapper: {
     "^\\.\\./generated/prisma/client\\.js$":
       "<rootDir>/tests/prismaClientMock.ts",

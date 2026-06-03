@@ -1,6 +1,8 @@
 import { Response, NextFunction } from "express";
 import { ActorTypeEnum } from "../schemas/auth.js";
 import type { AuthenticatedRequest } from "../schemas/auth.js";
+import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
+import { logger } from "../services/logger.js";
 
 export const createRequireRole = (
   roleOrRoles: ActorTypeEnum | readonly ActorTypeEnum[],
@@ -18,6 +20,16 @@ export const createRequireRole = (
       allowedRoles.some((role) => role === actorType);
 
     if (!hasRequiredRole) {
+      logger.warn("Request actor does not have required role", {
+        component: LogComponent.Auth,
+        event: LogEvent.RequestForbidden,
+        result: LogResult.Failure,
+        method: req.method,
+        path: req.path,
+        status_code: 403,
+        actor_type: actorType,
+        allowed_roles: allowedRoles,
+      });
       res.sendStatus(403);
       return;
     }
