@@ -26,12 +26,12 @@ router.post("/", requireUser, add);
 
 router.delete("/:id", requireUser, validateId, remove);
 
-router.patch("/:id/disable", validateId, disable);
+router.patch("/:id/disable", requireUser, validateId, disable);
 
-router.patch("/:id/enable", validateId, enable);
+router.patch("/:id/enable", requireUser, validateId, enable);
 
 router.post("/:id/pages", requireWorker, validateId, addPages);
 
-router.get("/:id/pages", getPages);
+router.get("/:id/pages", requireUser, validateId, getPages);
 
 export default router;

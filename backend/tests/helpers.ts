@@ -77,6 +77,10 @@ export const mockTarget = {
   findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  update:
+    jest.fn<
+      (args?: { where: { id: number }; data: object }) => Promise<object | null>
+    >(),
   delete: jest.fn<(args?: unknown) => Promise<object>>(),
 };
 
