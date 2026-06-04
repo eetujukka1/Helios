@@ -8,6 +8,7 @@ import {
   disable,
   addPages,
   getPages,
+  getAmount,
 } from "../controllers/targetController.js";
 import { validateId } from "../middlewares/validateId.js";
 import { createRequireRole } from "../middlewares/requireRole.js";
@@ -19,6 +20,8 @@ const requireWorker = createRequireRole(ActorTypeEnum.Worker);
 const router = Router();
 
 router.get("/", requireUser, getAll);
+
+router.get("/amount", requireUser, getAmount);
 
 router.get("/:id", requireUser, validateId, getOne);
 

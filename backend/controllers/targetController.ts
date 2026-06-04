@@ -19,6 +19,11 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
   res.json(target);
 };
 
+export const getAmount = async (req: Request, res: Response): Promise<void> => {
+  const amount = await prisma.target.count();
+  res.json({ amount });
+};
+
 export const add = async (req: Request, res: Response): Promise<void> => {
   const targets = z
     .array(TargetCreateSchema)

@@ -47,6 +47,7 @@ export const mockFile = {
 
 export const mockPage = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
   create: jest.fn<(args?: unknown) => Promise<object>>(),
@@ -63,6 +64,7 @@ export const mockResponse = {
 
 export const mockProxy = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
   update:
@@ -74,6 +76,7 @@ export const mockProxy = {
 
 export const mockTarget = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),

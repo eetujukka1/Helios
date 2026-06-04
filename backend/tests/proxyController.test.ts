@@ -62,6 +62,32 @@ describe("GET /api/proxies", () => {
   });
 });
 
+describe("GET /api/proxies/amount", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).get("/api/proxies/amount");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 on invalid token", async () => {
+    const res = await request(app)
+      .get("/api/proxies/amount")
+      .set("Authorization", "Bearer invalidtoken");
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 200 and the resource amount", async () => {
+    mockProxy.count.mockResolvedValue(123);
+
+    const res = await request(app)
+      .get("/api/proxies/amount")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(mockProxy.count).toHaveBeenCalledWith();
+    expect(res.body).toEqual({ amount: 123 });
+  });
+});
+
 describe("GET /api/proxies/:id", () => {
   it("responds with 401 when no token provided", async () => {
     const res = await request(app).get("/api/proxies/1");
