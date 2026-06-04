@@ -1,19 +1,35 @@
 import * as z from "zod";
 import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
-import { ProxyCreateSchema, ProxyUpdateSchema } from "@helios/shared";
+import {
+  ProxyCreateSchema,
+  ProxyUpdateSchema,
+  type Proxy,
+} from "@helios/shared";
 import { addProxy, bulkAddProxy, removeProxy } from "@helios/queue";
 import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
 import { logger } from "../services/logger.js";
 
+const redactProxyPassword = <T extends { password?: string | null }>(
+  proxy: T,
+): Omit<T, "password"> => {
+  const redactedProxy = { ...proxy };
+  delete redactedProxy.password;
+  return redactedProxy;
+};
+
+const redactProxyPasswords = <T extends { password?: string | null }>(
+  proxies: T[],
+): Omit<T, "password">[] => proxies.map(redactProxyPassword);
+
 export const getAll = async (req: Request, res: Response): Promise<void> => {
   const proxies = await prisma.proxy.findMany();
-  res.json(proxies);
+  res.json(redactProxyPasswords(proxies));
 };
 
 export const getOne = async (req: Request, res: Response): Promise<void> => {
   const proxy = await prisma.proxy.findFirst({ where: { id: res.locals.id } });
-  res.json(proxy);
+  res.json(proxy ? redactProxyPassword(proxy) : null);
 };
 
 export const getAmount = async (req: Request, res: Response): Promise<void> => {
@@ -23,7 +39,7 @@ export const getAmount = async (req: Request, res: Response): Promise<void> => {
 
 export const add = async (req: Request, res: Response): Promise<void> => {
   const proxies = z.array(ProxyCreateSchema).parse(req.body.proxies);
-  const addedProxies = await prisma.proxy.createManyAndReturn({
+  const addedProxies: Proxy[] = await prisma.proxy.createManyAndReturn({
     data: proxies,
   });
   await bulkAddProxy(
@@ -35,7 +51,7 @@ export const add = async (req: Request, res: Response): Promise<void> => {
     result: LogResult.Success,
     count: addedProxies.length,
   });
-  res.status(201).json(addedProxies);
+  res.status(201).json(redactProxyPasswords(addedProxies));
 };
 
 export const remove = async (req: Request, res: Response): Promise<void> => {
@@ -47,7 +63,7 @@ export const remove = async (req: Request, res: Response): Promise<void> => {
     result: LogResult.Success,
     proxy_id: deleted.id,
   });
-  res.json(deleted);
+  res.json(redactProxyPassword(deleted));
 };
 
 export const update = async (req: Request, res: Response): Promise<void> => {
@@ -62,7 +78,7 @@ export const update = async (req: Request, res: Response): Promise<void> => {
     result: LogResult.Success,
     proxy_id: updated.id,
   });
-  res.json(updated);
+  res.json(redactProxyPassword(updated));
 };
 
 export const enable = async (req: Request, res: Response): Promise<void> => {
@@ -77,7 +93,7 @@ export const enable = async (req: Request, res: Response): Promise<void> => {
     result: LogResult.Success,
     proxy_id: enabled.id,
   });
-  res.json(enabled);
+  res.json(redactProxyPassword(enabled));
 };
 
 export const disable = async (req: Request, res: Response): Promise<void> => {
@@ -92,5 +108,5 @@ export const disable = async (req: Request, res: Response): Promise<void> => {
     result: LogResult.Success,
     proxy_id: disabled.id,
   });
-  res.json(disabled);
+  res.json(redactProxyPassword(disabled));
 };

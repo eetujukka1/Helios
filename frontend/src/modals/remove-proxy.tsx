@@ -21,13 +21,13 @@ import {
 
 import { Button } from "@/components/ui/button"
 
-import type { Proxy } from "@helios/shared"
+import type { ProxyResponse } from "@helios/shared"
 import { Trash2Icon } from "lucide-react"
 
 import { useTranslation } from "react-i18next"
 
 type Props = {
-  proxy: Proxy
+  proxy: ProxyResponse
 }
 
 export function RemoveProxyModal({ proxy }: Props) {

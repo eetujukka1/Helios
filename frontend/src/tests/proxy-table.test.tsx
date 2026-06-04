@@ -121,7 +121,7 @@ describe("ProxyTable", () => {
 
   it("calls remove service on confirm", async () => {
     mockGet.mockResolvedValue([testProxy])
-    mockRemove.mockResolvedValue([])
+    mockRemove.mockResolvedValue(testProxy)
     const user = userEvent.setup()
     render(<ProxyTable />, { wrapper })
     await screen.findByText("1.1.1.1")

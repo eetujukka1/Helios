@@ -23,7 +23,10 @@ export const ProxySchema = ProxyCreateSchema.extend({
   disabled: z.boolean(),
 });
 
+export const ProxyResponseSchema = ProxySchema.omit({ password: true });
+
 export type Proxy = z.infer<typeof ProxySchema>;
+export type ProxyResponse = z.infer<typeof ProxyResponseSchema>;
 export type ProxyCreate = z.infer<typeof ProxyCreateSchema>;
 
 export const ProxyUpdateSchema = ProxyCreateSchema.partial().refine(

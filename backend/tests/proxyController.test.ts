@@ -26,6 +26,14 @@ const proxy = {
   enabled: true,
 };
 
+const redactedProxy = {
+  id: proxy.id,
+  host: proxy.host,
+  port: proxy.port,
+  username: proxy.username,
+  enabled: proxy.enabled,
+};
+
 describe("GET /api/proxies", () => {
   it("responds with 401 when no token provided", async () => {
     const res = await request(app).get("/api/proxies");
@@ -47,7 +55,8 @@ describe("GET /api/proxies", () => {
       .set("Authorization", `Bearer ${authToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual([proxy]);
+    expect(res.body).toEqual([redactedProxy]);
+    expect(res.body[0]).not.toHaveProperty("password");
   });
 
   it("responds with 200 and empty array when no proxies exist", async () => {
@@ -116,7 +125,8 @@ describe("GET /api/proxies/:id", () => {
       .set("Authorization", `Bearer ${authToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(proxy);
+    expect(res.body).toEqual(redactedProxy);
+    expect(res.body).not.toHaveProperty("password");
   });
 
   it("responds with 200 and null when proxy not found", async () => {
@@ -205,7 +215,8 @@ describe("POST /api/proxies", () => {
       });
 
     expect(res.status).toBe(201);
-    expect(res.body).toEqual([proxy]);
+    expect(res.body).toEqual([redactedProxy]);
+    expect(res.body[0]).not.toHaveProperty("password");
   });
 });
 
@@ -237,7 +248,7 @@ describe("DELETE /api/proxies/:id", () => {
       .set("Authorization", `Bearer ${authToken()}`);
 
     expect(res.status).toBe(200);
-    expect(res.body).toEqual(proxy);
+    expect(res.body).toEqual(redactedProxy);
   });
 });
 
@@ -292,10 +303,11 @@ describe("PATCH /api/proxies/:id", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({
-      ...proxy,
+      ...redactedProxy,
       host: "updated.example.com",
       disabled: true,
     });
+    expect(res.body).not.toHaveProperty("password");
     expect(mockProxy.update).toHaveBeenCalledWith({
       where: { id: 1 },
       data: { host: "updated.example.com", disabled: true },
