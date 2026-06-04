@@ -16,6 +16,11 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
   res.json(proxy);
 };
 
+export const getAmount = async (req: Request, res: Response): Promise<void> => {
+  const amount = await prisma.proxy.count();
+  res.json({ amount });
+};
+
 export const add = async (req: Request, res: Response): Promise<void> => {
   const proxies = z.array(ProxyCreateSchema).parse(req.body.proxies);
   const addedProxies = await prisma.proxy.createManyAndReturn({

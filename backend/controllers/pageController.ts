@@ -16,6 +16,11 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
   res.json(page);
 };
 
+export const getAmount = async (req: Request, res: Response): Promise<void> => {
+  const amount = await prisma.page.count();
+  res.json({ amount });
+};
+
 export const getResponses = async (
   req: Request,
   res: Response,

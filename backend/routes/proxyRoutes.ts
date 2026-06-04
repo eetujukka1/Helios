@@ -7,12 +7,15 @@ import {
   update,
   enable,
   disable,
+  getAmount,
 } from "../controllers/proxyController.js";
 import { validateId } from "../middlewares/validateId.js";
 
 const router = Router();
 
 router.get("/", getAll);
+
+router.get("/amount", getAmount);
 
 router.get("/:id", validateId, getOne);
 

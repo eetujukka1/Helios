@@ -91,6 +91,32 @@ describe("GET /api/pages", () => {
   });
 });
 
+describe("GET /api/pages/amount", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).get("/api/pages/amount");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 on invalid token", async () => {
+    const res = await request(app)
+      .get("/api/pages/amount")
+      .set("Authorization", "Bearer invalidtoken");
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 200 and the resource amount", async () => {
+    mockPage.count.mockResolvedValue(123);
+
+    const res = await request(app)
+      .get("/api/pages/amount")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(mockPage.count).toHaveBeenCalledWith();
+    expect(res.body).toEqual({ amount: 123 });
+  });
+});
+
 describe("GET /api/pages/:id", () => {
   it("responds with 401 when no token provided", async () => {
     const res = await request(app).get("/api/pages/1");
