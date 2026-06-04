@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach } from "@jest/globals";
 
 import {
   mockProxy,
+  mockProxyGet,
   resetMockClient,
   setupPrismaMockClient,
 } from "./helpers.js";
@@ -138,6 +139,78 @@ describe("GET /api/proxies/:id", () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toBeNull();
+  });
+});
+
+describe("GET /api/proxies/:id/health", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).get("/api/proxies/1/health");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 on invalid token", async () => {
+    const res = await request(app)
+      .get("/api/proxies/1/health")
+      .set("Authorization", "Bearer invalidtoken");
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 400 on non-numeric id", async () => {
+    const res = await request(app)
+      .get("/api/proxies/abc/health")
+      .set("Authorization", `Bearer ${authToken()}`);
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 404 when proxy is not found", async () => {
+    mockProxy.findFirst.mockResolvedValue(null);
+
+    const res = await request(app)
+      .get("/api/proxies/1/health")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({ error: "Proxy not found" });
+    expect(mockProxyGet).not.toHaveBeenCalled();
+  });
+
+  it("responds with health details when proxy test succeeds", async () => {
+    mockProxy.findFirst.mockResolvedValue(proxy);
+    mockProxyGet.mockResolvedValue({ status: 204 });
+
+    const res = await request(app)
+      .get("/api/proxies/1/health")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({
+      healthy: true,
+      statusCode: 204,
+      durationMs: expect.any(Number),
+      url: "https://example.com",
+    });
+    expect(mockProxyGet).toHaveBeenCalledWith(proxy, "https://example.com", {
+      responseType: "text",
+      timeout: 30000,
+      validateStatus: expect.any(Function),
+    });
+  });
+
+  it("responds with failed health details when proxy test fails", async () => {
+    mockProxy.findFirst.mockResolvedValue(proxy);
+    mockProxyGet.mockRejectedValue(new Error("connection failed"));
+
+    const res = await request(app)
+      .get("/api/proxies/1/health")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(502);
+    expect(res.body).toEqual({
+      healthy: false,
+      durationMs: expect.any(Number),
+      error: "connection failed",
+      url: "https://example.com",
+    });
   });
 });
 

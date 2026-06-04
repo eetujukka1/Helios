@@ -18,7 +18,9 @@
   },
   "dependencies": {
     "@helios/shared": "*",
+    "axios": "1.16.0",
     "bullmq": "^5.76.6",
+    "https-proxy-agent": "^7.0.6",
     "ioredis": "^5.10.1"
   },
   "devDependencies": {

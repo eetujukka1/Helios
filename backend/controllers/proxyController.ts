@@ -1,14 +1,14 @@
 import * as z from "zod";
 import { prisma } from "../services/prisma.js";
 import { Request, Response } from "express";
-import {
-  ProxyCreateSchema,
-  ProxyUpdateSchema,
-  type Proxy,
-} from "@helios/shared";
-import { addProxy, bulkAddProxy, removeProxy } from "@helios/queue";
+import { ProxyCreateSchema, ProxyUpdateSchema } from "@helios/shared";
+import { addProxy, bulkAddProxy, proxyGet, removeProxy } from "@helios/queue";
 import { LogComponent, LogEvent, LogResult } from "../config/logAttributes.js";
 import { logger } from "../services/logger.js";
+import { envService } from "../services/envService.js";
+
+const defaultProxyHealthUrl = "https://example.com";
+const proxyHealthTimeoutMs = 30000;
 
 const redactProxyPassword = <T extends { password?: string | null }>(
   proxy: T,
@@ -35,6 +35,43 @@ export const getOne = async (req: Request, res: Response): Promise<void> => {
 export const getAmount = async (req: Request, res: Response): Promise<void> => {
   const amount = await prisma.proxy.count();
   res.json({ amount });
+};
+
+export const getHealth = async (req: Request, res: Response): Promise<void> => {
+  const proxy = await prisma.proxy.findFirst({ where: { id: res.locals.id } });
+
+  if (!proxy) {
+    res.status(404).json({ error: "Proxy not found" });
+    return;
+  }
+
+  const url = envService.get("PROXY_HEALTH_CHECK_URL") ?? defaultProxyHealthUrl;
+  const startedAt = Date.now();
+
+  try {
+    const response = await proxyGet(proxy, url, {
+      responseType: "text",
+      timeout: proxyHealthTimeoutMs,
+      validateStatus: () => true,
+    });
+
+    res.json({
+      healthy: true,
+      statusCode: response.status,
+      durationMs: Date.now() - startedAt,
+      url,
+    });
+  } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Proxy health check failed";
+
+    res.status(502).json({
+      healthy: false,
+      durationMs: Date.now() - startedAt,
+      error: message,
+      url,
+    });
+  }
 };
 
 export const add = async (req: Request, res: Response): Promise<void> => {

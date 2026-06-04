@@ -24,6 +24,10 @@ export const mockEnqueuePageLoads = jest.fn<() => Promise<void>>();
 export const mockAddProxy = jest.fn<() => Promise<void>>();
 export const mockBulkAddProxy = jest.fn<() => Promise<void>>();
 export const mockRemoveProxy = jest.fn<() => Promise<void>>();
+export const mockProxyGet =
+  jest.fn<
+    (proxy: object, url: string, config?: object) => Promise<{ status: number }>
+  >();
 export const mockAddTarget = jest.fn<() => Promise<void>>();
 export const mockBulkAddTarget = jest.fn<() => Promise<void>>();
 export const mockRemoveTarget = jest.fn<() => Promise<void>>();
@@ -100,6 +104,7 @@ export function setupPrismaMockClient(): void {
     addProxy: mockAddProxy,
     bulkAddProxy: mockBulkAddProxy,
     removeProxy: mockRemoveProxy,
+    proxyGet: mockProxyGet,
     addTarget: mockAddTarget,
     bulkAddTarget: mockBulkAddTarget,
     removeTarget: mockRemoveTarget,
@@ -124,6 +129,7 @@ export function resetMockClient(): void {
   mockAddProxy.mockReset();
   mockBulkAddProxy.mockReset();
   mockRemoveProxy.mockReset();
+  mockProxyGet.mockReset();
   mockAddTarget.mockReset();
   mockBulkAddTarget.mockReset();
   mockRemoveTarget.mockReset();
