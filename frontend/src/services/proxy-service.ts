@@ -11,7 +11,7 @@ export async function getAmount(): Promise<number> {
   return response.data.amount
 }
 
-export async function add(proxies: ProxyCreate[]): Promise<Proxy[]> {
+export async function add(proxies: ProxyCreate[]): Promise<ProxyResponse[]> {
   const response = await apiClient.post("/proxies", {
     proxies: proxies,
   })
