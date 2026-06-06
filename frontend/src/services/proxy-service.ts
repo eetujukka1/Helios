@@ -6,6 +6,11 @@ export async function get(): Promise<Proxy[]> {
   return response.data
 }
 
+export async function getAmount(): Promise<number> {
+  const response = await apiClient.get("/proxies/amount")
+  return response.data.amount
+}
+
 export async function add(proxies: ProxyCreate[]): Promise<Proxy[]> {
   const response = await apiClient.post("/proxies", {
     proxies: proxies,

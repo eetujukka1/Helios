@@ -2,6 +2,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { ProxyCreate, ProxyUpdate } from "@helios/shared"
 import {
   get,
+  getAmount,
   add,
   remove,
   update,
@@ -11,6 +12,11 @@ import {
 import { toast } from "sonner"
 import i18n from "@/i18n"
 
+const proxyKeys = {
+  all: ["proxies"] as const,
+  amount: ["proxies", "amount"] as const,
+}
+
 export function useProxies() {
   const queryClient = useQueryClient()
 
@@ -19,12 +25,12 @@ export function useProxies() {
     isLoading: loading,
     error,
   } = useQuery({
-    queryKey: ["proxies"],
+    queryKey: proxyKeys.all,
     queryFn: get,
   })
 
   const getProxies = () =>
-    queryClient.invalidateQueries({ queryKey: ["proxies"] })
+    queryClient.invalidateQueries({ queryKey: proxyKeys.all })
 
   const { mutateAsync: addProxies } = useMutation({
     mutationFn: (newProxies: ProxyCreate[]) => add(newProxies),
@@ -67,5 +73,22 @@ export function useProxies() {
     updateProxy,
     enableProxy,
     disableProxy,
+  }
+}
+
+export function useProxyAmount() {
+  const {
+    data: amount = 0,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: proxyKeys.amount,
+    queryFn: getAmount,
+  })
+
+  return {
+    amount,
+    loading,
+    error: error ? (error as Error).message : null,
   }
 }

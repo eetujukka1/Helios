@@ -88,6 +88,16 @@
       },
       "targets": {
         "title": "Kohteet"
+      },
+      "pages": {
+        "title": "Sivut"
+      },
+      "successfulResponses": {
+        "title": "Onnistuneet vastaukset"
+      },
+      "responses": {
+        "title": "Vastaukset",
+        "totalLabel": "Yhteensä"
       }
     }
   },
