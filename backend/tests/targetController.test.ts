@@ -242,6 +242,83 @@ describe("DELETE /api/targets/:id", () => {
   });
 });
 
+describe("PATCH /api/targets/:id/disable", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).patch("/api/targets/1/disable");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 when using a worker token", async () => {
+    const res = await request(app)
+      .patch("/api/targets/1/disable")
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 400 on non-numeric id", async () => {
+    const res = await request(app)
+      .patch("/api/targets/abc/disable")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 200 and the disabled target", async () => {
+    const disabledTarget = { ...target, disabled: true };
+    mockTarget.update.mockResolvedValue(disabledTarget);
+
+    const res = await request(app)
+      .patch("/api/targets/1/disable")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(disabledTarget);
+    expect(mockTarget.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { disabled: true },
+    });
+  });
+});
+
+describe("PATCH /api/targets/:id/enable", () => {
+  it("responds with 401 when no token provided", async () => {
+    const res = await request(app).patch("/api/targets/1/enable");
+    expect(res.status).toBe(401);
+  });
+
+  it("responds with 403 when using a worker token", async () => {
+    const res = await request(app)
+      .patch("/api/targets/1/enable")
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 400 on non-numeric id", async () => {
+    const res = await request(app)
+      .patch("/api/targets/abc/enable")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(400);
+  });
+
+  it("responds with 200 and the enabled target", async () => {
+    mockTarget.update.mockResolvedValue(target);
+
+    const res = await request(app)
+      .patch("/api/targets/1/enable")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual(target);
+    expect(mockTarget.update).toHaveBeenCalledWith({
+      where: { id: 1 },
+      data: { disabled: false },
+    });
+  });
+});
+
 describe("POST /api/targets/:id/pages", () => {
   it("responds with 201 and the created pages", async () => {
     mockTarget.findUniqueOrThrow.mockResolvedValue(target);
@@ -294,12 +371,28 @@ describe("GET /api/targets/:id/pages", () => {
     expect(res.status).toBe(403);
   });
 
+  it("responds with 403 when using a worker token", async () => {
+    const res = await request(app)
+      .get("/api/targets/1/pages")
+      .set("Authorization", `Bearer ${workerAuthToken()}`);
+
+    expect(res.status).toBe(403);
+  });
+
+  it("responds with 400 on non-numeric id", async () => {
+    const res = await request(app)
+      .get("/api/targets/abc/pages")
+      .set("Authorization", `Bearer ${authToken()}`);
+
+    expect(res.status).toBe(400);
+  });
+
   it("responds with 200 and an array of pages", async () => {
     mockPage.findMany.mockResolvedValue(returnedPages);
 
     const res = await request(app)
       .get("/api/targets/1/pages")
-      .set("Authorization", `Bearer ${workerAuthToken()}`);
+      .set("Authorization", `Bearer ${authToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual(returnedPages);
@@ -310,7 +403,7 @@ describe("GET /api/targets/:id/pages", () => {
 
     const res = await request(app)
       .get("/api/targets/1/pages")
-      .set("Authorization", `Bearer ${workerAuthToken()}`);
+      .set("Authorization", `Bearer ${authToken()}`);
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual([]);
