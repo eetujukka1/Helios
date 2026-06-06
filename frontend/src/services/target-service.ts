@@ -6,6 +6,11 @@ export async function get(): Promise<Target[]> {
   return response.data
 }
 
+export async function getAmount(): Promise<number> {
+  const response = await apiClient.get("/targets/amount")
+  return response.data.amount
+}
+
 export async function add(targets: TargetCreate[]): Promise<Target[]> {
   const response = await apiClient.post("/targets", {
     targets: targets,

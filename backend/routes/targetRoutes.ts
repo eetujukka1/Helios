@@ -8,6 +8,7 @@ import {
   disable,
   addPages,
   getPages,
+  getAmount,
 } from "../controllers/targetController.js";
 import { validateId } from "../middlewares/validateId.js";
 import { createRequireRole } from "../middlewares/requireRole.js";
@@ -20,18 +21,20 @@ const router = Router();
 
 router.get("/", requireUser, getAll);
 
+router.get("/amount", requireUser, getAmount);
+
 router.get("/:id", requireUser, validateId, getOne);
 
 router.post("/", requireUser, add);
 
 router.delete("/:id", requireUser, validateId, remove);
 
-router.patch("/:id/disable", validateId, disable);
+router.patch("/:id/disable", requireUser, validateId, disable);
 
-router.patch("/:id/enable", validateId, enable);
+router.patch("/:id/enable", requireUser, validateId, enable);
 
 router.post("/:id/pages", requireWorker, validateId, addPages);
 
-router.get("/:id/pages", getPages);
+router.get("/:id/pages", requireUser, validateId, getPages);
 
 export default router;

@@ -1,6 +1,18 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import type { TargetCreate } from "@helios/shared"
-import { get, add, remove, enable, disable } from "@/services/target-service"
+import {
+  get,
+  getAmount,
+  add,
+  remove,
+  enable,
+  disable,
+} from "@/services/target-service"
+
+const targetKeys = {
+  all: ["targets"] as const,
+  amount: ["targets", "amount"] as const,
+}
 
 export function useTargets() {
   const queryClient = useQueryClient()
@@ -10,12 +22,12 @@ export function useTargets() {
     isLoading: loading,
     error,
   } = useQuery({
-    queryKey: ["targets"],
+    queryKey: targetKeys.all,
     queryFn: get,
   })
 
   const getTargets = () =>
-    queryClient.invalidateQueries({ queryKey: ["targets"] })
+    queryClient.invalidateQueries({ queryKey: targetKeys.all })
 
   const { mutateAsync: addTargets } = useMutation({
     mutationFn: (newTargets: TargetCreate[]) => add(newTargets),
@@ -46,5 +58,22 @@ export function useTargets() {
     removeTarget,
     disableTarget,
     enableTarget,
+  }
+}
+
+export function useTargetAmount() {
+  const {
+    data: amount = 0,
+    isLoading: loading,
+    error,
+  } = useQuery({
+    queryKey: targetKeys.amount,
+    queryFn: getAmount,
+  })
+
+  return {
+    amount,
+    loading,
+    error: error ? (error as Error).message : null,
   }
 }

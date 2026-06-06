@@ -24,6 +24,10 @@ export const mockEnqueuePageLoads = jest.fn<() => Promise<void>>();
 export const mockAddProxy = jest.fn<() => Promise<void>>();
 export const mockBulkAddProxy = jest.fn<() => Promise<void>>();
 export const mockRemoveProxy = jest.fn<() => Promise<void>>();
+export const mockProxyGet =
+  jest.fn<
+    (proxy: object, url: string, config?: object) => Promise<{ status: number }>
+  >();
 export const mockAddTarget = jest.fn<() => Promise<void>>();
 export const mockBulkAddTarget = jest.fn<() => Promise<void>>();
 export const mockRemoveTarget = jest.fn<() => Promise<void>>();
@@ -47,6 +51,7 @@ export const mockFile = {
 
 export const mockPage = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
   create: jest.fn<(args?: unknown) => Promise<object>>(),
@@ -63,6 +68,7 @@ export const mockResponse = {
 
 export const mockProxy = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
   update:
@@ -74,9 +80,14 @@ export const mockProxy = {
 
 export const mockTarget = {
   findMany: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  count: jest.fn<(args?: unknown) => Promise<number>>(),
   findUniqueOrThrow: jest.fn<(args?: unknown) => Promise<object | null>>(),
   findFirst: jest.fn<(args?: unknown) => Promise<object | null>>(),
   createManyAndReturn: jest.fn<(args?: unknown) => Promise<object[]>>(),
+  update:
+    jest.fn<
+      (args?: { where: { id: number }; data: object }) => Promise<object | null>
+    >(),
   delete: jest.fn<(args?: unknown) => Promise<object>>(),
 };
 
@@ -93,6 +104,7 @@ export function setupPrismaMockClient(): void {
     addProxy: mockAddProxy,
     bulkAddProxy: mockBulkAddProxy,
     removeProxy: mockRemoveProxy,
+    proxyGet: mockProxyGet,
     addTarget: mockAddTarget,
     bulkAddTarget: mockBulkAddTarget,
     removeTarget: mockRemoveTarget,
@@ -117,6 +129,7 @@ export function resetMockClient(): void {
   mockAddProxy.mockReset();
   mockBulkAddProxy.mockReset();
   mockRemoveProxy.mockReset();
+  mockProxyGet.mockReset();
   mockAddTarget.mockReset();
   mockBulkAddTarget.mockReset();
   mockRemoveTarget.mockReset();

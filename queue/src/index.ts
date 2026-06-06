@@ -3,3 +3,4 @@ export * from "./queues.js";
 export * from "./redis.js";
 export * from "./operations.js";
 export * from "./services/index.js";
+export * from "./proxyHttpClient.js";

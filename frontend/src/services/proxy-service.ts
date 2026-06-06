@@ -1,4 +1,9 @@
-import type { Proxy, ProxyCreate, ProxyUpdate } from "@helios/shared"
+import type {
+  Proxy,
+  ProxyCreate,
+  ProxyResponse,
+  ProxyUpdate,
+} from "@helios/shared"
 import apiClient from "./api-client"
 
 export async function get(): Promise<Proxy[]> {
@@ -6,7 +11,12 @@ export async function get(): Promise<Proxy[]> {
   return response.data
 }
 
-export async function add(proxies: ProxyCreate[]): Promise<Proxy[]> {
+export async function getAmount(): Promise<number> {
+  const response = await apiClient.get("/proxies/amount")
+  return response.data.amount
+}
+
+export async function add(proxies: ProxyCreate[]): Promise<ProxyResponse[]> {
   const response = await apiClient.post("/proxies", {
     proxies: proxies,
   })
