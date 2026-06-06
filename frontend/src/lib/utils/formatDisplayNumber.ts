@@ -1,5 +1,5 @@
 export function formatDisplayNumber(number: number): string {
-  if ( number > 1000000000000) {
+  if (number > 1000000000000) {
     return `${(number / 1000000000000).toFixed(1).toString()}T`
   }
   if (number > 1000000000) {

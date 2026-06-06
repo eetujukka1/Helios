@@ -18,10 +18,11 @@ export default function Dashboard() {
   const queryClient = useQueryClient()
   const { amount: targetAmount, loading: targetsLoading } = useTargetAmount()
   const { amount: proxyAmount, loading: proxiesLoading } = useProxyAmount()
-  const { amount: pageAmount, loading: pagesLoading} = usePageAmount()
-  const { amount: responseAmount, loading: responsesLoading } = useResponseAmount({
-    group: true
-  })
+  const { amount: pageAmount, loading: pagesLoading } = usePageAmount()
+  const { amount: responseAmount, loading: responsesLoading } =
+    useResponseAmount({
+      group: true,
+    })
 
   const { t } = useTranslation()
 

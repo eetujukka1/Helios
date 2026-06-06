@@ -1,11 +1,6 @@
 import { Cell, Label, Pie, PieChart } from "recharts"
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card"
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import {
   type ChartConfig,
   ChartContainer,
@@ -39,12 +34,7 @@ const CHART_COLORS = [
   "var(--chart-10)",
 ]
 
-export function DataPieChart({
-  data,
-  title,
-  footer,
-  totalLabel,
-}: Props) {
+export function DataPieChart({ data, title, footer, totalLabel }: Props) {
   const chartConfig = data.reduce<ChartConfig>((config, item, index) => {
     config[item.label] = {
       label: item.label,
@@ -57,9 +47,7 @@ export function DataPieChart({
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="items-center pb-0">
-        {title}
-      </CardHeader>
+      <CardHeader className="items-center pb-0">{title}</CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           className="mx-auto aspect-square max-h-[250px]"
