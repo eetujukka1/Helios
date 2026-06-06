@@ -7,7 +7,7 @@ import workerAuthRoutes from "./routes/workerAuthRoutes.js";
 import proxyRoutes from "./routes/proxyRoutes.js";
 import targetRoutes from "./routes/targetRoutes.js";
 import pageRoutes from "./routes/pageRouter.js";
-import responseRoutes from "./routes/responseRoutes.js"
+import responseRoutes from "./routes/responseRoutes.js";
 import { authenticateToken } from "./middlewares/auth.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import { createRequireRole } from "./middlewares/requireRole.js";
@@ -26,7 +26,6 @@ app.use("/api/proxies", authenticateToken, requireUser, proxyRoutes);
 app.use("/api/responses", authenticateToken, requireUser, responseRoutes);
 app.use("/api/pages", authenticateToken, pageRoutes);
 app.use("/api/targets", authenticateToken, targetRoutes);
-
 
 app.use(errorHandler);
 

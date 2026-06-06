@@ -2,6 +2,7 @@ import { Router } from "express";
 import {
   getAll,
   getOne,
+  getHealth,
   add,
   remove,
   update,
@@ -16,6 +17,8 @@ const router = Router();
 router.get("/", getAll);
 
 router.get("/amount", getAmount);
+
+router.get("/:id/health", validateId, getHealth);
 
 router.get("/:id", validateId, getOne);
 

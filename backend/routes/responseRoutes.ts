@@ -1,7 +1,5 @@
 import { Router } from "express";
-import {
-  getAmount,
-} from "../controllers/responseController.js";
+import { getAmount } from "../controllers/responseController.js";
 
 const router = Router();
 

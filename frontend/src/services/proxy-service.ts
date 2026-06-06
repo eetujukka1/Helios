@@ -1,4 +1,9 @@
-import type { Proxy, ProxyCreate, ProxyUpdate } from "@helios/shared"
+import type {
+  Proxy,
+  ProxyCreate,
+  ProxyResponse,
+  ProxyUpdate,
+} from "@helios/shared"
 import apiClient from "./api-client"
 
 export async function get(): Promise<Proxy[]> {

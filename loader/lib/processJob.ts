@@ -1,13 +1,12 @@
 import { QueuePage } from "../types.js";
 import { DelayedError, Job } from "bullmq";
-import axios, { isAxiosError } from "axios";
-import { HttpsProxyAgent } from "https-proxy-agent";
+import { isAxiosError } from "axios";
 import * as cheerio from "cheerio";
-import { PageCreate, Proxy } from "@helios/shared";
+import { PageCreate } from "@helios/shared";
 import add from "../services/pages.js";
 import addResponse from "../services/responses.js";
 import { resolveHref } from "./resolveHref.js";
-import { getRandomProxy, getTarget } from "@helios/queue";
+import { getRandomProxy, getTarget, proxyGet } from "@helios/queue";
 
 const noProxyRetryDelayMs = 4000;
 const pageLoadTimeoutMs = 30000;
@@ -35,17 +34,6 @@ function logAxiosError(context: string, error: unknown): void {
   console.error(context, error);
 }
 
-function getProxyUrl(proxy: Proxy): string {
-  const url = new URL(`http://${proxy.host}:${proxy.port}`);
-
-  if (proxy.username && proxy.password) {
-    url.username = proxy.username;
-    url.password = proxy.password;
-  }
-
-  return url.toString();
-}
-
 async function processJob(
   // eslint-disable-next-line
   job: Job<QueuePage, any, string>,
@@ -56,21 +44,15 @@ async function processJob(
   const target = await getTarget(page.targetId);
 
   if (proxy !== null && target !== null) {
-    const proxyAgent = new HttpsProxyAgent(getProxyUrl(proxy));
-    const response = await axios
-      .get<string>(page.url, {
-        headers: pageLoadHeaders,
-        httpAgent: proxyAgent,
-        httpsAgent: proxyAgent,
-        proxy: false,
-        responseType: "text",
-        timeout: pageLoadTimeoutMs,
-        validateStatus: () => true,
-      })
-      .catch((error: unknown) => {
-        logAxiosError("Page load failed before response", error);
-        throw error;
-      });
+    const response = await proxyGet<string>(proxy, page.url, {
+      headers: pageLoadHeaders,
+      responseType: "text",
+      timeout: pageLoadTimeoutMs,
+      validateStatus: () => true,
+    }).catch((error: unknown) => {
+      logAxiosError("Page load failed before response", error);
+      throw error;
+    });
 
     if (response.data && typeof response.data === "string") {
       await addResponse(
