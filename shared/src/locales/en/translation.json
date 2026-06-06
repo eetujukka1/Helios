@@ -88,6 +88,16 @@
       },
       "targets": {
         "title": "Targets"
+      },
+      "pages": {
+        "title": "Pages"
+      },
+      "successfulResponses": {
+        "title": "Successful responses"
+      },
+      "responses": {
+        "title": "Responses",
+        "totalLabel": "Total"
       }
     }
   },

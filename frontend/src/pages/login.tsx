@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils/cn.ts"
 import { Button } from "@/components/ui/button"
 import {
   Card,
