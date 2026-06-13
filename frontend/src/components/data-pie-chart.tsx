@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart"
 import { formatDisplayNumber } from "@/lib/utils/formatDisplayNumber"
+import { Skeleton } from "@/components/ui/skeleton"
 
 export type DataPieChartItem = {
   label: string
@@ -111,6 +112,21 @@ export function DataPieChart({ data, title, footer, totalLabel }: Props) {
           <div className="leading-none text-muted-foreground">{footer}</div>
         </CardFooter>
       ) : null}
+    </Card>
+  )
+}
+
+export function DataPieChartSkeleton() {
+  return (
+    <Card className="flex flex-col">
+      <CardHeader className="items-center pb-0">
+        <Skeleton className="h-5 w-36" />
+      </CardHeader>
+      <CardContent className="flex-1 pb-0">
+        <div className="mx-auto aspect-square max-h-[250px] w-full">
+          <Skeleton className="size-full rounded-full" />
+        </div>
+      </CardContent>
     </Card>
   )
 }

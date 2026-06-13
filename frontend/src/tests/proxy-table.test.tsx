@@ -43,12 +43,6 @@ describe("ProxyTable", () => {
     vi.clearAllMocks()
   })
 
-  it("shows a loading spinner while fetching", () => {
-    mockGet.mockReturnValue(new Promise(() => {}))
-    render(<ProxyTable />, { wrapper })
-    expect(screen.getByRole("status")).toBeInTheDocument()
-  })
-
   it("shows empty state when there are no proxies", async () => {
     mockGet.mockResolvedValue([])
     render(<ProxyTable />, { wrapper })

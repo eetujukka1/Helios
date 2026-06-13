@@ -19,7 +19,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 
-import { Spinner } from "@/components/ui/spinner"
+import { Skeleton } from "@/components/ui/skeleton"
 import { useTargets } from "@/hooks/use-targets"
 import { AddTargetModal } from "@/modals/add-target"
 import { RemoveTargetModal } from "@/modals/remove-target"
@@ -32,16 +32,52 @@ import {
   HoverCardWrapper,
 } from "@/components/reusables/hover-card.tsx"
 
+function TargetTableSkeleton() {
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>
+            <Skeleton className="h-4 w-24" />
+          </TableHead>
+          <TableHead>
+            <Skeleton className="h-4 w-16" />
+          </TableHead>
+          <TableHead className="text-right">
+            <div className="flex justify-end">
+              <Skeleton className="h-4 w-16" />
+            </div>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <TableRow key={index}>
+            <TableCell>
+              <Skeleton className="h-5 w-48" />
+            </TableCell>
+            <TableCell>
+              <Skeleton className="h-5 w-16 rounded-4xl" />
+            </TableCell>
+            <TableCell className="text-right">
+              <div className="flex justify-end gap-2">
+                <Skeleton className="h-6 w-6 rounded-lg" />
+                <Skeleton className="h-6 w-6 rounded-lg" />
+              </div>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  )
+}
+
 export default function TargetTable() {
   const { targets, loading, error, enableTarget, disableTarget } = useTargets()
   const { t } = useTranslation()
 
   if (loading) {
-    return (
-      <div className="flex justify-center py-8">
-        <Spinner />
-      </div>
-    )
+    return <TargetTableSkeleton />
   }
 
   if (error) {
